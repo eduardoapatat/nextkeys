@@ -1,32 +1,32 @@
 # Roadmap
 
-Estado general del proyecto. Se actualiza en el mismo commit que cierra cada tarea.
-Las fases terminadas se resumen en una línea; el detalle vive en el historial de git.
+Overall project status. Updated in the same commit that closes each task.
+Finished phases collapse to one line; details live in the git history.
 
-## Estado actual
+## Current status
 
-- **Fase en curso:** 1. Catálogo
-- **Siguiente tarea:** diseñar el dominio del catálogo en `/plan` (enums, modelos, migraciones, seeders).
+- **Current phase:** 1. Catalog
+- **Next task:** design the catalog domain in `/plan` (enums, models, migrations, seeders).
 
-## Fases
+## Phases
 
-- [x] **0. Base:** repositorio, Docker (Postgres/Redis/Mailpit), `apps/api` con starter kit Vue, PHPStan `max`, tests sobre Postgres, CI y Dependabot.
-- [ ] **1. Catálogo**
-  - [ ] Enums: `ProductType` (`digital_key`, `license`, `physical`), plataformas y regiones
-  - [ ] Modelos y migraciones: Platform, Region, Product, GameKey (key cifrada)
-  - [ ] Factories y seeders con datos ficticios
-  - [ ] CRUD de productos en el panel admin
-  - [ ] Importación masiva de keys por CSV
-- [ ] **2. API pública del catálogo:** `/api/v1` de solo lectura (listado con filtros y ficha) con API Resources.
-- [ ] **3. Pedidos y pagos:** Order/OrderItem, reserva de stock con `SKIP LOCKED`, interfaz `PaymentGateway` + Stripe en modo prueba, webhooks y entrega de keys por cola y correo.
-- [ ] **4. Tienda Nuxt (`apps/web`):** catálogo, ficha, carrito, autenticación con Sanctum, checkout y "Mi biblioteca".
-- [ ] **5. Productos físicos:** direcciones, envíos y estados del despacho.
-- [ ] **6. Extras:** búsqueda con Meilisearch, wishlist, reseñas, cupones y dashboard de ventas.
-- [ ] **7. Publicación:** despliegue, demo pública y README de portfolio (capturas, GIF, diagrama).
+- [x] **0. Foundation:** repository, Docker (Postgres/Redis/Mailpit), `apps/api` with the Vue starter kit, PHPStan `max`, tests on Postgres, CI and Dependabot.
+- [ ] **1. Catalog**
+  - [ ] Enums: `ProductType` (`digital_key`, `license`, `physical`), platforms and regions
+  - [ ] Models and migrations: Platform, Region, Product, GameKey (encrypted key)
+  - [ ] Factories and seeders with fictitious data
+  - [ ] Product CRUD in the admin panel
+  - [ ] Bulk key import from CSV
+- [ ] **2. Public catalog API:** read-only `/api/v1` (filtered listing and product detail) with API Resources.
+- [ ] **3. Orders and payments:** Order/OrderItem, stock reservation with `SKIP LOCKED`, `PaymentGateway` interface + Stripe in test mode, webhooks, and key delivery via queue and email.
+- [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library".
+- [ ] **5. Physical products:** addresses, shipments and shipping status.
+- [ ] **6. Extras:** Meilisearch search, wishlist, reviews, coupons and sales dashboard.
+- [ ] **7. Launch:** deployment, public demo and portfolio README (screenshots, GIF, diagram).
 
-## Decisiones tomadas
+## Decisions
 
-- Monorepo con dos apps independientes, sin pnpm workspace en la raíz (se reevalúa si se comparten tipos).
-- Postgres también en tests: la reserva de keys depende de bloqueos de fila que SQLite no tiene.
-- Instrucciones para agentes en `AGENTS.md`; no se usa `CLAUDE.md`.
-- Comentarios de código en inglés; commits y documentación en español.
+- Monorepo with two independent apps, no pnpm workspace at the root (revisit if types get shared).
+- Postgres in tests too: key reservation relies on row locks that SQLite lacks.
+- Agent instructions live in `AGENTS.md`; `CLAUDE.md` is not used.
+- Everything in English: code comments, docs and commits.

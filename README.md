@@ -1,47 +1,48 @@
 # NextKeys
 
-E-commerce de videojuegos: keys digitales, licencias de software y juegos físicos.
-Proyecto de portfolio.
+Video game e-commerce: digital keys, software licenses and physical games.
+Portfolio project.
 
-> **Tienda demo.** Todos los productos, keys y pagos son ficticios.
+> **Demo store.** All products, keys and payments are fictitious.
 
 ## Stack
 
-| Parte | Tecnología | Carpeta |
+| Part | Technology | Folder |
 |---|---|---|
-| API + panel admin | Laravel · Inertia · Vue · TypeScript | `apps/api` |
-| Tienda pública (SSR) | Nuxt | `apps/web` |
-| Servicios | PostgreSQL · Redis · Mailpit (Docker) | `docker-compose.yml` |
+| API + admin panel | Laravel · Inertia · Vue · TypeScript | `apps/api` |
+| Public storefront (SSR) | Nuxt | `apps/web` |
+| Services | PostgreSQL · Redis · Mailpit (Docker) | `docker-compose.yml` |
 
-## Estructura
+## Structure
 
 ```
 nextkeys/
 ├── apps/
-│   ├── api/     # Laravel: API REST + panel de administración
-│   └── web/     # Nuxt: tienda pública
+│   ├── api/     # Laravel: REST API + admin panel
+│   └── web/     # Nuxt: public storefront
+├── docs/        # Roadmap and project docs
 ├── docker-compose.yml
 └── README.md
 ```
 
-Cada app es un proyecto independiente con sus propias dependencias.
+Each app is an independent project with its own dependencies.
 
-## Desarrollo local
+## Local development
 
-Requisitos: PHP 8.5, Composer, Node, pnpm y Docker.
+Requirements: PHP 8.5, Composer, Node, pnpm and Docker.
 
 ```bash
 docker compose up -d
 ```
 
-| Servicio | URL / puerto |
+| Service | URL / port |
 |---|---|
-| PostgreSQL | `localhost:5432` (db/usuario `nextkeys`) |
+| PostgreSQL | `localhost:5432` (db/user `nextkeys`) |
 | Redis | `localhost:6379` |
 | Mailpit | http://localhost:8025 |
 
-Las instrucciones de cada app están en su propio README.
+Each app has its own README with setup instructions.
 
-## Licencia
+## License
 
 [MIT](LICENSE)

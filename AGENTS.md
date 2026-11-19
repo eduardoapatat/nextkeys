@@ -1,60 +1,60 @@
 # NextKeys
 
-E-commerce de portfolio: keys digitales, licencias de software y juegos físicos. Datos y pagos ficticios.
+Portfolio e-commerce: digital game keys, software licenses and physical games. All data and payments are fictitious.
 
-- `apps/api`: Laravel 13 + Inertia v3 + Vue + TypeScript. API REST para la tienda y panel admin (starter kit Vue).
-- `apps/web`: Nuxt con SSR, la tienda pública. Todavía no existe.
-- Servicios en `docker-compose.yml`: PostgreSQL 18, Redis 8 y Mailpit.
+- `apps/api`: Laravel 13 + Inertia v3 + Vue + TypeScript. REST API for the storefront and the admin panel (Vue starter kit).
+- `apps/web`: Nuxt with SSR, the public storefront. Not created yet.
+- Services in `docker-compose.yml`: PostgreSQL 18, Redis 8 and Mailpit.
 
-## Estado del proyecto
+## Project status
 
 @docs/ROADMAP.md
 
-Al cerrar una tarea: `composer ci:check` en verde, actualizar `docs/ROADMAP.md` (estado, checklist, decisiones) y commitear todo junto.
+When closing a task: `composer ci:check` green, update `docs/ROADMAP.md` (status, checklist, decisions) and commit everything together.
 
-## Comandos
+## Commands
 
-- Servicios: `docker compose up -d` (desde la raíz).
-- Dev API: `composer dev` en `apps/api`.
-- **Verificación (único comando):** `composer ci:check` en `apps/api`, que corre ESLint, vue-tsc, Pint, PHPStan y Pest. Es lo mismo que ejecuta el CI.
+- Services: `docker compose up -d` (from the repo root).
+- API dev server: `composer dev` in `apps/api`.
+- **Verification (single command):** `composer ci:check` in `apps/api`. Runs ESLint, vue-tsc, Pint, PHPStan and Pest — the same command CI runs.
 
-## Arquitectura y límites
+## Architecture and boundaries
 
-- Laravel es la única fuente de verdad. Nuxt no contiene lógica de negocio: solo consume `/api/v1`.
-- Rutas: `routes/web.php` es para el panel admin (Inertia) y `routes/api.php` (`/api/v1`) para la tienda, con API Resources.
-- Controladores delgados. La lógica de negocio vive en `app/Actions` (un caso de uso por clase).
-- El tipo de producto es un enum (`digital_key`, `license`, `physical`), no subclases. Cada tipo define su forma de entrega.
-- Los pagos van detrás de una interfaz `PaymentGateway`. El dominio no conoce a Stripe ni a Mercado Pago.
-- Las keys se guardan cifradas (cast `encrypted`) y nunca se exponen en listados ni en logs.
-- La reserva y asignación de keys usa bloqueo en Postgres (`lockForUpdate` / `SKIP LOCKED`), nunca lectura y escritura sin lock.
-- Cada app es un proyecto pnpm independiente. No hay workspace en la raíz.
+- Laravel is the single source of truth. Nuxt holds no business logic; it only consumes `/api/v1`.
+- Routes: `routes/web.php` is the admin panel (Inertia); `routes/api.php` (`/api/v1`) is the storefront, using API Resources.
+- Thin controllers. Business logic lives in `app/Actions` (one use case per class).
+- Product type is an enum (`digital_key`, `license`, `physical`), not subclasses. Each type defines how it is delivered.
+- Payments sit behind a `PaymentGateway` interface. The domain knows nothing about Stripe or Mercado Pago.
+- Keys are stored encrypted (`encrypted` cast) and are never exposed in listings or logs.
+- Key reservation and assignment use Postgres row locks (`lockForUpdate` / `SKIP LOCKED`), never an unlocked read-then-write.
+- Each app is an independent pnpm project. There is no workspace at the root.
 
-## Convenciones
+## Conventions
 
-- El usuario autenticado se inyecta con `#[CurrentUser] User $user`, no con `$request->user()` (que es nullable).
-- Las rutas Inertia se escriben con `Route::get(..., fn () => Inertia::render(...))`, no con `Route::inertia()`, que PHPStan tipa como `mixed`.
-- Comentarios de código y PHPDoc en inglés, en todos los archivos (PHP, TS/Vue, YAML, SQL, configuración).
-- Commits en español, con convención `tipo(alcance): descripción`, por ejemplo `feat(api): ...`.
+- Everything is written in English: code comments, PHPDoc, docs, AGENTS.md and commit messages.
+- Commits follow Conventional Commits: `type(scope): description`, e.g. `feat(api): ...`.
+- Inject the authenticated user with `#[CurrentUser] User $user`, not `$request->user()` (nullable).
+- Inertia routes use `Route::get(..., fn () => Inertia::render(...))`, not `Route::inertia()`, which PHPStan types as `mixed`.
 
-## Checks existentes
+## Existing checks
 
-- PHPStan con Larastan en nivel `max`, sin baseline (`apps/api/phpstan.neon`).
-- Pint, ESLint/Prettier y vue-tsc, todos incluidos en `composer ci:check`.
-- CI en `.github/workflows/api.yml`, filtrado por `apps/api/**`, con Postgres como servicio.
-- Dependabot en `.github/dependabot.yml` para actions, composer y npm de `apps/api`.
+- PHPStan with Larastan at level `max`, no baseline (`apps/api/phpstan.neon`).
+- Pint, ESLint/Prettier and vue-tsc, all included in `composer ci:check`.
+- CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service.
+- Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`.
 
-## Trampas conocidas
+## Known pitfalls
 
-- Los tests corren contra Postgres (`nextkeys_test`), no SQLite. Docker tiene que estar levantado.
-- La base `nextkeys_test` la crea `docker/postgres/init/` solo con un volumen nuevo.
-- PHPStan necesita `--memory-limit=1G`, que ya está en el script `types:check`.
-- Los workflows de GitHub solo se leen desde `.github/` en la raíz, nunca dentro de `apps/*`.
-- El MCP de Boost (`apps/api/.mcp.json`) solo carga si la sesión se abre dentro de `apps/api`.
-- No crear `CLAUDE.md` ni `CLAUDE.local.md` en ninguna carpeta: Claude Code deja de leer los `AGENTS.md`. `apps/api/AGENTS.md` lo genera Boost (`boost:update`); no editarlo a mano.
-- El frontend del kit usa Vite+ (`vp`), no `vite`.
+- Tests run against Postgres (`nextkeys_test`), not SQLite. Docker must be running.
+- The `nextkeys_test` database is created by `docker/postgres/init/` only on a fresh volume.
+- PHPStan needs `--memory-limit=1G`, already set in the `types:check` script.
+- GitHub only reads workflows from the root `.github/`, never from inside `apps/*`.
+- The Boost MCP server (`apps/api/.mcp.json`) only loads when the session starts inside `apps/api`.
+- Do not create `CLAUDE.md` or `CLAUDE.local.md` anywhere: Claude Code then stops reading `AGENTS.md`. `apps/api/AGENTS.md` is generated by Boost (`boost:update`); do not edit it by hand.
+- The starter kit frontend uses Vite+ (`vp`), not `vite`.
 
-## Definición de terminado
+## Definition of done
 
-- `composer ci:check` en verde.
-- Un test nuevo que falla sin el cambio.
-- Cambios de UI verificados en el navegador.
+- `composer ci:check` is green.
+- New behavior has a test that fails without the change.
+- UI changes are verified in the browser.
