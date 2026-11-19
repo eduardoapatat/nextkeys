@@ -1,0 +1,20 @@
+# Ignorados comunes a todo el repositorio.
+# Cada app (apps/api, apps/web) mantiene su propio .gitignore.
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Editores
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Entorno local
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
