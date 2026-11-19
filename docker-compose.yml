@@ -1,6 +1,6 @@
 name: nextkeys
 
-# Servicios de desarrollo. Las apps corren en local (php artisan / pnpm dev).
+# Development services. The apps run locally (php artisan / pnpm dev).
 
 services:
   postgres:
@@ -36,7 +36,7 @@ services:
     image: axllent/mailpit:latest
     ports:
       - "1025:1025" # SMTP
-      - "8025:8025" # UI web: http://localhost:8025
+      - "8025:8025" # Web UI: http://localhost:8025
 
 volumes:
   postgres-data:

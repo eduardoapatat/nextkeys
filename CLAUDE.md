@@ -27,6 +27,7 @@ E-commerce de portfolio: keys digitales, licencias de software y juegos físicos
 
 - El usuario autenticado se inyecta con `#[CurrentUser] User $user`, no con `$request->user()` (que es nullable).
 - Las rutas Inertia se escriben con `Route::get(..., fn () => Inertia::render(...))`, no con `Route::inertia()`, que PHPStan tipa como `mixed`.
+- Comentarios de código y PHPDoc en inglés, en todos los archivos (PHP, TS/Vue, YAML, SQL, configuración).
 - Commits en español, con convención `tipo(alcance): descripción`, por ejemplo `feat(api): ...`.
 
 ## Checks existentes

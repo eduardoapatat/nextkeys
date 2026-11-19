@@ -1,17 +1,17 @@
-# Ignorados comunes a todo el repositorio.
-# Cada app (apps/api, apps/web) mantiene su propio .gitignore.
+# Repository-wide ignores.
+# Each app (apps/api, apps/web) keeps its own .gitignore.
 
-# SO
+# OS
 .DS_Store
 Thumbs.db
 
-# Editores
+# Editors
 .idea/
 .vscode/*
 !.vscode/extensions.json
 *.swp
 
-# Entorno local
+# Local environment
 .env
 .env.*
 !.env.example
