@@ -6,6 +6,12 @@ E-commerce de portfolio: keys digitales, licencias de software y juegos físicos
 - `apps/web`: Nuxt con SSR, la tienda pública. Todavía no existe.
 - Servicios en `docker-compose.yml`: PostgreSQL 18, Redis 8 y Mailpit.
 
+## Estado del proyecto
+
+@docs/ROADMAP.md
+
+Al cerrar una tarea: `composer ci:check` en verde, actualizar `docs/ROADMAP.md` (estado, checklist, decisiones) y commitear todo junto.
+
 ## Comandos
 
 - Servicios: `docker compose up -d` (desde la raíz).
@@ -44,6 +50,7 @@ E-commerce de portfolio: keys digitales, licencias de software y juegos físicos
 - PHPStan necesita `--memory-limit=1G`, que ya está en el script `types:check`.
 - Los workflows de GitHub solo se leen desde `.github/` en la raíz, nunca dentro de `apps/*`.
 - El MCP de Boost (`apps/api/.mcp.json`) solo carga si la sesión se abre dentro de `apps/api`.
+- No crear `CLAUDE.md` ni `CLAUDE.local.md` en ninguna carpeta: Claude Code deja de leer los `AGENTS.md`. `apps/api/AGENTS.md` lo genera Boost (`boost:update`); no editarlo a mano.
 - El frontend del kit usa Vite+ (`vp`), no `vite`.
 
 ## Definición de terminado
