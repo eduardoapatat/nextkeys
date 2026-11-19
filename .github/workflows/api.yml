@@ -1,10 +1,16 @@
-name: tests
+name: api
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'apps/api/**'
+      - '.github/workflows/api.yml'
   pull_request:
+    paths:
+      - 'apps/api/**'
+      - '.github/workflows/api.yml'
 
 permissions:
   contents: read
@@ -12,6 +18,33 @@ permissions:
 jobs:
   ci:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/api
+
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: nextkeys_test
+          POSTGRES_USER: nextkeys
+          POSTGRES_PASSWORD: secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nextkeys -d nextkeys_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: nextkeys_test
+      DB_USERNAME: nextkeys
+      DB_PASSWORD: secret
 
     steps:
       - name: Checkout code
@@ -29,7 +62,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '22'
+          node-version: '26'
+
+      - name: Setup pnpm
+        run: npm install --global pnpm@12.21.0
 
       - name: Setup Application
         run: composer setup
