@@ -1,6 +1,12 @@
 <?php
 
+use App\Enums\ProductType;
+use App\Models\ActivationService;
+use App\Models\Platform;
+use App\Models\Region;
+use App\Models\Title;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /*
@@ -44,7 +50,43 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Inserts a valid `digital_key` product row straight into the database,
+ * bypassing models and Actions, plus its platforms. Returns its id.
+ *
+ * @param  array<string, mixed>  $overrides
+ * @param  list<int>|null  $platformIds  one new platform when null
+ */
+function insertProductRow(array $overrides = [], ?array $platformIds = null): int
 {
-    // ..
+    $id = DB::table('products')->insertGetId([
+        'title_id' => Title::factory()->create()->id,
+        'type' => ProductType::DigitalKey->value,
+        'slug' => fake()->unique()->slug(3),
+        'activation_service_id' => ActivationService::factory()->create()->id,
+        'region_id' => Region::factory()->create()->id,
+        'price' => 19990,
+        'stock' => null,
+        'is_published' => false,
+        'created_at' => now(),
+        'updated_at' => now(),
+        ...$overrides,
+    ]);
+
+    foreach ($platformIds ?? [Platform::factory()->create()->id] as $platformId) {
+        DB::table('product_platforms')->insert(['product_id' => $id, 'platform_id' => $platformId]);
+    }
+
+    return $id;
+}
+
+/**
+ * Runs the deferred constraint triggers now. RefreshDatabase never commits,
+ * so without this an `INITIALLY DEFERRED` trigger would never fire in tests.
+ * Constraints go back to deferred afterwards, as they are in production.
+ */
+function checkDeferredConstraints(): void
+{
+    DB::statement('SET CONSTRAINTS ALL IMMEDIATE');
+    DB::statement('SET CONSTRAINTS ALL DEFERRED');
 }

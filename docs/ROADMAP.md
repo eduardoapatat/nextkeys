@@ -6,16 +6,17 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 1. Catalog
-- **Next task:** plan in `/plan` and implement the catalog domain model from [`docs/domain/catalog.md`](domain/catalog.md) (enums, models, migrations with CHECKs and triggers, factories, seeders, tests). Follow its *Implementation notes*.
+- **Next task:** users and roles from [`docs/domain/users.md`](domain/users.md), then the product CRUD in the admin panel (with the Action that mirrors the catalog's database checks).
 
 ## Phases
 
 - [x] **0. Foundation:** repository, Docker (Postgres/Redis/Mailpit), `apps/api` with the Vue starter kit, PHPStan `max`, tests on Postgres, CI and Dependabot.
 - [ ] **1. Catalog**
-  - [x] Domain model designed: [`docs/domain/catalog.md`](domain/catalog.md) (agreed, not implemented)
-  - [ ] Enums: `ProductType` (`digital_key`, `license`, `physical`) and `ProductKeyStatus`
-  - [ ] Models and migrations: ActivationService, Platform, Region, Title, Product (+ `product_platforms` pivot), ProductKey (encrypted key)
-  - [ ] Factories and seeders with fictitious data
+  - [x] Domain model designed: [`docs/domain/catalog.md`](domain/catalog.md) (implemented)
+  - [x] Enums: `ProductType` (`digital_key`, `license`, `physical`) and `ProductKeyStatus`
+  - [x] Models and migrations: ActivationService, Platform, Region, Title, Product (+ `product_platforms` pivot), ProductKey (encrypted key)
+  - [x] Factories and seeders with fictitious data
+  - [ ] Users: `UserRole` enum, `role` column, seeded admin, panel restricted to admins: [`docs/domain/users.md`](domain/users.md) (agreed, not implemented)
   - [ ] Product CRUD in the admin panel
   - [ ] Bulk key import from CSV
 - [ ] **2. Public catalog API:** read-only `/api/v1` (filtered listing and product detail) with API Resources.
@@ -34,3 +35,4 @@ Domain model decisions live in `docs/domain/*.md`; this list keeps project-wide 
 - Agent instructions live in `AGENTS.md`; `CLAUDE.md` is not used.
 - Everything in English: code comments, docs and commits.
 - Catalog domain: see [`docs/domain/catalog.md`](domain/catalog.md).
+- Users: one `users` table with a `role` enum (admin, customer); admins use the panel session, customers use Sanctum (phase 4). See [`docs/domain/users.md`](domain/users.md).

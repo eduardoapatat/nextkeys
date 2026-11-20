@@ -1,6 +1,6 @@
 # Catalog domain model
 
-Status: **agreed, not implemented yet**. Implementation notes at the end must be followed when writing the migrations and tests.
+Status: **implemented** (enums, migrations with every database rule, models, factories, seeders, tests). The Action layer ("In the Action") arrives with the product CRUD. See *Implementation notes* at the end.
 
 ## Overview
 
@@ -25,7 +25,7 @@ This is the product/variant pattern used by Shopify, Saleor, Sylius and Medusa, 
 
 Same shape: `id`, `name`, `slug` (unique), timestamps. Tables, not enums, so the admin can add entries without a deploy. Not deletable while in use (`restrictOnDelete`).
 
-- **Activation service**: where a code is redeemed or activated. Named this way (not "store") because NextKeys is itself a store and licenses are activated on accounts. Seeded with the labels buyers recognize from key stores: Steam, PlayStation Store, Nintendo eShop, **Xbox** (console and Play Anywhere games), **Microsoft Store** (PC-only games) and **Microsoft Account** (software such as Office). All Microsoft codes are redeemed on the same account; the split is a label, not a technical difference.
+- **Activation service**: where a code is redeemed or activated. Named this way (not "store") because NextKeys is itself a store and licenses are activated on accounts. Seeded with the labels buyers recognize from key stores: Steam, PlayStation Store, Nintendo eShop, **Xbox** (console and Play Anywhere games), **Microsoft Store** (PC-only games) and **Microsoft Account** (software such as Office). The demo seeder adds the fictitious **Shield Account** used in the example. All Microsoft codes are redeemed on the same account; the split is a label, not a technical difference.
 - **Platform**: a device or OS. Seeded with Windows, macOS, PS4, PS5, Switch, Switch 2, Xbox One, Xbox Series, Android, iOS. Xbox One and Xbox Series are separate because key stores sell them as separate listings.
 - **Region**: Global, Europe, LATAM, North America…
 
@@ -106,7 +106,7 @@ A product's identity is `title + type + activation service + region + the exact 
 
 A unique index cannot express this (it only compares columns of one row, and the set lives in the pivot), and a copied signature column was rejected (duplicated data that can drift from the pivot). It is enforced in the database with a **constraint trigger**, `DEFERRABLE INITIALLY DEFERRED`, so it runs at commit, when the product and all its platforms are already written:
 
-- Fires `AFTER INSERT OR UPDATE` on `products` and `AFTER INSERT OR DELETE` on `product_platforms`.
+- Fires `AFTER INSERT OR UPDATE OF title_id, type, activation_service_id, region_id` on `products` (price or stock changes do not affect identity) and `AFTER INSERT OR UPDATE OR DELETE` on `product_platforms` (an `UPDATE` of `platform_id` would otherwise bypass it; both the old and the new `product_id` are checked).
 - If the product no longer exists (it was deleted and its pivot rows cascaded), it does nothing.
 - Checks: at least one platform; exactly one for `physical`; no other product with the same identity (`NULLS NOT DISTINCT` semantics for the nullable columns).
 - Before checking, takes a transaction-scoped lock on the title with the two-argument form, `pg_advisory_xact_lock(<constant for products>, title_id)`, so two concurrent transactions creating the same product cannot both pass, and the lock cannot collide with future advisory locks on other tables.
@@ -184,7 +184,21 @@ Products 6 and 7 share title, activation service, region and platforms but diffe
 
 - **Deferred triggers and tests.** Feature tests use `RefreshDatabase`, which wraps each test in a transaction that is rolled back and never committed, so `INITIALLY DEFERRED` triggers would never fire and their tests would pass without them. Tests of the constraint trigger must run `SET CONSTRAINTS ALL IMMEDIATE` right after the operation, and must be shown to fail without the trigger.
 - Every database rule above (CHECKs, composite FK, triggers, unique `code_hash`) gets a test that hits the database directly, bypassing the Action.
-- `KEY_HASH_SECRET` is a new environment variable; the user adds it to `.env` (agents do not edit `.env`).
+- `KEY_HASH_SECRET` is a new environment variable; the user adds it to `.env` (agents do not edit `.env`). Tests read it from `phpunit.xml`; `ProductKey::hashCode()` throws if it is empty.
+- **Products and their platforms are written in one transaction.** Under autocommit the product `INSERT` commits alone and the deferred trigger rejects it for having no platforms. `DatabaseSeeder` and `CatalogDemoSeeder` wrap their work in `DB::transaction`.
+- **`code_hash` is written by the `App\Casts\ProductKeyCode` cast**, which encrypts `code` and sets `code_hash` in the same assignment, so a code cannot be stored without its hash. A `saving` event was rejected because seeders run `WithoutModelEvents`.
+- **Database errors**: CHECKs have explicit names (`products_price_positive`, `products_slug_format`, …) and the triggers raise `check_violation`, or `unique_violation` for a duplicate identity (Laravel turns it into `UniqueConstraintViolationException`, which the Action can catch).
+- Trigger functions use `CREATE OR REPLACE`: `migrate:fresh` drops tables but not functions.
+- `SET CONSTRAINTS ALL IMMEDIATE` stays in effect for the rest of the transaction; the test helper `checkDeferredConstraints()` (`tests/Pest.php`) sets them back to `DEFERRED`.
+- The advisory lock's concurrency is not covered by tests (it needs two simultaneous connections).
+
+### Advisory lock namespaces
+
+The first argument of `pg_advisory_xact_lock(namespace, id)`. Add a row before using a new one.
+
+| Namespace | Used by | Second argument |
+|---|---|---|
+| 1 | `products_assert_identity()` | `title_id` (cast to `integer`) |
 
 ## Phase 3 reminders (do not block the catalog)
 
