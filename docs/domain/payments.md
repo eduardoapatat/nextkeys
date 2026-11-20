@@ -21,6 +21,15 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
 5. The return page only shows the result; nothing is delivered from the browser's word alone.
 6. Delivery: keys by email through the queue (to be designed).
 
+## Transbank requirements for the store (official getting-started guide)
+
+- **Result page.** Webpay Plus REST has no Transbank voucher: the customer lands on the store, which must show the result. Recommended content when approved: order number, store name, amount and currency, authorization code, date, payment type (debit or credit), installment type, number of installments and their amount, last 4 card digits and a description of what was bought. When rejected: "Orden de Compra XXXXXXX rechazada" plus the possible causes (wrong card data, insufficient funds, card not enabled). The commit response carries these fields (`authorization_code`, `payment_type_code`, `installments_number`, `installments_amount`, `card_detail.card_number`, `transaction_date`), so they are stored with the payment. The page itself belongs to the storefront (phase 4).
+- **Check what Transbank returns**: amount and `buy_order` must match what the store sent; approved means exactly `response_code` 0 and `status` `AUTHORIZED`.
+- **`buy_order` must be unique per transaction** (max 26 characters; letters, digits and `|_=&%.,~:/?[+!@()>-`). An order can have several payment attempts (the customer cancels in Webpay and tries again), so each attempt needs its own `buy_order`, e.g. the order reference plus an attempt number (`NK-7QF2K9-2`). Design input for the payments table.
+- **HTTPS** is required for the store's endpoints and `return_url`, in integration too (redirects fail on Safari without it). Local development worked over plain HTTP in the experiments, but the deployed demo needs HTTPS.
+- **Going to production** requires a productive commerce code, Transbank's validation form with test evidence, the store logo (130x59 px) and one real transaction. Not applicable: NextKeys stays in the integration environment (fictitious payments).
+- General security recommendations (OWASP, updated dependencies, quarterly vulnerability scans, restricted admin access, backups, monitoring) apply to any deployment; nothing payment-specific to build.
+
 ## Chile
 
 - Amounts are integer CLP (already the case in `products.price` and `orders.total`).
