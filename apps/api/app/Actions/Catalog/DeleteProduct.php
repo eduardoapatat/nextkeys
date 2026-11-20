@@ -10,12 +10,13 @@ use Illuminate\Validation\ValidationException;
 final class DeleteProduct
 {
     /**
-     * Deletes a product nothing references (no keys yet), then its cover once
-     * the row is gone; a referenced product is archived instead.
+     * Deletes a product nothing references (no keys, no orders), then its
+     * cover once the row is gone; a referenced product is archived instead.
      *
-     * The product row is locked first: inserting a key locks its product row
-     * too (FOR KEY SHARE), so a concurrent import either already committed and
-     * is seen by the check, or waits until the delete is done.
+     * The product row is locked first: inserting a key or an order line locks
+     * its product row too (FOR KEY SHARE), so a concurrent import or checkout
+     * either already committed and is seen by the check, or waits until the
+     * delete is done.
      *
      * @throws ValidationException
      */
@@ -27,6 +28,12 @@ final class DeleteProduct
             if ($product->keys()->exists()) {
                 throw ValidationException::withMessages([
                     'product' => 'Este producto tiene claves y no se puede eliminar. Archívalo en su lugar.',
+                ]);
+            }
+
+            if ($product->orderItems()->exists()) {
+                throw ValidationException::withMessages([
+                    'product' => 'Este producto tiene pedidos y no se puede eliminar. Archívalo en su lugar.',
                 ]);
             }
 

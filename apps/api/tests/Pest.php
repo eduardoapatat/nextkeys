@@ -4,9 +4,11 @@ use App\Actions\Catalog\ProductData;
 use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\ActivationService;
+use App\Models\Order;
 use App\Models\Platform;
 use App\Models\Region;
 use App\Models\Title;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -82,6 +84,69 @@ function insertProductRow(array $overrides = [], ?array $platformIds = null): in
     }
 
     return $id;
+}
+
+/**
+ * Inserts a key row straight into the database, bypassing the model. Returns
+ * its id.
+ *
+ * @param  array<string, mixed>  $overrides
+ */
+function insertProductKeyRow(int $productId, array $overrides = []): int
+{
+    return DB::table('product_keys')->insertGetId([
+        'product_id' => $productId,
+        'product_type' => 'digital_key',
+        'code' => 'not-really-encrypted',
+        'code_hash' => hash('sha256', fake()->unique()->uuid()),
+        'code_hint' => 'XXXXX-XXXXX-XXXXX',
+        'status' => 'available',
+        'created_at' => now(),
+        'updated_at' => now(),
+        ...$overrides,
+    ]);
+}
+
+/**
+ * Inserts a valid pending order row straight into the database, for a new
+ * customer. Returns its id.
+ *
+ * @param  array<string, mixed>  $overrides
+ */
+function insertOrderRow(array $overrides = []): int
+{
+    return DB::table('orders')->insertGetId([
+        'user_id' => User::factory()->create()->id,
+        'reference' => Order::generateReference(),
+        'status' => 'pending',
+        'total' => 19990,
+        'expires_at' => now()->addMinutes(15),
+        'created_at' => now(),
+        'updated_at' => now(),
+        ...$overrides,
+    ]);
+}
+
+/**
+ * Inserts a valid one-unit order line row straight into the database.
+ * Returns its id.
+ *
+ * @param  array<string, mixed>  $overrides
+ */
+function insertOrderItemRow(int $orderId, int $productId, array $overrides = []): int
+{
+    return DB::table('order_items')->insertGetId([
+        'order_id' => $orderId,
+        'product_id' => $productId,
+        'quantity' => 1,
+        'unit_price' => 19990,
+        'line_total' => 19990,
+        'title_name' => 'Hollow Knight',
+        'product_type' => 'digital_key',
+        'created_at' => now(),
+        'updated_at' => now(),
+        ...$overrides,
+    ]);
 }
 
 /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Catalog\DeleteProduct;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductKey;
 
@@ -20,5 +21,15 @@ it('refuses to delete a product that has keys', function () {
     $errors = validationErrorsOf(fn () => app(DeleteProduct::class)->handle($product));
 
     expect($errors['product'])->toBe(['Este producto tiene claves y no se puede eliminar. Archívalo en su lugar.']);
+    $this->assertModelExists($product);
+});
+
+it('refuses to delete a product that has orders', function () {
+    $product = Product::factory()->physical()->create();
+    OrderItem::factory()->create(['product_id' => $product->id]);
+
+    $errors = validationErrorsOf(fn () => app(DeleteProduct::class)->handle($product));
+
+    expect($errors['product'])->toBe(['Este producto tiene pedidos y no se puede eliminar. Archívalo en su lugar.']);
     $this->assertModelExists($product);
 });

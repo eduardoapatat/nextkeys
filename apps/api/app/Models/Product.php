@@ -159,6 +159,16 @@ class Product extends Model
     }
 
     /**
+     * Order lines that bought this product.
+     *
+     * @return HasMany<OrderItem, $this>
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

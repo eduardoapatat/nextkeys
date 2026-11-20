@@ -3,26 +3,6 @@
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
-/**
- * Inserts a key row straight into the database, bypassing the model.
- *
- * @param  array<string, mixed>  $overrides
- */
-function insertProductKeyRow(int $productId, array $overrides = []): void
-{
-    DB::table('product_keys')->insert([
-        'product_id' => $productId,
-        'product_type' => 'digital_key',
-        'code' => 'not-really-encrypted',
-        'code_hash' => hash('sha256', fake()->unique()->uuid()),
-        'code_hint' => 'XXXXX-XXXXX-XXXXX',
-        'status' => 'available',
-        'created_at' => now(),
-        'updated_at' => now(),
-        ...$overrides,
-    ]);
-}
-
 it('rejects a key whose product type is physical', function () {
     $productId = insertProductRow(['type' => 'physical', 'activation_service_id' => null, 'stock' => 5]);
 

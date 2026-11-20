@@ -26,11 +26,13 @@ use RuntimeException;
  * @property string $code_hash
  * @property string $code_hint
  * @property ProductKeyStatus $status
+ * @property int|null $order_item_id Set exactly while the key is reserved or sold.
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Product $product
+ * @property-read OrderItem|null $orderItem
  */
-#[Fillable(['product_id', 'product_type', 'code', 'status'])]
+#[Fillable(['product_id', 'product_type', 'code', 'status', 'order_item_id'])]
 #[Hidden(['code', 'code_hash'])]
 class ProductKey extends Model
 {
@@ -100,6 +102,14 @@ class ProductKey extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo<OrderItem, $this>
+     */
+    public function orderItem(): BelongsTo
+    {
+        return $this->belongsTo(OrderItem::class);
     }
 
     /**
