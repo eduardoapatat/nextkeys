@@ -14,6 +14,12 @@ it('stores the code encrypted and reads it back decrypted', function () {
         ->and($key->fresh()?->code)->toBe('ABCDE-12345-FGHIJ');
 });
 
+it('stores the code trimmed, keeping its case', function () {
+    $key = ProductKey::factory()->create(['code' => "  abCDE-12345\t"]);
+
+    expect($key->fresh()?->code)->toBe('abCDE-12345');
+});
+
 it('rejects a code that only differs in case or surrounding spaces', function () {
     $product = Product::factory()->create();
     ProductKey::factory()->for($product)->create(['code' => 'abcde-12345']);

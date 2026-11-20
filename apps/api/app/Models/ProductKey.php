@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Crypt;
 use RuntimeException;
 
 /**
@@ -48,6 +49,21 @@ class ProductKey extends Model
         }
 
         return hash_hmac('sha256', mb_strtoupper(trim($code)), $secret);
+    }
+
+    /**
+     * The stored columns of a code: the trimmed code encrypted, plus its hash.
+     * The only way a code reaches the database, through the cast or a bulk
+     * insert, so a code is never stored without its hash.
+     *
+     * @return array{code: string, code_hash: string}
+     */
+    public static function storedCodeAttributes(string $code): array
+    {
+        return [
+            'code' => Crypt::encryptString(trim($code)),
+            'code_hash' => self::hashCode($code),
+        ];
     }
 
     /**

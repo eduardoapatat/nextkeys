@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import ProductController from '@/actions/App/Http/Controllers/Catalog/ProductController';
+import ProductKeyController from '@/actions/App/Http/Controllers/Catalog/ProductKeyController';
 import ProductForm from '@/components/catalog/ProductForm.vue';
 import type { ProductFormOptions, ProductFormValues } from '@/types';
 import Heading from '@/components/Heading.vue';
+import { Button } from '@/components/ui/button';
 
 const props = defineProps<
     ProductFormOptions & {
@@ -24,6 +26,15 @@ defineOptions({
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div class="flex items-start justify-between gap-4">
             <Heading title="Editar producto" />
+            <Button
+                v-if="props.product.type !== 'physical'"
+                variant="outline"
+                as-child
+            >
+                <Link :href="ProductKeyController.index(props.product.id)">
+                    Gestionar keys
+                </Link>
+            </Button>
         </div>
 
         <ProductForm :options="props" :product="props.product" />

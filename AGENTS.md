@@ -42,6 +42,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Pint, ESLint/Prettier and vue-tsc, all included in `composer ci:check`.
 - Catalog database rules (CHECKs, composite FK, triggers) live in the migrations and are covered by `tests/Feature/Catalog/*DatabaseRulesTest.php` and `ProductIdentityTriggerTest.php`.
 - Catalog Actions turn every database rule into a validation error before writing (per type, platforms, slug, identity, delete guards): `tests/Feature/Catalog/{Create,Update,Delete}ProductTest.php`, `DeleteTitleTest.php` and `GenerateProductSlugTest.php` (checks the doc's example slugs from the demo seeder).
+- Key import: per-line rules, duplicates (in the file and in the database) and limits in `tests/Feature/Catalog/ImportProductKeysTest.php`; upload validation and "codes never reach a response" in `ProductKeyControllerTest.php`.
 - User role rule: `users_role_check` CHECK in the migration, covered by `tests/Feature/Users/UserRoleDatabaseRulesTest.php`.
 - Every authenticated app route must sit behind the `can:access-admin-panel` gate: `tests/Feature/AdminPanelRoutesTest.php`.
 - CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service.

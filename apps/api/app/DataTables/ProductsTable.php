@@ -57,13 +57,14 @@ class ProductsTable extends DataTable
     }
 
     /**
-     * The slug names the product in the row actions even when its column is hidden.
+     * The row actions need the slug (to name the product) and the type (to
+     * link the keys of key-delivered products) even when their columns are hidden.
      *
      * @return list<string>
      */
     public function alwaysInclude(): ?array
     {
-        return ['id', 'slug'];
+        return ['id', 'slug', 'type'];
     }
 
     public function defaultSort(): ?string

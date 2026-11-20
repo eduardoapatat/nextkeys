@@ -34,3 +34,17 @@ export type TitleFormValues = {
     name: string;
     description: string;
 };
+
+/** Flashed by ProductKeyController::store; rejections are capped at 100. */
+export type KeyImportResult = {
+    imported: number;
+    rejectedCount: number;
+    rejections: { line: number; reason: string }[];
+};
+
+export type KeyProduct = {
+    id: number;
+    slug: string;
+    type: string;
+    statusCounts: { label: string; total: number }[];
+};

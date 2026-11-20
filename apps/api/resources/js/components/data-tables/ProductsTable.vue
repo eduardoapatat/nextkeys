@@ -18,10 +18,11 @@ export type Product = {
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { Pencil } from '@lucide/vue';
+import { KeyRound, Pencil } from '@lucide/vue';
 import { createColumnHelper } from '@tanstack/vue-table';
 import { h } from 'vue';
 import ProductController from '@/actions/App/Http/Controllers/Catalog/ProductController';
+import ProductKeyController from '@/actions/App/Http/Controllers/Catalog/ProductKeyController';
 import ConfirmDeleteButton from '@/components/catalog/ConfirmDeleteButton.vue';
 import {
     DataTable,
@@ -59,10 +60,27 @@ const columns = columnHelper.columns([
     }),
     columnHelper.display({
         id: 'actions',
-        size: 96,
+        size: 136,
         header: () => h('span', { class: 'sr-only' }, 'Acciones'),
         cell: ({ row }) =>
             h('div', { class: 'flex justify-end gap-1' }, [
+                row.original.type !== 'physical'
+                    ? h(
+                          Button,
+                          { variant: 'ghost', size: 'icon', asChild: true },
+                          () =>
+                              h(
+                                  Link,
+                                  {
+                                      href: ProductKeyController.index(
+                                          row.original.id,
+                                      ).url,
+                                      'aria-label': `Keys de ${row.original.slug ?? 'producto'}`,
+                                  },
+                                  () => h(KeyRound, { class: 'size-4' }),
+                              ),
+                      )
+                    : null,
                 h(
                     Button,
                     { variant: 'ghost', size: 'icon', asChild: true },

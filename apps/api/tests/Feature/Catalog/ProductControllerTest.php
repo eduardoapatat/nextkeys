@@ -19,7 +19,7 @@ it('lists products with their stock and no key codes', function () {
     $windows = Platform::factory()->create(['name' => 'Windows']);
     $product = Product::factory()->for($title)->withPlatforms($windows)->published()->create(['price' => 19990]);
     ProductKey::factory()->for($product)->count(2)->create();
-    Product::factory()->physical()->create(['stock' => 4]);
+    Product::factory()->physical()->create(['stock' => 4, 'price' => 29990]);
 
     $this->get(route('products.index', ['sort' => 'price']))
         ->assertOk()

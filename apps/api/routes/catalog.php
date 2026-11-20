@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Catalog\ProductController;
+use App\Http\Controllers\Catalog\ProductKeyController;
 use App\Http\Controllers\Catalog\TitleController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,4 +12,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('catalog')->group(function () {
     Route::resource('titles', TitleController::class)->except('show');
     Route::resource('products', ProductController::class)->except('show');
+    Route::get('products/{product}/keys', [ProductKeyController::class, 'index'])->name('products.keys.index');
+    Route::post('products/{product}/keys', [ProductKeyController::class, 'store'])->name('products.keys.store');
 });

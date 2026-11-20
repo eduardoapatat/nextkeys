@@ -13,6 +13,7 @@ return [
     'integer' => 'El campo :attribute debe ser un número entero.',
     'max' => [
         'array' => 'El campo :attribute no puede tener más de :max elementos.',
+        'file' => 'El :attribute no puede pesar más de :max kilobytes.',
         'numeric' => 'El campo :attribute no puede ser mayor que :max.',
         'string' => 'El campo :attribute no puede tener más de :max caracteres.',
     ],
@@ -25,9 +26,14 @@ return [
     'regex' => 'El formato del campo :attribute no es válido.',
     'required' => 'El campo :attribute es obligatorio.',
     'string' => 'El campo :attribute debe ser texto.',
+    'extensions' => 'El :attribute debe tener una de estas extensiones: :values.',
+    'file' => 'El :attribute debe ser un archivo.',
+    'mimetypes' => 'El :attribute debe ser un archivo de texto (:values).',
+    'uploaded' => 'No se pudo subir el :attribute.',
     'unique' => 'El :attribute ya está en uso.',
 
     'attributes' => [
+        'file' => 'archivo',
         'activation_service_id' => 'servicio de activación',
         'description' => 'descripción',
         'is_published' => 'publicado',

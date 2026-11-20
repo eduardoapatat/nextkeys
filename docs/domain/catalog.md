@@ -75,7 +75,7 @@ One row per code to deliver.
 |---|---|
 | `product_id` | FK → products, `restrictOnDelete` |
 | `product_type` | Copy of the product's type, for the composite FK |
-| `code` | Stored as entered, `encrypted` cast, hidden from serialization, never logged |
+| `code` | Stored trimmed (case preserved), `encrypted` cast, hidden from serialization, never logged |
 | `code_hash` | HMAC-SHA256 of the **normalized** code (trimmed, uppercased) with `KEY_HASH_SECRET` (not `APP_KEY`, so key rotation does not break it). Hidden |
 | `status` | `ProductKeyStatus`, default `available` |
 
@@ -186,6 +186,18 @@ Decisions taken before planning the CRUD:
 - **Admin listings use `eduardoapatat/laravel-inertia-datatable`.** Pagination and sorting are resolved on the server and the state lives in the URL; adding filters later is a column method, not a rewrite. Table classes live in `app/DataTables`.
 - **Implementation.** `SaveProduct` (shared by `CreateProduct` and `UpdateProduct`) validates the per-type rules, the slug and the identity, writes the product and its platforms in one transaction and runs the identity constraint triggers before it ends (`SET CONSTRAINTS … IMMEDIATE`), turning a unique violation from a race into the same validation error. `DeleteProduct` and `DeleteTitle` lock the row (`lockForUpdate`) before checking it is unreferenced. The list's stock is one correlated subquery (`coalesce(stock, count of available keys)`, valid because of `products_stock_only_for_physical`).
 - **The product type cannot change by design.** The data object the create and update Actions receive has no `type` field: the type is a separate argument of the create Action only. The `products_type_immutable` trigger stays as the safety net.
+
+## Admin panel (key import)
+
+Decisions taken before planning the bulk import from CSV:
+
+- **CSV format: one column, no header.** One code per line; blank lines are ignored. If the first line is exactly `code` (case-insensitive), it is treated as a header and skipped. No extra columns.
+- **Invalid rows: import the valid ones and report the rest.** Valid codes are inserted in one transaction; the result lists every rejected row with its line number and reason (invalid format, repeated in the file, already exists). A code that collides with `unique(code_hash)` in a race (inserted by another import between the check and the write) is reported as "already exists", never as a Postgres exception.
+- **Normalization and format.** The code is trimmed and stored with its original case; the hash normalizes it further (trim + uppercase), so `abc-1` and `ABC-1` are duplicates. A valid code has 5 to 100 characters from `[A-Za-z0-9-]`, no inner spaces. No per-activation-service format (real formats vary); it can be added later as a field on `activation_services`.
+- **Size and processing: 1 MB and 5,000 codes per file, processed in the request.** A batched insert is fast enough at that size; no queue, worker or import status table. Larger batches are split into several files.
+- **Only key-delivered products.** The import rejects `physical` products with a validation error before reading the file; the composite FK stays as the safety net.
+
+- **Implementation.** `ImportProductKeys` validates the file and classifies each line, then inserts the valid codes in one transaction, in chunks of 1,000, with `INSERT … ON CONFLICT (code_hash) DO NOTHING RETURNING code_hash`: a code whose hash does not come back already existed, also when a concurrent import committed it after the file was read. Inserting a key takes `FOR KEY SHARE` on its product row, so the import serializes with `DeleteProduct`'s `lockForUpdate`. A bulk insert skips the `ProductKeyCode` cast, so both use `ProductKey::storedCodeAttributes()`, the only place that encrypts a code and computes its hash. The result carries line numbers and reasons, never codes; the controller flashes at most 100 rejected lines plus the total. The keys list (`ProductKeysTable`) selects neither `code` nor `code_hash`.
 
 ## Out of scope (for now)
 

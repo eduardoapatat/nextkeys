@@ -5,20 +5,13 @@ Finished phases collapse to one line; details live in the git history.
 
 ## Current status
 
-- **Current phase:** 1. Catalog
-- **Next task:** the bulk key import from CSV.
+- **Current phase:** 2. Public catalog API
+- **Next task:** design the read-only `/api/v1` catalog (filtered listing and product detail).
 
 ## Phases
 
 - [x] **0. Foundation:** repository, Docker (Postgres/Redis/Mailpit), `apps/api` with the Vue starter kit, PHPStan `max`, tests on Postgres, CI and Dependabot.
-- [ ] **1. Catalog**
-  - [x] Domain model designed: [`docs/domain/catalog.md`](domain/catalog.md) (implemented)
-  - [x] Enums: `ProductType` (`digital_key`, `license`, `physical`) and `ProductKeyStatus`
-  - [x] Models and migrations: ActivationService, Platform, Region, Title, Product (+ `product_platforms` pivot), ProductKey (encrypted key)
-  - [x] Factories and seeders with fictitious data
-  - [x] Users: `UserRole` enum, `role` column, seeded admin, panel restricted to admins, registration disabled: [`docs/domain/users.md`](domain/users.md) (implemented)
-  - [x] Product and title CRUD in the admin panel: [`catalog.md` → Admin panel](domain/catalog.md#admin-panel-product-crud) (implemented)
-  - [ ] Bulk key import from CSV
+- [x] **1. Catalog:** domain model ([`docs/domain/catalog.md`](domain/catalog.md)), users with roles ([`docs/domain/users.md`](domain/users.md)), admin CRUD for titles and products, and bulk key import from CSV ([`catalog.md` → Admin panel (key import)](domain/catalog.md#admin-panel-key-import)).
 - [ ] **2. Public catalog API:** read-only `/api/v1` (filtered listing and product detail) with API Resources.
 - [ ] **3. Orders and payments:** Order/OrderItem, stock reservation with `SKIP LOCKED`, `PaymentGateway` interface + Stripe in test mode, webhooks, and key delivery via queue and email.
 - [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library".
