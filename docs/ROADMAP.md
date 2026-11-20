@@ -27,6 +27,6 @@ Domain model decisions live in `docs/domain/*.md`; this list keeps project-wide 
 - Postgres in tests too: key reservation relies on row locks that SQLite lacks.
 - Agent instructions live in `AGENTS.md`; `CLAUDE.md` is not used.
 - Everything in English: code comments, docs and commits.
-- The user interface is Spanish only, for now: UI strings are Spanish literals (no `__()` keys), the app locale defaults to `es`, `lang/es/validation.php` holds the messages of the validation rules in use, and data tables format with `es-CL` and CLP (`config/inertia-datatable.php`). No other language is planned. Product keys are called **claves** in the UI ("Claves", "Gestionar claves", "Clave digital"), never "keys"; code, routes and docs keep `keys`.
+- The user interface is Spanish only, for now: UI strings are Spanish literals (no `__()` keys), the app locale defaults to `es`, `lang/es/validation.php` holds the messages of the validation rules in use, `lang/es/pagination.php` the page link labels (plain text, they reach the API JSON), and data tables format with `es-CL` and CLP (`config/inertia-datatable.php`). No other language is planned. Product keys are called **claves** in the UI ("Claves", "Gestionar claves", "Clave digital"), never "keys"; code, routes and docs keep `keys`.
 - Catalog domain: see [`docs/domain/catalog.md`](domain/catalog.md).
 - Users: one `users` table with a `role` enum (admin, customer); admins use the panel session, customers use Sanctum (phase 4). See [`docs/domain/users.md`](domain/users.md).

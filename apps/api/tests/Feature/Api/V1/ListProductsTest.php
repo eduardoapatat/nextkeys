@@ -170,6 +170,14 @@ it('paginates 24 products per page', function () {
         ->assertJsonCount(1, 'data');
 });
 
+it('labels the previous and next page links in Spanish, as plain text', function () {
+    Product::factory()->published()->create();
+
+    $links = $this->getJson(route('api.v1.products.index'))->assertOk()->json('meta.links');
+
+    expect(array_column($links, 'label'))->toBe(['« Anterior', '1', 'Siguiente »']);
+});
+
 it('rejects unknown filter values with the storefront message', function (string $filter, string $message) {
     $this->getJson(route('api.v1.products.index', [$filter => 'does-not-exist']))
         ->assertUnprocessable()
