@@ -3,7 +3,9 @@ import type { AcceptableValue } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { ChevronDownIcon } from "@lucide/vue"
 import { reactiveOmit, useVModel } from "@vueuse/core"
+import { provide } from "vue"
 import { cn } from "@/lib/utils"
+import { nativeSelectValueKey } from "./context"
 
 defineOptions({
   inheritAttrs: false,
@@ -20,7 +22,9 @@ const modelValue = useVModel(props, "modelValue", emit, {
   defaultValue: "",
 })
 
-const delegatedProps = reactiveOmit(props, "class")
+provide(nativeSelectValueKey, modelValue)
+
+const delegatedProps = reactiveOmit(props, "class", "modelValue")
 </script>
 
 <template>
