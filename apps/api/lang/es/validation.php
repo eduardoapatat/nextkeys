@@ -26,6 +26,9 @@ return [
     'regex' => 'El formato del campo :attribute no es válido.',
     'required' => 'El campo :attribute es obligatorio.',
     'string' => 'El campo :attribute debe ser texto.',
+    'dimensions' => 'El campo :attribute debe medir al menos :min_width × :min_height píxeles.',
+    'image' => 'El campo :attribute debe ser una imagen.',
+    'mimes' => 'El campo :attribute debe ser un archivo de tipo: :values.',
     'extensions' => 'El :attribute debe tener una de estas extensiones: :values.',
     'file' => 'El :attribute debe ser un archivo.',
     'mimetypes' => 'El :attribute debe ser un archivo de texto (:values).',
@@ -33,6 +36,7 @@ return [
     'unique' => 'El :attribute ya está en uso.',
 
     'attributes' => [
+        'cover' => 'carátula',
         'file' => 'archivo',
         'activation_service_id' => 'servicio de activación',
         'description' => 'descripción',

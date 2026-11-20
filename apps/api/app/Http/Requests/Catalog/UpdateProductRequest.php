@@ -5,6 +5,7 @@ namespace App\Http\Requests\Catalog;
 use App\Actions\Catalog\ProductData;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
 /**
  * Checks only the shape of the product form. The catalog rules (per type,
@@ -26,6 +27,8 @@ class UpdateProductRequest extends FormRequest
             'price' => ['required', 'integer'],
             'stock' => ['nullable', 'integer'],
             'slug' => ['nullable', 'string', 'max:255'],
+            'cover' => ['nullable', 'file'],
+            'remove_cover' => ['nullable', 'boolean'],
         ];
     }
 
@@ -40,6 +43,8 @@ class UpdateProductRequest extends FormRequest
             stock: $this->filled('stock') ? $this->integer('stock') : null,
             isPublished: $this->boolean('is_published'),
             slug: $this->filled('slug') ? $this->string('slug')->toString() : null,
+            cover: $this->file('cover') instanceof UploadedFile ? $this->file('cover') : null,
+            removeCover: $this->boolean('remove_cover'),
         );
     }
 }

@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Crypt;
 use InvalidArgumentException;
 
 /**
- * Encrypts a product key code (trimmed) and writes its `code_hash` in the
- * same step, so a code can never be stored without the hash that keeps it
- * unique.
+ * Encrypts a product key code (trimmed) and writes its `code_hash` and
+ * `code_hint` in the same step, so a code can never be stored without the
+ * hash that keeps it unique or the hint shown in place of it.
  *
  * @implements CastsAttributes<string, string>
  */
@@ -35,7 +35,7 @@ class ProductKeyCode implements CastsAttributes
      * Prepare the given value for storage.
      *
      * @param  array<string, mixed>  $attributes
-     * @return array{code: string, code_hash: string}
+     * @return array{code: string, code_hash: string, code_hint: string}
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): array
     {

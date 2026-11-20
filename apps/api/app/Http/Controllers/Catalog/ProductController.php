@@ -58,6 +58,7 @@ class ProductController extends Controller
                 'stock' => $product->stock,
                 'is_published' => $product->is_published,
                 'slug' => $product->slug,
+                'cover_url' => $product->coverUrl(),
             ],
         ]);
     }

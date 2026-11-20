@@ -20,6 +20,22 @@ it('stores the code trimmed, keeping its case', function () {
     expect($key->fresh()?->code)->toBe('abCDE-12345');
 });
 
+it('masks a code, showing at most its last 4 characters and a third of them', function (string $code, string $hint) {
+    expect(ProductKey::hintFor($code))->toBe($hint);
+})->with([
+    'hyphenated' => ['ABCDE-12345-FGHIJ', 'XXXXX-XXXXX-XGHIJ'],
+    'keeps case and trims' => ['  abcde-12345-fghij ', 'XXXXX-XXXXX-Xghij'],
+    'without hyphens' => ['ABCDEFGHIJKL', 'XXXXXXXXIJKL'],
+    'short' => ['ABCDE', 'XXXXE'],
+    'third of the code' => ['ABC-DEFGH', 'XXX-XXXGH'],
+]);
+
+it('stores the hint of the code', function () {
+    $key = ProductKey::factory()->create(['code' => 'ABCDE-12345-FGHIJ']);
+
+    expect(DB::table('product_keys')->where('id', $key->id)->value('code_hint'))->toBe('XXXXX-XXXXX-XGHIJ');
+});
+
 it('rejects a code that only differs in case or surrounding spaces', function () {
     $product = Product::factory()->create();
     ProductKey::factory()->for($product)->create(['code' => 'abcde-12345']);

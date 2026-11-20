@@ -33,7 +33,7 @@ setLayoutProps({
             title: props.product.slug,
             href: ProductController.edit(props.product.id),
         },
-        { title: 'Keys', href: ProductKeyController.index(props.product.id) },
+        { title: 'Claves', href: ProductKeyController.index(props.product.id) },
     ],
 });
 
@@ -90,17 +90,17 @@ function submit(): void {
 </script>
 
 <template>
-    <Head :title="`Keys de ${product.slug}`" />
+    <Head :title="`Claves de ${product.slug}`" />
 
     <div class="flex flex-1 flex-col gap-4 p-4">
         <Heading
-            :title="`Keys de ${product.slug}`"
+            :title="`Claves de ${product.slug}`"
             :description="statusSummary"
         />
 
         <Card>
             <CardHeader>
-                <CardTitle>Importar keys</CardTitle>
+                <CardTitle>Importar claves</CardTitle>
                 <CardDescription>
                     Un archivo .csv o .txt de hasta 1 MB, con un código por
                     línea y sin encabezado (máximo 5.000). Cada código tiene de

@@ -75,7 +75,7 @@ const columns = columnHelper.columns([
                                       href: ProductKeyController.index(
                                           row.original.id,
                                       ).url,
-                                      'aria-label': `Keys de ${row.original.slug ?? 'producto'}`,
+                                      'aria-label': `Claves de ${row.original.slug ?? 'producto'}`,
                                   },
                                   () => h(KeyRound, { class: 'size-4' }),
                               ),

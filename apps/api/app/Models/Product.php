@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * What gets sold: one way of selling a title (type, activation service,
@@ -26,13 +27,14 @@ use Illuminate\Support\Carbon;
  * @property int $price
  * @property int|null $stock
  * @property bool $is_published
+ * @property string|null $cover_image Path on the `public` disk.
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Title $title
  * @property-read ActivationService|null $activationService
  * @property-read Region|null $region
  */
-#[Fillable(['title_id', 'type', 'slug', 'activation_service_id', 'region_id', 'price', 'stock', 'is_published'])]
+#[Fillable(['title_id', 'type', 'slug', 'activation_service_id', 'region_id', 'price', 'stock', 'is_published', 'cover_image'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -83,6 +85,14 @@ class Product extends Model
     public function platforms(): BelongsToMany
     {
         return $this->belongsToMany(Platform::class, 'product_platforms');
+    }
+
+    /**
+     * Public URL of the cover, or null when the product has none yet.
+     */
+    public function coverUrl(): ?string
+    {
+        return $this->cover_image === null ? null : Storage::disk('public')->url($this->cover_image);
     }
 
     /**

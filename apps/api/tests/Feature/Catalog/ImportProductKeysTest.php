@@ -36,6 +36,7 @@ it('imports the codes as available keys, trimmed and keeping their case', functi
     $keys = $product->keys()->orderBy('id')->get();
     expect($keys->map->code->all())->toBe(['abCDE-12345', 'FGHIJ-67890'])
         ->and($keys[0]->code_hash)->toBe(ProductKey::hashCode('ABCDE-12345'))
+        ->and($keys->map->code_hint->all())->toBe(['XXXXX-XX345', 'XXXXX-XX890'])
         ->and($keys[0]->product_type)->toBe(ProductType::License)
         ->and($keys[0]->status)->toBe(ProductKeyStatus::Available);
 });
@@ -102,7 +103,7 @@ it('refuses to import keys into a physical product', function () {
 
     $errors = validationErrorsOf(fn () => importKeys($product, 'ABCDE-12345'));
 
-    expect($errors['product'])->toBe(['Solo los productos de tipo key digital o licencia tienen keys.']);
+    expect($errors['product'])->toBe(['Solo los productos de tipo clave digital o licencia tienen claves.']);
     $this->assertDatabaseCount('product_keys', 0);
 });
 

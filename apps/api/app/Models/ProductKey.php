@@ -24,6 +24,7 @@ use RuntimeException;
  * @property ProductType $product_type
  * @property string $code
  * @property string $code_hash
+ * @property string $code_hint
  * @property ProductKeyStatus $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -52,17 +53,44 @@ class ProductKey extends Model
     }
 
     /**
-     * The stored columns of a code: the trimmed code encrypted, plus its hash.
-     * The only way a code reaches the database, through the cast or a bulk
-     * insert, so a code is never stored without its hash.
+     * A mask of the code that is safe to show, e.g. `XXXXX-XXXXX-XGHIJ`: every
+     * letter and digit becomes `X` except the last 4, and never more than a
+     * third of them, so short codes are not almost exposed. Hyphens are kept.
+     */
+    public static function hintFor(string $code): string
+    {
+        $characters = mb_str_split(trim($code));
+        $alphanumeric = count(array_filter($characters, fn (string $character): bool => ctype_alnum($character)));
+        $visible = min(4, intdiv($alphanumeric, 3));
+        $hidden = $alphanumeric - $visible;
+
+        $hint = '';
+
+        foreach ($characters as $character) {
+            if (ctype_alnum($character) && $hidden > 0) {
+                $hint .= 'X';
+                $hidden--;
+            } else {
+                $hint .= $character;
+            }
+        }
+
+        return $hint;
+    }
+
+    /**
+     * The stored columns of a code: the trimmed code encrypted, its hash and
+     * its hint. The only way a code reaches the database, through the cast or
+     * a bulk insert, so a code is never stored without its hash and hint.
      *
-     * @return array{code: string, code_hash: string}
+     * @return array{code: string, code_hash: string, code_hint: string}
      */
     public static function storedCodeAttributes(string $code): array
     {
         return [
             'code' => Crypt::encryptString(trim($code)),
             'code_hash' => self::hashCode($code),
+            'code_hint' => self::hintFor($code),
         ];
     }
 

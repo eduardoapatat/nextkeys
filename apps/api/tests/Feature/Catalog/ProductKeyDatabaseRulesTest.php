@@ -15,6 +15,7 @@ function insertProductKeyRow(int $productId, array $overrides = []): void
         'product_type' => 'digital_key',
         'code' => 'not-really-encrypted',
         'code_hash' => hash('sha256', fake()->unique()->uuid()),
+        'code_hint' => 'XXXXX-XXXXX-XXXXX',
         'status' => 'available',
         'created_at' => now(),
         'updated_at' => now(),

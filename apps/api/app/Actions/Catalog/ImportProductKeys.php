@@ -29,7 +29,7 @@ final class ImportProductKeys
     {
         if (! $product->type->isDeliveredByKey()) {
             throw ValidationException::withMessages([
-                'product' => 'Solo los productos de tipo key digital o licencia tienen keys.',
+                'product' => 'Solo los productos de tipo clave digital o licencia tienen claves.',
             ]);
         }
 
@@ -133,17 +133,18 @@ final class ImportProductKeys
                         $product->type->value,
                         $stored['code'],
                         $stored['code_hash'],
+                        $stored['code_hint'],
                         ProductKeyStatus::Available->value,
                         $now,
                         $now,
                     );
                 }
 
-                $rows = implode(', ', array_fill(0, count($chunk), '(?, ?, ?, ?, ?, ?, ?)'));
+                $rows = implode(', ', array_fill(0, count($chunk), '(?, ?, ?, ?, ?, ?, ?, ?)'));
 
                 /** @var list<object{code_hash: string}> $returned */
                 $returned = DB::select(
-                    "insert into product_keys (product_id, product_type, code, code_hash, status, created_at, updated_at)
+                    "insert into product_keys (product_id, product_type, code, code_hash, code_hint, status, created_at, updated_at)
                      values {$rows}
                      on conflict (code_hash) do nothing
                      returning code_hash",

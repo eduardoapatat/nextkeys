@@ -10,7 +10,7 @@ use InertiaDataTable\Column;
 use InertiaDataTable\DataTable;
 
 /**
- * The keys of one product in the admin panel: status and import date only.
+ * The keys of one product in the admin panel: hint, status and import date.
  * The query selects neither `code` nor `code_hash`, so codes never leave the
  * database for a listing.
  */
@@ -23,7 +23,7 @@ class ProductKeysTable extends DataTable
      */
     public function query(): HasMany
     {
-        return $this->product->keys()->select(['id', 'product_id', 'status', 'created_at']);
+        return $this->product->keys()->select(['id', 'product_id', 'code_hint', 'status', 'created_at']);
     }
 
     /**
@@ -32,6 +32,7 @@ class ProductKeysTable extends DataTable
     public function columns(): array
     {
         return [
+            Column::text('code_hint', 'Clave')->searchable()->hideable(false),
             Column::option('status', 'Estado')->options(ProductKeyStatus::class)->badge()->sortable()->filterSelect(),
             Column::date('created_at', 'Importada')->format('datetime')->sortable(),
         ];

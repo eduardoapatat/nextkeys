@@ -27,6 +27,7 @@ export type ProductFormValues = {
     stock: number | null;
     is_published: boolean;
     slug: string;
+    cover_url: string | null;
 };
 
 export type TitleFormValues = {

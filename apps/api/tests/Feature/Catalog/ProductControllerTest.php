@@ -8,6 +8,8 @@ use App\Models\ProductKey;
 use App\Models\Region;
 use App\Models\Title;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -123,6 +125,29 @@ it('ignores a type sent when updating a product', function () {
         ->slug->toBe('starfall-pc');
 });
 
+it('uploads a cover through a spoofed PUT and shows it in the edit form', function () {
+    Storage::fake('public');
+    $product = Product::factory()->create();
+
+    $this->post(route('products.update', $product), [
+        '_method' => 'put',
+        'title_id' => $product->title_id,
+        'activation_service_id' => $product->activation_service_id,
+        'region_id' => $product->region_id,
+        'platform_ids' => $product->platforms()->pluck('platforms.id')->all(),
+        'price' => $product->price,
+        'cover' => UploadedFile::fake()->image('cover.webp', 600, 800),
+    ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('products.index'));
+
+    $path = (string) $product->refresh()->cover_image;
+    Storage::disk('public')->assertExists($path);
+
+    $this->get(route('products.edit', $product))
+        ->assertInertia(fn (Assert $page) => $page->where('product.cover_url', Storage::disk('public')->url($path)));
+});
+
 it('deletes a product without keys', function () {
     $product = Product::factory()->create();
 
@@ -140,7 +165,7 @@ it('refuses to delete a product with keys', function () {
     $this->from(route('products.index'))
         ->delete(route('products.destroy', $product))
         ->assertRedirect(route('products.index'))
-        ->assertSessionHasErrors(['product' => 'Este producto tiene keys y no se puede eliminar. Despublícalo en su lugar.']);
+        ->assertSessionHasErrors(['product' => 'Este producto tiene claves y no se puede eliminar. Despublícalo en su lugar.']);
 
     $this->assertModelExists($product);
 });

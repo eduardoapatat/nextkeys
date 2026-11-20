@@ -32,7 +32,7 @@ defineOptions({
                 as-child
             >
                 <Link :href="ProductKeyController.index(props.product.id)">
-                    Gestionar keys
+                    Gestionar claves
                 </Link>
             </Button>
         </div>

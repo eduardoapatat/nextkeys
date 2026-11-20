@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, useForm } from '@inertiajs/vue3';
-import { computed, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import ProductController from '@/actions/App/Http/Controllers/Catalog/ProductController';
 import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
@@ -39,7 +39,47 @@ const form = useForm({
     stock: props.product?.stock ?? null,
     is_published: props.product?.is_published ?? false,
     slug: props.product?.slug ?? '',
+    cover: null as File | null,
+    remove_cover: false,
 });
+
+const coverInput = ref<InstanceType<typeof Input> | null>(null);
+const newCoverUrl = ref<string | null>(null);
+
+/** The cover the product will have after saving, for the preview. */
+const coverPreview = computed(() =>
+    form.remove_cover
+        ? null
+        : (newCoverUrl.value ?? props.product?.cover_url ?? null),
+);
+
+function setNewCoverUrl(file: File | null): void {
+    if (newCoverUrl.value) {
+        URL.revokeObjectURL(newCoverUrl.value);
+    }
+
+    newCoverUrl.value = file ? URL.createObjectURL(file) : null;
+}
+
+function onCoverChange(event: Event): void {
+    form.cover = (event.target as HTMLInputElement).files?.[0] ?? null;
+    form.remove_cover = false;
+    setNewCoverUrl(form.cover);
+}
+
+function removeCover(): void {
+    form.cover = null;
+    form.remove_cover = Boolean(props.product?.cover_url);
+    setNewCoverUrl(null);
+
+    const element = coverInput.value?.$el as HTMLInputElement | undefined;
+
+    if (element) {
+        element.value = '';
+    }
+}
+
+onBeforeUnmount(() => setNewCoverUrl(null));
 
 /**
  * A duplicate identity or a database rule is reported under `product`, a key
@@ -81,7 +121,11 @@ function nullableNumber(value: unknown): number | null {
 
 function submit(): void {
     if (props.product) {
-        form.submit(ProductController.update(props.product.id));
+        // PHP does not parse multipart PUT bodies, so a cover upload is sent
+        // as POST with Laravel's method spoofing.
+        form.transform((data) => ({ ...data, _method: 'put' })).post(
+            ProductController.update(props.product.id).url,
+        );
     } else {
         form.submit(ProductController.store());
     }
@@ -303,6 +347,48 @@ function submit(): void {
                 }}
             </p>
             <InputError :message="form.errors.slug" />
+        </div>
+
+        <div class="grid gap-2">
+            <Label for="cover">Carátula</Label>
+            <div class="flex items-start gap-4">
+                <img
+                    v-if="coverPreview"
+                    :src="coverPreview"
+                    alt="Carátula del producto"
+                    class="h-40 w-30 shrink-0 rounded-md border object-cover"
+                />
+                <div
+                    v-else
+                    class="flex h-40 w-30 shrink-0 items-center justify-center rounded-md border border-dashed text-center text-xs text-muted-foreground"
+                >
+                    Sin carátula
+                </div>
+                <div class="grid flex-1 gap-2">
+                    <Input
+                        id="cover"
+                        ref="coverInput"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        @change="onCoverChange"
+                    />
+                    <p class="text-sm text-muted-foreground">
+                        JPG, PNG o WebP de hasta 2 MB y al menos 300 × 400
+                        píxeles. Opcional.
+                    </p>
+                    <div v-if="coverPreview">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            @click="removeCover"
+                        >
+                            Quitar carátula
+                        </Button>
+                    </div>
+                    <InputError :message="form.errors.cover" />
+                </div>
+            </div>
         </div>
 
         <Label class="flex items-center gap-2 font-normal">

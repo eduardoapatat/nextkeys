@@ -11,7 +11,7 @@ enum ProductType: string
     public function label(): string
     {
         return match ($this) {
-            self::DigitalKey => 'Key digital',
+            self::DigitalKey => 'Clave digital',
             self::License => 'Licencia',
             self::Physical => 'Físico',
         };

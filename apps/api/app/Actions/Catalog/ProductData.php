@@ -2,6 +2,8 @@
 
 namespace App\Actions\Catalog;
 
+use Illuminate\Http\UploadedFile;
+
 /**
  * The editable fields of a product, as the create and update Actions receive
  * them. It has no `type`: the type is chosen once, as a separate argument of
@@ -12,6 +14,7 @@ final readonly class ProductData
     /**
      * @param  list<int>  $platformIds
      * @param  ?string  $slug  Null keeps the current slug on update and generates one on create.
+     * @param  ?UploadedFile  $cover  A new cover; null keeps the current one unless $removeCover.
      */
     public function __construct(
         public int $titleId,
@@ -22,5 +25,7 @@ final readonly class ProductData
         public ?int $stock,
         public bool $isPublished,
         public ?string $slug,
+        public ?UploadedFile $cover = null,
+        public bool $removeCover = false,
     ) {}
 }

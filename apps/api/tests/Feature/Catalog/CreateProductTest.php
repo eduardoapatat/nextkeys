@@ -85,7 +85,7 @@ it('rejects invalid product data with a readable error', function (ProductType $
 })->with([
     'key without activation service' => [ProductType::DigitalKey, ['activationServiceId' => null], 'activation_service_id', 'El campo servicio de activación es obligatorio.'],
     'license without region' => [ProductType::License, ['regionId' => null], 'region_id', 'El campo región es obligatorio.'],
-    'key with stock' => [ProductType::DigitalKey, ['stock' => 5], 'stock', 'Para este tipo, el stock se cuenta a partir de las keys disponibles.'],
+    'key with stock' => [ProductType::DigitalKey, ['stock' => 5], 'stock', 'Para este tipo, el stock se cuenta a partir de las claves disponibles.'],
     'physical without stock' => [ProductType::Physical, ['stock' => null], 'stock', 'El campo stock es obligatorio.'],
     'physical with negative stock' => [ProductType::Physical, ['stock' => -1], 'stock', 'El campo stock debe ser al menos 0.'],
     'no platforms' => [ProductType::DigitalKey, ['platformIds' => []], 'platform_ids', 'El campo plataformas es obligatorio.'],

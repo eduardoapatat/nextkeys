@@ -42,9 +42,20 @@ it('lists the keys of the product by status and date, never their codes', functi
             ])
             ->where('keys.meta.total', 2)
             ->has('keys.data.0', fn (Assert $row) => $row
-                ->hasAll(['id', 'status', 'created_at'])
+                ->hasAll(['id', 'code_hint', 'status', 'created_at'])
                 ->missingAll(['code', 'code_hash'])
                 ->etc()));
+});
+
+it('finds a key by the visible characters of its hint', function () {
+    $product = Product::factory()->create();
+    ProductKey::factory()->for($product)->create(['code' => 'ABCDE-12345-F7QF2']);
+    ProductKey::factory()->for($product)->create(['code' => 'ABCDE-12345-G8RG3']);
+
+    $this->get(route('products.keys.index', [$product, 'search' => '7QF2']))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('keys.meta.total', 1)
+            ->where('keys.data.0.code_hint', 'XXXXX-XXXXX-X7QF2'));
 });
 
 it('has no keys page for a physical product', function () {
@@ -70,7 +81,7 @@ it('imports the keys of an uploaded file and flashes the result', function () {
                 ['line' => 4, 'reason' => 'Repetido en el archivo.'],
             ],
         ])
-        ->assertInertiaFlash('toast.message', '2 keys importadas, 3 rechazadas.');
+        ->assertInertiaFlash('toast.message', '2 claves importadas, 3 rechazadas.');
 
     expect($product->keys()->where('status', ProductKeyStatus::Available)->count())->toBe(2);
 });
@@ -105,7 +116,7 @@ it('refuses to import into a physical product', function () {
     $file = UploadedFile::fake()->createWithContent('keys.csv', 'ABCDE-12345');
 
     $this->post(route('products.keys.store', $product), ['file' => $file])
-        ->assertSessionHasErrors(['product' => 'Solo los productos de tipo key digital o licencia tienen keys.']);
+        ->assertSessionHasErrors(['product' => 'Solo los productos de tipo clave digital o licencia tienen claves.']);
 
     $this->assertDatabaseCount('product_keys', 0);
 });

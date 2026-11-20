@@ -56,6 +56,7 @@ What gets sold. Has a page, is listed, goes into the cart.
 | `price` | Integer CLP (no decimals): `19990` = $19.990. `CHECK (price > 0)` |
 | `stock` | Integer, nullable. Only for `physical`. `CHECK (stock >= 0)` |
 | `is_published` | Admin decision: draft or for sale. Default `false` |
+| `cover_image` | Optional path of the variant's cover on the `public` disk (see *Variant cover and key hint*) |
 
 Postgres has no unsigned integers (`unsignedInteger()` creates a plain `integer`), so the sign rules are explicit CHECKs. `UNIQUE (id, type)` is also required: it is redundant with the primary key, but Postgres needs it as the target of the composite FK from `product_keys`.
 
@@ -77,6 +78,7 @@ One row per code to deliver.
 | `product_type` | Copy of the product's type, for the composite FK |
 | `code` | Stored trimmed (case preserved), `encrypted` cast, hidden from serialization, never logged |
 | `code_hash` | HMAC-SHA256 of the **normalized** code (trimmed, uppercased) with `KEY_HASH_SECRET` (not `APP_KEY`, so key rotation does not break it). Hidden |
+| `code_hint` | Plain-text mask of the code shown in the admin instead of it, e.g. `XXXXX-XXXXX-X7QF2`. Not hidden |
 | `status` | `ProductKeyStatus`, default `available` |
 
 Indexes:
@@ -198,6 +200,17 @@ Decisions taken before planning the bulk import from CSV:
 - **Only key-delivered products.** The import rejects `physical` products with a validation error before reading the file; the composite FK stays as the safety net.
 
 - **Implementation.** `ImportProductKeys` validates the file and classifies each line, then inserts the valid codes in one transaction, in chunks of 1,000, with `INSERT … ON CONFLICT (code_hash) DO NOTHING RETURNING code_hash`: a code whose hash does not come back already existed, also when a concurrent import committed it after the file was read. Inserting a key takes `FOR KEY SHARE` on its product row, so the import serializes with `DeleteProduct`'s `lockForUpdate`. A bulk insert skips the `ProductKeyCode` cast, so both use `ProductKey::storedCodeAttributes()`, the only place that encrypts a code and computes its hash. The result carries line numbers and reasons, never codes; the controller flashes at most 100 rejected lines plus the total. The keys list (`ProductKeysTable`) selects neither `code` nor `code_hash`.
+
+## Variant cover and key hint
+
+Decisions taken on 2026-11-20, after closing the key import:
+
+- **Titles stay.** A title is the game: it groups its products (variants) for the storefront, the identity rule (`title_id` + activation service + region + platforms) and the slugs. Removing it was rejected: identity and grouping would depend on a free-text name, and the name and description would be repeated in every variant.
+- **Each product gets its own cover** (`cover_image`, a path on the `public` disk): the PS5 box is not the Switch one. Optional: a product without a cover shows a placeholder in the storefront. Titles have no cover and there is no fallback, so each variant has one source of truth. JPG, PNG or WebP, at most 2 MB, at least 300×400, stored as uploaded (no conversion or thumbnails, which would need a new dependency). The code uses `Storage::disk()`, so moving to S3/R2 later is configuration.
+- **The description stays on the title only.** It describes the game, which every variant shares. A Deluxe or Gold edition is a separate title with its own description, so a variant never needs its own. A per-product description was considered and reverted the same day.
+- **Key hint.** A new plain-text column `code_hint` holds a mask of the code computed at import, e.g. `XXXXX-XXXXX-7QF2`: every letter and digit becomes `X` except the last 4, capped at a third of the code's length (rounded down), so short codes are not almost exposed. Hyphens are kept. It shows the length and hyphen positions, which is acceptable (a 15-character Steam key still hides 11). The last group after the last hyphen was rejected: a code without hyphens would be shown whole. The full code stays encrypted, never hashed only: phase 3 must deliver it to the buyer. The keys list shows the hint and can search by its visible characters.
+
+- **Implementation.** `ProductKey::storedCodeAttributes()` also returns `code_hint` (`ProductKey::hintFor()`), so the cast and the bulk import both write it; the migration backfills existing rows through the model before making the column `NOT NULL`. The keys list shows the hint and searches it. `SaveProduct` validates the cover with the other catalog rules, stores the file **before** the transaction (files are not transactional), deletes it if the save throws, and deletes a replaced or removed cover only after the save commits; `DeleteProduct` deletes the cover after the row. The edit form sends a cover as `POST` with `_method=put`, because PHP does not parse multipart `PUT` bodies.
 
 ## Out of scope (for now)
 

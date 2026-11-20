@@ -9,10 +9,13 @@ use App\Models\Product;
 use App\Models\Region;
 use App\Models\Title;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 /**
  * Validates and writes a product with its platforms. Shared by CreateProduct
@@ -22,6 +25,10 @@ use Illuminate\Validation\ValidationException;
  * so the admin gets readable errors. The database stays the safety net: its
  * constraint triggers are checked before the transaction ends and their
  * violations are turned into the same validation errors.
+ *
+ * The cover is written to the `public` disk before the transaction, because
+ * files are not transactional: a failed save deletes the new file, and the
+ * replaced or removed one is only deleted once the save has committed.
  */
 final class SaveProduct
 {
@@ -37,9 +44,36 @@ final class SaveProduct
         $this->validate($product, $type, $data);
         $this->ensureIdentityIsFree($product, $type, $data);
 
+        $previousCover = $product->cover_image;
+        $newCover = $data->cover instanceof UploadedFile ? $this->storeCover($data->cover) : null;
+        $cover = $newCover ?? ($data->removeCover ? null : $previousCover);
+
         try {
-            return DB::transaction(function () use ($product, $type, $data): Product {
+            $saved = $this->write($product, $type, $data, $cover);
+        } catch (Throwable $exception) {
+            if ($newCover !== null) {
+                Storage::disk('public')->delete($newCover);
+            }
+
+            throw $exception;
+        }
+
+        if ($previousCover !== null && $previousCover !== $cover) {
+            Storage::disk('public')->delete($previousCover);
+        }
+
+        return $saved;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function write(Product $product, ProductType $type, ProductData $data, ?string $cover): Product
+    {
+        try {
+            return DB::transaction(function () use ($product, $type, $data, $cover): Product {
                 $product->fill([
+                    'cover_image' => $cover,
                     'title_id' => $data->titleId,
                     'activation_service_id' => $data->activationServiceId,
                     'region_id' => $data->regionId,
@@ -85,6 +119,7 @@ final class SaveProduct
             'price' => $data->price,
             'stock' => $data->stock,
             'slug' => $data->slug,
+            'cover' => $data->cover,
         ], [
             'title_id' => ['required', Rule::exists(Title::class, 'id')],
             'activation_service_id' => [$deliveredByKey ? 'required' : 'nullable', Rule::exists(ActivationService::class, 'id')],
@@ -94,11 +129,24 @@ final class SaveProduct
             'price' => ['integer', 'min:1', 'max:'.self::MAX_INTEGER],
             'stock' => $deliveredByKey ? ['prohibited'] : ['required', 'integer', 'min:0', 'max:'.self::MAX_INTEGER],
             'slug' => ['nullable', 'max:255', 'regex:/^[a-z0-9]+(-[a-z0-9]+)*$/', Rule::unique(Product::class, 'slug')->ignore($product->id)],
+            'cover' => ['nullable', 'bail', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048', 'dimensions:min_width=300,min_height=400'],
         ], [
             'platform_ids.max' => 'Un producto físico cubre exactamente una plataforma.',
-            'stock.prohibited' => 'Para este tipo, el stock se cuenta a partir de las keys disponibles.',
+            'stock.prohibited' => 'Para este tipo, el stock se cuenta a partir de las claves disponibles.',
             'slug.regex' => 'Usa minúsculas, números y guiones simples.',
+            'cover.max' => 'La carátula no puede pesar más de 2 MB.',
         ])->validate();
+    }
+
+    private function storeCover(UploadedFile $cover): string
+    {
+        $path = Storage::disk('public')->putFile('covers', $cover);
+
+        if ($path === false) {
+            throw new \RuntimeException('The product cover could not be stored.');
+        }
+
+        return $path;
     }
 
     /**

@@ -19,6 +19,6 @@ it('refuses to delete a product that has keys', function () {
 
     $errors = validationErrorsOf(fn () => app(DeleteProduct::class)->handle($product));
 
-    expect($errors['product'])->toBe(['Este producto tiene keys y no se puede eliminar. Despublícalo en su lugar.']);
+    expect($errors['product'])->toBe(['Este producto tiene claves y no se puede eliminar. Despublícalo en su lugar.']);
     $this->assertModelExists($product);
 });

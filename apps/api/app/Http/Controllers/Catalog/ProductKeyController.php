@@ -56,8 +56,8 @@ class ProductKeyController extends Controller
             ),
         ]);
         Inertia::flash('toast', $rejectedCount === 0
-            ? ['type' => 'success', 'message' => "{$result->imported} keys importadas."]
-            : ['type' => 'warning', 'message' => "{$result->imported} keys importadas, {$rejectedCount} rechazadas."]);
+            ? ['type' => 'success', 'message' => "{$result->imported} claves importadas."]
+            : ['type' => 'warning', 'message' => "{$result->imported} claves importadas, {$rejectedCount} rechazadas."]);
 
         return to_route('products.keys.index', $product);
     }
