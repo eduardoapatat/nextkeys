@@ -14,4 +14,11 @@ return [
     */
     'max_quantity_per_line' => 5,
 
+    /*
+    | Lets admins mark an order as paid from the panel, to try orders without
+    | a payment gateway. Local only: in production it would deliver keys
+    | without charging, so it is off unless the environment turns it on.
+    */
+    'manual_payments' => (bool) env('ORDERS_MANUAL_PAYMENTS', false),
+
 ];

@@ -47,7 +47,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Catalog Actions turn every database rule into a validation error before writing (per type, platforms, slug, identity, delete guards): `tests/Feature/Catalog/{Create,Update,Delete}ProductTest.php`, `DeleteTitleTest.php` and `GenerateProductSlugTest.php` (checks the doc's example slugs from the demo seeder).
 - Key import: per-line rules, duplicates (in the file and in the database) and limits in `tests/Feature/Catalog/ImportProductKeysTest.php`; upload validation and "codes never reach a response" in `ProductKeyControllerTest.php`.
 - Product cover (stored before the transaction, cleaned up on failure, replace and remove) and key hint: `tests/Feature/Catalog/ProductCoverTest.php` and `ProductKeyTest.php`.
-- Orders: CHECKs, the `orders_status_transition` trigger, the key lifecycle and quantity triggers on `product_keys` in `tests/Feature/Orders/OrderDatabaseRulesTest.php` and `ProductKeyOrderRulesTest.php`; reservation, cancel, expiry and payment in `tests/Feature/Orders/*Test.php`.
+- Orders: CHECKs, the `orders_status_transition` trigger, the key lifecycle and quantity triggers on `product_keys` in `tests/Feature/Orders/OrderDatabaseRulesTest.php` and `ProductKeyOrderRulesTest.php`; reservation, cancel, expiry and payment in `tests/Feature/Orders/*Test.php`; the admin panel (search, filter, no codes, reference URLs, manual payment flag) in `OrderControllerTest.php`.
 - User role rule: `users_role_check` CHECK in the migration, covered by `tests/Feature/Users/UserRoleDatabaseRulesTest.php`.
 - Public catalog API (`/api/v1`): visibility, facets, sorting, pagination, `in_stock`, 422s, constant query count, variants, 404s, filter options, "no key data, stock, status or ids in any response", rate limit and CORS in `tests/Feature/Api/V1/*Test.php`.
 - Every authenticated app route must sit behind the `can:access-admin-panel` gate: `tests/Feature/AdminPanelRoutesTest.php`.
@@ -78,6 +78,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - A data table `transform()` override stops the package from resolving relation columns (`from('title.name')`); add computed values as SQL aliases in `query()` instead.
 
 - A reserved or sold key must belong to an order line (`product_keys_order_item_matches_status`): use `ProductKey::factory()->reserved()`/`sold()`, never just set `status`.
+- "Marcar como pagado" in the panel only exists with `ORDERS_MANUAL_PAYMENTS=true` (local); otherwise the route returns 404.
 - `composer dev` also runs `schedule:work` (registered in `AppServiceProvider`), which expires pending orders every minute.
 
 - After changing an API Resource, regenerate the fixtures with `CONTRACTS_UPDATE=1 php artisan test --filter=ApiContract` (in `apps/api`) and update the valibot schemas in `apps/web`.

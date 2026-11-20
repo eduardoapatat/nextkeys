@@ -92,6 +92,15 @@ pending ──payment──▶ paid ──delivery──▶ completed
 - **Factories.** `ProductKeyFactory::reserved()` / `sold()` create a one-unit line of a pending / completed order, as the CHECK requires.
 - **Not covered by tests:** concurrency across two connections (`SKIP LOCKED`, the stock `UPDATE`), like the catalog's advisory lock.
 
+## Admin panel (orders)
+
+Decided and implemented on 2026-11-20.
+
+- **List:** a data table with reference, customer (name and email), status badge, total (CLP), creation date and, for pending orders, `expires_at`. Filter by status, search by reference or customer email, sort by date and total. Same pattern as the product list.
+- **Detail:** header (reference, customer, status, `paid_at` / `completed_at` / `cancelled_at`, `expires_at`) and lines from the snapshot (title name, type, quantity, unit price, line total). Digital lines list their keys by `code_hint` and status; the code is never shown, as everywhere else in the panel.
+- **Actions:** cancel a pending order (`CancelOrder`, with confirmation). Mark as paid (`MarkOrderPaid`) by hand to test without Stripe, **only in the local environment**: in production it would deliver keys without charging. Gated by `orders.manual_payments` (`ORDERS_MANUAL_PAYMENTS`, default `false`): when off, the route returns 404 and the button is hidden.
+- **Implementation.** `OrderController` (`routes/orders.php`, bound by `{order:reference}`: URLs never carry the id), `OrdersTable`, pages `orders/Index` and `orders/Show`. `OrderCannotBePaid` is turned into a Spanish validation error only in the panel; the Action keeps the domain exception for the webhook. Confirmations use the generic `ConfirmActionButton` (POST or DELETE); `ConfirmDeleteButton` wraps it.
+
 ## Rejected alternatives
 
 - **One `order_items` row per unit**: simpler 1:1 link to a key, but every list and total has to group rows.

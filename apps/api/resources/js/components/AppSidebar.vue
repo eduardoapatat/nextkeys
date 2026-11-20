@@ -6,8 +6,10 @@ import {
     LayoutGrid,
     Library,
     Package,
+    ShoppingCart,
 } from '@lucide/vue';
 import ProductController from '@/actions/App/Http/Controllers/Catalog/ProductController';
+import OrderController from '@/actions/App/Http/Controllers/Orders/OrderController';
 import TitleController from '@/actions/App/Http/Controllers/Catalog/TitleController';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -30,6 +32,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Pedidos',
+        href: OrderController.index(),
+        icon: ShoppingCart,
     },
     {
         title: 'Productos',

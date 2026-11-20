@@ -21,4 +21,5 @@ Route::middleware(['auth', 'can:access-admin-panel'])->group(function () {
 
     require __DIR__.'/settings.php';
     require __DIR__.'/catalog.php';
+    require __DIR__.'/orders.php';
 });
