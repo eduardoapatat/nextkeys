@@ -1,0 +1,44 @@
+<?php
+
+/*
+ * Spanish messages for the validation rules the admin panel uses. Rules not
+ * listed here fall back to English (`fallback_locale`).
+ */
+return [
+    'array' => 'El campo :attribute debe ser una lista.',
+    'boolean' => 'El campo :attribute debe ser verdadero o falso.',
+    'distinct' => 'El campo :attribute tiene un valor repetido.',
+    'enum' => 'El :attribute seleccionado no es válido.',
+    'exists' => 'El :attribute seleccionado no existe.',
+    'integer' => 'El campo :attribute debe ser un número entero.',
+    'max' => [
+        'array' => 'El campo :attribute no puede tener más de :max elementos.',
+        'numeric' => 'El campo :attribute no puede ser mayor que :max.',
+        'string' => 'El campo :attribute no puede tener más de :max caracteres.',
+    ],
+    'min' => [
+        'array' => 'El campo :attribute debe tener al menos :min elementos.',
+        'numeric' => 'El campo :attribute debe ser al menos :min.',
+        'string' => 'El campo :attribute debe tener al menos :min caracteres.',
+    ],
+    'prohibited' => 'El campo :attribute no está permitido.',
+    'regex' => 'El formato del campo :attribute no es válido.',
+    'required' => 'El campo :attribute es obligatorio.',
+    'string' => 'El campo :attribute debe ser texto.',
+    'unique' => 'El :attribute ya está en uso.',
+
+    'attributes' => [
+        'activation_service_id' => 'servicio de activación',
+        'description' => 'descripción',
+        'is_published' => 'publicado',
+        'name' => 'nombre',
+        'platform_ids' => 'plataformas',
+        'platform_ids.*' => 'plataforma',
+        'price' => 'precio',
+        'region_id' => 'región',
+        'slug' => 'slug',
+        'stock' => 'stock',
+        'title_id' => 'título',
+        'type' => 'tipo',
+    ],
+];

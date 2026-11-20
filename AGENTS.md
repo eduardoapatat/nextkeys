@@ -41,6 +41,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - PHPStan with Larastan at level `max`, no baseline (`apps/api/phpstan.neon`).
 - Pint, ESLint/Prettier and vue-tsc, all included in `composer ci:check`.
 - Catalog database rules (CHECKs, composite FK, triggers) live in the migrations and are covered by `tests/Feature/Catalog/*DatabaseRulesTest.php` and `ProductIdentityTriggerTest.php`.
+- Catalog Actions turn every database rule into a validation error before writing (per type, platforms, slug, identity, delete guards): `tests/Feature/Catalog/{Create,Update,Delete}ProductTest.php`, `DeleteTitleTest.php` and `GenerateProductSlugTest.php` (checks the doc's example slugs from the demo seeder).
 - User role rule: `users_role_check` CHECK in the migration, covered by `tests/Feature/Users/UserRoleDatabaseRulesTest.php`.
 - Every authenticated app route must sit behind the `can:access-admin-panel` gate: `tests/Feature/AdminPanelRoutesTest.php`.
 - CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service.
@@ -57,6 +58,8 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Boost output in `apps/api` (`AGENTS.md`, `.claude/`, `.agents/`, `.mcp.json`, `opencode.json`, `boost.json`) is git-ignored. After a fresh clone, run `php artisan boost:install` there.
 - Write a product and its platforms in one transaction: the identity constraint trigger is deferred to commit and rejects a product with no platforms. Tests never commit, so call `checkDeferredConstraints()` to fire it.
 - The starter kit frontend uses Vite+ (`vp`), not `vite`.
+- `shadcn-vue add` writes `import { cn } from "cn"` in new `components/ui` files; change it to `@/lib/utils`, or the build fails.
+- A data table `transform()` override stops the package from resolving relation columns (`from('title.name')`); add computed values as SQL aliases in `query()` instead.
 
 ## Definition of done
 

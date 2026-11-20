@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Actions\Catalog;
+
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
+final class DeleteProduct
+{
+    /**
+     * Deletes a product nothing references (no keys yet); a referenced product
+     * is unpublished instead.
+     *
+     * The product row is locked first: inserting a key locks its product row
+     * too (FOR KEY SHARE), so a concurrent import either already committed and
+     * is seen by the check, or waits until the delete is done.
+     *
+     * @throws ValidationException
+     */
+    public function handle(Product $product): void
+    {
+        DB::transaction(function () use ($product): void {
+            Product::query()->whereKey($product->id)->lockForUpdate()->first();
+
+            if ($product->keys()->exists()) {
+                throw ValidationException::withMessages([
+                    'product' => 'Este producto tiene keys y no se puede eliminar. Despublícalo en su lugar.',
+                ]);
+            }
+
+            $product->delete();
+        });
+    }
+}

@@ -20,4 +20,5 @@ Route::middleware(['auth', 'can:access-admin-panel'])->group(function () {
         ->name('dashboard');
 
     require __DIR__.'/settings.php';
+    require __DIR__.'/catalog.php';
 });

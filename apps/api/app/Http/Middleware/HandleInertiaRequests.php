@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -24,6 +25,15 @@ class HandleInertiaRequests extends Middleware
     public function version(Request $request): ?string
     {
         return parent::version($request);
+    }
+
+    /**
+     * Keep the URL as the browser sent it, so data table query strings
+     * (`filter[status]=a,b`) stay readable instead of being re-encoded.
+     */
+    public function urlResolver(): ?Closure
+    {
+        return fn (Request $request): string => $request->getRequestUri();
     }
 
     /**

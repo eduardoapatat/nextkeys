@@ -1,6 +1,6 @@
 # Catalog domain model
 
-Status: **implemented** (enums, migrations with every database rule, models, factories, seeders, tests). The Action layer ("In the Action") arrives with the product CRUD. See *Implementation notes* at the end.
+Status: **implemented** (enums, migrations with every database rule, models, factories, seeders, tests, and the admin CRUD of titles and products with its Actions in `app/Actions/Catalog`). See *Implementation notes* at the end.
 
 ## Overview
 
@@ -174,6 +174,18 @@ Products 6 and 7 share title, activation service, region and platforms but diffe
 | Slug with spaces or uppercase | CHECK |
 | Key for product 5 (physical) | composite FK + CHECK |
 | The same code imported into two products | unique `code_hash` |
+
+## Admin panel (product CRUD)
+
+Decisions taken before planning the CRUD:
+
+- **Deleting products: guarded hard delete.** A product can be deleted only while nothing references it (no `product_keys` rows now; no orders from phase 3). Otherwise the Action returns a readable validation error suggesting to unpublish it. "Deactivating" is `is_published = false`, which already exists. `SoftDeletes` was rejected: the identity trigger and every query would have to decide whether a deleted product still blocks an identical new one.
+- **Titles have their own section.** A small CRUD (name, description). The product form only selects an existing title; it never creates one inline. A title cannot be deleted while it has products (`restrictOnDelete`), and the Action reports it as a validation error.
+- **Slug generation.** The slug field is optional. Left empty on creation, the server builds the suggestion from the rule in *Slugs* and, if it is taken, appends `-2`, `-3`… until it is free. A slug typed by the admin that is already taken is a validation error (no suffix). On edit the slug is kept unless the admin changes it; renaming the title or other fields never regenerates it. The rule lives only on the server; the form shows no live preview.
+- **Product listing: no filters for now.** A paginated list that only shows the data. Filters can be added later.
+- **Admin listings use `eduardoapatat/laravel-inertia-datatable`.** Pagination and sorting are resolved on the server and the state lives in the URL; adding filters later is a column method, not a rewrite. Table classes live in `app/DataTables`.
+- **Implementation.** `SaveProduct` (shared by `CreateProduct` and `UpdateProduct`) validates the per-type rules, the slug and the identity, writes the product and its platforms in one transaction and runs the identity constraint triggers before it ends (`SET CONSTRAINTS … IMMEDIATE`), turning a unique violation from a race into the same validation error. `DeleteProduct` and `DeleteTitle` lock the row (`lockForUpdate`) before checking it is unreferenced. The list's stock is one correlated subquery (`coalesce(stock, count of available keys)`, valid because of `products_stock_only_for_physical`).
+- **The product type cannot change by design.** The data object the create and update Actions receive has no `type` field: the type is a separate argument of the create Action only. The `products_type_immutable` trigger stays as the safety net.
 
 ## Out of scope (for now)
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Catalog\ProductData;
 use App\Enums\ProductType;
 use App\Models\ActivationService;
 use App\Models\Platform;
@@ -7,6 +8,8 @@ use App\Models\Region;
 use App\Models\Title;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 
 /*
@@ -89,4 +92,40 @@ function checkDeferredConstraints(): void
 {
     DB::statement('SET CONSTRAINTS ALL IMMEDIATE');
     DB::statement('SET CONSTRAINTS ALL DEFERRED');
+}
+
+/**
+ * A valid `digital_key` ProductData with new related rows; override any field
+ * by its constructor name (`stock: 5`, `platformIds: [...]`).
+ */
+function productData(mixed ...$overrides): ProductData
+{
+    return new ProductData(...[
+        'titleId' => Title::factory()->create()->id,
+        'activationServiceId' => ActivationService::factory()->create()->id,
+        'regionId' => Region::factory()->create()->id,
+        'platformIds' => [Platform::factory()->create()->id],
+        'price' => 19990,
+        'stock' => null,
+        'isPublished' => false,
+        'slug' => null,
+        ...$overrides,
+    ]);
+}
+
+/**
+ * The validation errors an action throws, by field. Fails the test when the
+ * action does not throw a ValidationException.
+ *
+ * @return array<string, list<string>>
+ */
+function validationErrorsOf(Closure $action): array
+{
+    try {
+        $action();
+    } catch (ValidationException $exception) {
+        return $exception->errors();
+    }
+
+    Assert::fail('Expected a ValidationException, none was thrown.');
 }
