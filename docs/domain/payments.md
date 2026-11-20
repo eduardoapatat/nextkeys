@@ -8,7 +8,7 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
   - It is the expected gateway for a Chilean store; Stripe is, per most sources, not available to businesses registered in Chile.
   - Its **commit** model fits the stock reservation: the charge is only confirmed when the store commits it, so the store decides with the order locked.
   - The payment form expires after **4 minutes** in production (10 in integration), well inside the 15-minute hold.
-- **PHP client: Laravel's HTTP client**, not the official `transbank/transbank-sdk` (decided 2026-11-20). Webpay Plus needs four calls (create, commit, status, refund); they live in the Transbank implementation of `PaymentGateway` and are tested with `Http::fake`, without network. The SDK was rejected: no release since 5.1.0 (2025-06-17), its CI only tests PHP  8.2 (nothing newer, so untested on our 8.5), and one more dependency for four endpoints.
+- **PHP client: Laravel's HTTP client**, not the official `transbank/transbank-sdk` (decided 2026-11-20). Webpay Plus needs four calls (create, commit, status, refund); they live in the Transbank implementation of `PaymentGateway` and are tested with `Http::fake`, without network. The SDK was rejected: no release since 5.1.0 (2025-06-17), its CI only tests PHP 8.2 (nothing newer, so untested on our 8.5), and one more dependency for four endpoints.
 - **A second gateway may come later** (Mercado Pago Checkout Pro, or Stripe) as another `PaymentGateway` implementation, to prove the interface. Not planned yet.
 - **General rule for any gateway:** its payment window must be no longer than the order's reservation (`orders.expires_at`), so a late payment only happens when the gateway misbehaves.
 
