@@ -1,6 +1,6 @@
 # Payments domain model
 
-Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
+Status: **design decided** (2026-11-20), implementation in progress. Phase 3.
 
 ## Decisions
 
@@ -28,6 +28,56 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
 4. On `token_ws`: lock the order. If it can still be paid (`pending`, or `expired` with stock that can be reserved again), **commit**; approved means exactly `response_code` 0 **and** `status` `AUTHORIZED`, and the returned `amount` and `buy_order` must match the attempt; then `MarkOrderPaid`. A rejection (`response_code` -1 to -5, status `FAILED`) leaves the order `pending` for another attempt. Otherwise **do not commit**: the customer is not charged and sees that the order expired. The commit happens **in the same request, within seconds** of the return (the window is under a minute, see *Integration environment experiments*); it is never queued. The order lock waits with a short timeout so a busy lock cannot push the commit past the window.
 5. The return page only shows the result; nothing is delivered from the browser's word alone.
 6. Delivery: keys by email through the queue (to be designed).
+
+## Design (decided 2026-11-20)
+
+### `payment_attempts`
+
+One row per attempt to pay an order; an order has at most **5** (`payments.max_attempts`, `CHECK (number BETWEEN 1 AND 5)`), well under the card brands' retry blocks.
+
+| column | notes |
+|---|---|
+| `order_id` | FK to `orders`, restrict |
+| `number` | 1 to 5, unique per order |
+| `gateway` | `webpay_plus` (CHECK) |
+| `buy_order` | `{reference}-{number}` (`NK-7QF2K9-2`), unique. An attempt whose create call fails still counts: its `buy_order` may have reached Transbank, so it is never reused |
+| `token` | 64 lowercase hex characters (CHECK), unique, null until create answers |
+| `amount` | integer CLP, the order's `total` when the attempt starts |
+| `status` | `PaymentAttemptStatus` (below) |
+| receipt | `response_code`, `authorization_code`, `payment_type_code`, `installments_number`, `installments_amount`, `card_last_digits`, `transaction_date`, `accounting_date`, from the commit (or `status`) response. `vci` is neither stored nor validated |
+| refund | `refund_type` (`reversed` / `nullified`), `refunded_amount`, `refunded_at` |
+| `finished_at` | when it left `initialized` |
+
+Statuses: `initialized` (sent to Webpay), `authorized` (committed and recorded on the order), `rejected` (the bank said no), `cancelled` (the customer cancelled in Webpay), `aborted` (never committed: form timeout, order no longer payable, or the commit window passed; nothing charged), `refunded` (charged and refunded automatically). A trigger allows only `initialized` → any other; CHECKs tie the receipt to `authorized` / `refunded` and `refunded_at` to `refunded`.
+
+### Order changes
+
+- **Reopening replaces late payment.** The `orders` trigger trades `expired` → `paid` for `expired` → `pending`. `ReopenExpiredOrder` reserves the stock again and gives the order a fresh hold; `MarkOrderPaid` only takes a `pending` order. So "the stock is held" means exactly "`pending` (or paid)". If the bank then rejects the payment, the reopened order stays `pending` and the customer can try again.
+- **Starting an attempt extends the hold** to `max(expires_at, now + 11 min)` (`payments.payment_window_minutes`: the 10-minute integration form plus the commit), so an order rarely expires while the customer is in Webpay.
+- `LockPayableOrder` is the single "can it still be charged?" rule: it locks the order with `SET LOCAL lock_timeout = '3s'`, returns it when `pending`, reopens it when `expired`, and throws `OrderCannotBePaid` otherwise.
+
+### Gateway
+
+- `App\Payments\PaymentGateway`: `start`, `confirm` (commit), `status`, `refund`, with gateway-neutral typed results (`PaymentRedirect`, `GatewayPayment`, `GatewayRefund`). Approved means exactly `Authorized` with response code 0. Every failure is one `PaymentGatewayException` that carries no request, no URL and no previous exception (the HTTP client's exceptions hold the `Tbk-Api-Key-Secret` header).
+- `App\Payments\Transbank\WebpayPlusGateway` (Laravel's HTTP client): connect timeout 3 s, total 10 s; the commit retries once on a connection error only (it is idempotent), so the worst case (3 s lock + 2 × 13 s) stays under the ~42 s window. Tokens are checked against `^[0-9a-f]{64}$` before they go into a URL. Credentials and hosts live in `config/payments.php` (integration defaults).
+
+### Return route
+
+`GET|POST /payments/webpay/return`, outside CSRF, throttled, no auth (the token identifies the attempt).
+
+- only `token_ws` → `ConfirmPaymentAttempt`: lock the order (`LockPayableOrder`); not payable → `aborted`, no commit; lock timeout → no commit, the attempt stays `initialized`; otherwise commit. Approved with matching `amount` and `buy_order` → `MarkOrderPaid` and `authorized`; approved but mismatched → refunded at once; rejected → `rejected`. A gateway error leaves the attempt `initialized` for reconciliation.
+- `TBK_TOKEN` (with or without `token_ws`) → `cancelled` when it matches the stored token and `buy_order`; never committed.
+- only `TBK_ORDEN_COMPRA` (form timeout) → nothing changes; reconciliation closes it, so a forged request cannot touch someone else's attempt. `TBK_ID_SESION` (either spelling) is not used.
+- Then a redirect to the storefront result page (`payments.result_url`/`{reference}`, phase 4).
+
+### Reconciliation
+
+`payments:reconcile` every 5 minutes takes `initialized` attempts older than 15 minutes (`payments.reconcile_after_minutes`), skipping locked orders: no token or older than 7 days → `aborted` without a call; `status` `INITIALIZED` → `aborted`; `FAILED` → `rejected`; `AUTHORIZED` → recorded as paid if the order can take it, otherwise refunded in full and `refunded`; `REVERSED` / `NULLIFIED` → `refunded`. A gateway error is logged and retried on the next run.
+
+### Panel and phase 4
+
+- The order detail lists its payment attempts. With `ORDERS_MANUAL_PAYMENTS=true` (local only) a "Pagar con Webpay (prueba)" button starts an attempt and auto-posts the form to Webpay, to try the integration end to end before the storefront exists.
+- Phase 4: the Sanctum endpoint that starts an attempt, the Nuxt checkout with the auto-POST form and the withdrawal notice, the result/receipt page and its API contract, HTTPS for the deployed `return_url`.
 
 ## Webpay Plus API (spec for the HTTP client)
 
@@ -79,9 +129,9 @@ Conclusions:
 - **The only payment that needs a refund** is one committed (`AUTHORIZED`) whose order was not recorded as paid, e.g. the server failed between the commit and `MarkOrderPaid`. The reconciliation job looks for those through `status` (within its 7 days) and either records the order as paid, if it can still take it, or refunds automatically (see *Decisions*).
 - Refunds: within 3 hours of the commit a full refund is a reversal (`REVERSED`); afterwards an annulment (`NULLIFIED`), partial for credit cards, full only for debit and prepaid, up to 90 days (official product docs).
 
-## Open questions
+## Resolved questions
 
-- Return parameters to handle: `token_ws` (normal), `TBK_TOKEN` + `TBK_ID_SESION` + `TBK_ORDEN_COMPRA` (cancelled), only `TBK_ID_SESION` + `TBK_ORDEN_COMPRA` (form timeout); the docs spell `TBK_ID_SESION` two ways, so confirm in integration.
+- **Return parameters** (resolved 2026-11-20): the attempt is found by `token_ws`, `TBK_TOKEN` or `TBK_ORDEN_COMPRA`, never by `TBK_ID_SESION`, so its two spellings in the docs do not matter (see *Return route*).
 
 ## Research sources (2026-11-20)
 

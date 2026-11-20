@@ -73,7 +73,7 @@ pending ──payment──▶ paid ──delivery──▶ completed
   - Keys: `SELECT … WHERE product_id = ? AND status = 'available' … LIMIT n FOR UPDATE SKIP LOCKED`, then set `reserved` and `order_item_id`. Fewer than `n` rows ⇒ the whole checkout fails with a validation error (no partial orders).
   - Physical: `UPDATE products SET stock = stock - n WHERE id = ? AND stock >= n`; 0 rows ⇒ the same error. A box is held during checkout, symmetric with keys.
 - **Expiry: 15 minutes.** A scheduled job runs every minute and moves `pending` orders past `expires_at` to `expired`, releasing their stock: keys back to `available` with `order_item_id = NULL`, physical stock added back. Cancelling a `pending` order releases stock the same way.
-- **Late payment** (the gateway confirms an order already `expired`): the order tries to reserve its stock again; if it succeeds it goes `expired` → `paid`. Otherwise it stays `expired` and needs a refund (see *Open questions*).
+- **Late payment** (the customer comes back from the gateway after the order `expired`): before the payment is committed, `ReopenExpiredOrder` reserves the stock again and moves the order `expired` → `pending` with a fresh hold (decided 2026-11-20, replaces `expired` → `paid`). Without stock the order stays `expired` and the payment is not committed. Starting a payment attempt also extends the hold (see [`payments.md`](payments.md)).
 - **Key lifecycle trigger** on `product_keys` (`BEFORE UPDATE OF status`): allowed `available` → `reserved`, `reserved` → `available`, `reserved` → `sold`; leaving `sold` is rejected. Tested by updating the row directly, bypassing the Action.
 
 ## Mixed orders
