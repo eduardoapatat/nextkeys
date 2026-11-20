@@ -205,3 +205,4 @@ The first argument of `pg_advisory_xact_lock(namespace, id)`. Add a row before u
 - Reserved keys need an expiry (`reserved_until`) and a link to the order; otherwise an abandoned checkout keeps a key `reserved` forever.
 - Physical stock must decrease atomically (`UPDATE … SET stock = stock - 1 WHERE stock > 0`, or `lockForUpdate`), or two simultaneous purchases can sell the last box twice.
 - Physical products have no "reserved" state like keys; decide whether a box is held during checkout.
+- Enforce the key lifecycle in the database: a `BEFORE UPDATE OF status` trigger on `product_keys` that rejects leaving `sold` (a sold key never goes back to `available` or `reserved`). Allowed transitions: `available` → `reserved`, `reserved` → `available` (expired or cancelled checkout), `reserved` → `sold`. Like the other rules, it gets a test that updates the row directly, bypassing the Action, and fails without the trigger.
