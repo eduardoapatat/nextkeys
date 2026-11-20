@@ -41,6 +41,8 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - PHPStan with Larastan at level `max`, no baseline (`apps/api/phpstan.neon`).
 - Pint, ESLint/Prettier and vue-tsc, all included in `composer ci:check`.
 - Catalog database rules (CHECKs, composite FK, triggers) live in the migrations and are covered by `tests/Feature/Catalog/*DatabaseRulesTest.php` and `ProductIdentityTriggerTest.php`.
+- User role rule: `users_role_check` CHECK in the migration, covered by `tests/Feature/Users/UserRoleDatabaseRulesTest.php`.
+- Every authenticated app route must sit behind the `can:access-admin-panel` gate: `tests/Feature/AdminPanelRoutesTest.php`.
 - CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service.
 - Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`.
 

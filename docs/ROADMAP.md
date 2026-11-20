@@ -6,7 +6,7 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 1. Catalog
-- **Next task:** users and roles from [`docs/domain/users.md`](domain/users.md), then the product CRUD in the admin panel (with the Action that mirrors the catalog's database checks).
+- **Next task:** the product CRUD in the admin panel (with the Action that mirrors the catalog's database checks and the slug generator), then the bulk key import from CSV.
 
 ## Phases
 
@@ -16,7 +16,7 @@ Finished phases collapse to one line; details live in the git history.
   - [x] Enums: `ProductType` (`digital_key`, `license`, `physical`) and `ProductKeyStatus`
   - [x] Models and migrations: ActivationService, Platform, Region, Title, Product (+ `product_platforms` pivot), ProductKey (encrypted key)
   - [x] Factories and seeders with fictitious data
-  - [ ] Users: `UserRole` enum, `role` column, seeded admin, panel restricted to admins: [`docs/domain/users.md`](domain/users.md) (agreed, not implemented)
+  - [x] Users: `UserRole` enum, `role` column, seeded admin, panel restricted to admins, registration disabled: [`docs/domain/users.md`](domain/users.md) (implemented)
   - [ ] Product CRUD in the admin panel
   - [ ] Bulk key import from CSV
 - [ ] **2. Public catalog API:** read-only `/api/v1` (filtered listing and product detail) with API Resources.

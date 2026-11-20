@@ -19,11 +19,12 @@ class DatabaseSeeder extends Seeder
     {
         DB::transaction(function (): void {
             User::factory()->create([
-                'name' => 'Test User',
+                'name' => 'Test Customer',
                 'email' => 'test@example.com',
             ]);
 
             $this->call([
+                AdminUserSeeder::class,
                 ActivationServiceSeeder::class,
                 PlatformSeeder::class,
                 RegionSeeder::class,
