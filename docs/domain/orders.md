@@ -1,6 +1,6 @@
 # Orders domain model
 
-Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action. No HTTP endpoints yet (checkout comes with Sanctum in phase 4, the webhook with `PaymentGateway`). Phase 3. Payments (`PaymentGateway`, Stripe, webhooks) and key delivery by email get their own sections when designed.
+Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action. No HTTP endpoints yet (checkout comes with Sanctum in phase 4, the webhook with `PaymentGateway`). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email gets its own section when designed.
 
 ## Overview
 
@@ -73,7 +73,7 @@ pending ──payment──▶ paid ──delivery──▶ completed
   - Keys: `SELECT … WHERE product_id = ? AND status = 'available' … LIMIT n FOR UPDATE SKIP LOCKED`, then set `reserved` and `order_item_id`. Fewer than `n` rows ⇒ the whole checkout fails with a validation error (no partial orders).
   - Physical: `UPDATE products SET stock = stock - n WHERE id = ? AND stock >= n`; 0 rows ⇒ the same error. A box is held during checkout, symmetric with keys.
 - **Expiry: 15 minutes.** A scheduled job runs every minute and moves `pending` orders past `expires_at` to `expired`, releasing their stock: keys back to `available` with `order_item_id = NULL`, physical stock added back. Cancelling a `pending` order releases stock the same way.
-- **Late payment** (the webhook confirms an order already `expired`): the order tries to reserve its stock again; if it succeeds it goes `expired` → `paid`. Otherwise it stays `expired` and needs a refund (see *Open questions*).
+- **Late payment** (the gateway confirms an order already `expired`): the order tries to reserve its stock again; if it succeeds it goes `expired` → `paid`. Otherwise it stays `expired` and needs a refund (see *Open questions*).
 - **Key lifecycle trigger** on `product_keys` (`BEFORE UPDATE OF status`): allowed `available` → `reserved`, `reserved` → `available`, `reserved` → `sold`; leaving `sold` is rejected. Tested by updating the row directly, bypassing the Action.
 
 ## Mixed orders
@@ -98,7 +98,7 @@ Decided and implemented on 2026-11-20.
 
 - **List:** a data table with reference, customer (name and email), status badge, total (CLP), creation date and, for pending orders, `expires_at`. Filter by status, search by reference or customer email, sort by date and total. Same pattern as the product list.
 - **Detail:** header (reference, customer, status, `paid_at` / `completed_at` / `cancelled_at`, `expires_at`) and lines from the snapshot (title name, type, quantity, unit price, line total). Digital lines list their keys by `code_hint` and status; the code is never shown, as everywhere else in the panel.
-- **Actions:** cancel a pending order (`CancelOrder`, with confirmation). Mark as paid (`MarkOrderPaid`) by hand to test without Stripe, **only in the local environment**: in production it would deliver keys without charging. Gated by `orders.manual_payments` (`ORDERS_MANUAL_PAYMENTS`, default `false`): when off, the route returns 404 and the button is hidden.
+- **Actions:** cancel a pending order (`CancelOrder`, with confirmation). Mark as paid (`MarkOrderPaid`) by hand to test without a payment gateway, **only in the local environment**: in production it would deliver keys without charging. Gated by `orders.manual_payments` (`ORDERS_MANUAL_PAYMENTS`, default `false`): when off, the route returns 404 and the button is hidden.
 - **Implementation.** `OrderController` (`routes/orders.php`, bound by `{order:reference}`: URLs never carry the id), `OrdersTable`, pages `orders/Index` and `orders/Show`. `OrderCannotBePaid` is turned into a Spanish validation error only in the panel; the Action keeps the domain exception for the webhook. Confirmations use the generic `ConfirmActionButton` (POST or DELETE); `ConfirmDeleteButton` wraps it.
 
 ## Rejected alternatives
@@ -111,5 +111,4 @@ Decided and implemented on 2026-11-20.
 
 ## Open questions
 
-- **Stripe session lifetime.** Stripe Checkout sessions last at least 30 minutes, longer than the 15-minute hold. Expiring the order should also expire its Stripe session (`checkout.sessions.expire`) so late payments are rare; decide with the `PaymentGateway` design.
-- **Late payment without stock**: automatic refund through the gateway or manual from the panel (with `refunded`)?
+- **Late payment without stock.** With Transbank Webpay Plus the store does not commit an order that cannot be paid, so the customer is never charged (see [`payments.md`](payments.md)). A refund and a `refunded` status are only needed for a gateway that charges before asking the store.

@@ -26,7 +26,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Routes: `routes/web.php` is the admin panel (Inertia); `routes/api.php` (`/api/v1`) is the storefront, using API Resources.
 - Thin controllers. Business logic lives in `app/Actions` (one use case per class).
 - Product type is an enum (`digital_key`, `license`, `physical`), not subclasses. Each type defines how it is delivered.
-- Payments sit behind a `PaymentGateway` interface. The domain knows nothing about Stripe or Mercado Pago.
+- Payments sit behind a `PaymentGateway` interface. The domain knows nothing about Transbank (the first gateway) or any other provider.
 - Keys are stored encrypted (`encrypted` cast) and are never exposed in listings or logs.
 - Key reservation and assignment use Postgres row locks (`lockForUpdate` / `SKIP LOCKED`), never an unlocked read-then-write.
 - Each app is an independent pnpm project. There is no workspace at the root.

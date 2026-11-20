@@ -6,14 +6,14 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 3. Orders and payments
-- **Next task:** design payments: `PaymentGateway` interface + Stripe in test mode and its webhook calling `MarkOrderPaid` (see *Open questions* in [`orders.md`](domain/orders.md#open-questions)).
+- **Next task:** design payments in detail: `PaymentGateway` interface + Transbank Webpay Plus (integration environment), whose commit calls `MarkOrderPaid` (see [`payments.md`](domain/payments.md)).
 
 ## Phases
 
 - [x] **0. Foundation:** repository, Docker (Postgres/Redis/Mailpit), `apps/api` with the Vue starter kit, PHPStan `max`, tests on Postgres, CI and Dependabot.
 - [x] **1. Catalog:** domain model ([`docs/domain/catalog.md`](domain/catalog.md)), users with roles ([`docs/domain/users.md`](domain/users.md)), admin CRUD for titles and products, bulk key import from CSV ([`catalog.md` → Admin panel (key import)](domain/catalog.md#admin-panel-key-import)), per-variant cover and key hint ([`catalog.md` → Variant cover and key hint](domain/catalog.md#variant-cover-and-key-hint)), and product status ([`catalog.md` → Product status](domain/catalog.md#product-status)).
 - [x] **2. Public catalog API:** read-only `/api/v1` (filtered listing, product detail with its variants, filter options) with API Resources ([`catalog.md` → Public catalog API (phase 2)](domain/catalog.md#public-catalog-api-phase-2)). Price range, name search and in-stock filter deferred.
-- [ ] **3. Orders and payments:** Order/OrderItem with stock reservation and expiry, admin orders list and detail (done: [`docs/domain/orders.md`](domain/orders.md)), stock reservation with `SKIP LOCKED`, `PaymentGateway` interface + Stripe in test mode, webhooks, and key delivery via queue and email.
+- [ ] **3. Orders and payments:** Order/OrderItem with stock reservation and expiry, admin orders list and detail (done: [`docs/domain/orders.md`](domain/orders.md)), stock reservation with `SKIP LOCKED`, `PaymentGateway` interface + Transbank Webpay Plus in the integration environment (direction decided: [`docs/domain/payments.md`](domain/payments.md)), and key delivery via queue and email.
 - [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library". Prototype of the catalog and product page pulled ahead and implemented (visual design pending): [`docs/domain/storefront.md`](domain/storefront.md).
 - [ ] **5. Physical products:** addresses, shipments and shipping status.
 - [ ] **6. Extras:** Meilisearch search, wishlist, reviews, coupons and sales dashboard.
@@ -31,5 +31,6 @@ Domain model decisions live in `docs/domain/*.md`; this list keeps project-wide 
 - `apps/web` was scaffolded on 2026-11-20, ahead of phase 4, with the minimal Nuxt template (no Nuxt UI: the storefront can share shadcn-vue + Tailwind with the admin later).
 - Storefront: types, data layer and tests decided for the prototype, shared with the API through `contracts/api/v1/` fixtures. See [`docs/domain/storefront.md`](domain/storefront.md).
 - Orders: one order per checkout (mixed digital/physical allowed), lines with quantity (max 5) and a snapshot, `NK-XXXXXX` references, 15-minute stock hold released by the scheduled `orders:expire`. See [`docs/domain/orders.md`](domain/orders.md).
+- Payments: Transbank Webpay Plus is the first gateway (replaces Stripe, not available to Chilean businesses); its commit model lets the store refuse an expired order without charging. See [`docs/domain/payments.md`](domain/payments.md).
 - Catalog domain: see [`docs/domain/catalog.md`](domain/catalog.md).
 - Users: one `users` table with a `role` enum (admin, customer); admins use the panel session, customers use Sanctum (phase 4). See [`docs/domain/users.md`](domain/users.md).
