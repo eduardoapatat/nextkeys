@@ -10,7 +10,7 @@ Portfolio e-commerce: digital game keys, software licenses and physical games. A
 
 @docs/ROADMAP.md
 
-When closing a task: `composer ci:check` green, update `docs/ROADMAP.md` (status, checklist, decisions) and commit everything together.
+Record every decision as soon as it is made, not only when closing a task: domain model decisions in `docs/domain/<area>.md` (model, rules, examples, open questions), project-wide ones in `docs/ROADMAP.md` (Decisions). Keep the roadmap checklist pointing to each domain doc and its status. When closing a task: `composer ci:check` green, update `docs/ROADMAP.md` (status and checklist) and commit everything together.
 
 ## Commands
 
