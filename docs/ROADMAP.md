@@ -5,14 +5,14 @@ Finished phases collapse to one line; details live in the git history.
 
 ## Current status
 
-- **Current phase:** 2. Public catalog API
-- **Next task:** design the read-only `/api/v1` catalog (filtered listing and product detail).
+- **Current phase:** 3. Orders and payments
+- **Next task:** design the order model and key reservation (see *Phase 3 reminders* in [`catalog.md`](domain/catalog.md#phase-3-reminders-do-not-block-the-catalog)).
 
 ## Phases
 
 - [x] **0. Foundation:** repository, Docker (Postgres/Redis/Mailpit), `apps/api` with the Vue starter kit, PHPStan `max`, tests on Postgres, CI and Dependabot.
 - [x] **1. Catalog:** domain model ([`docs/domain/catalog.md`](domain/catalog.md)), users with roles ([`docs/domain/users.md`](domain/users.md)), admin CRUD for titles and products, bulk key import from CSV ([`catalog.md` → Admin panel (key import)](domain/catalog.md#admin-panel-key-import)), per-variant cover and key hint ([`catalog.md` → Variant cover and key hint](domain/catalog.md#variant-cover-and-key-hint)), and product status ([`catalog.md` → Product status](domain/catalog.md#product-status)).
-- [ ] **2. Public catalog API:** read-only `/api/v1` (filtered listing and product detail) with API Resources.
+- [x] **2. Public catalog API:** read-only `/api/v1` (filtered listing, product detail with its variants, filter options) with API Resources ([`catalog.md` → Public catalog API (phase 2)](domain/catalog.md#public-catalog-api-phase-2)). Price range, name search and in-stock filter deferred.
 - [ ] **3. Orders and payments:** Order/OrderItem, stock reservation with `SKIP LOCKED`, `PaymentGateway` interface + Stripe in test mode, webhooks, and key delivery via queue and email.
 - [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library".
 - [ ] **5. Physical products:** addresses, shipments and shipping status.
