@@ -1,0 +1,36 @@
+{
+    "name": "nextkeys-web",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "types:check": "nuxt typecheck",
+        "test": "vitest run --passWithNoTests",
+        "ci:check": "pnpm lint && pnpm format:check && pnpm types:check && pnpm test"
+    },
+    "dependencies": {
+        "@nuxt/image": "2.2.1",
+        "nuxt": "^4.6.4",
+        "vue": "^3.5.45",
+        "vue-router": "^5.4.0"
+    },
+    "devDependencies": {
+        "@nuxt/eslint": "1.17.0",
+        "@nuxt/test-utils": "4.4.0",
+        "@vue/test-utils": "^2.6.0",
+        "eslint": "^10.15.0",
+        "eslint-config-prettier": "^10.1.8",
+        "happy-dom": "^21.0.4",
+        "prettier": "^3.10.1",
+        "typescript": "^5.9.3",
+        "vitest": "^5.1.1",
+        "vue-tsc": "^3.3.14"
+    }
+}

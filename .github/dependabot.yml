@@ -32,3 +32,14 @@ updates:
       api-npm:
         patterns:
           - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 5
+    groups:
+      web-npm:
+        patterns:
+          - "*"

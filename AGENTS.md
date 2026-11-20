@@ -3,20 +3,22 @@
 Portfolio e-commerce: digital game keys, software licenses and physical games. All data and payments are fictitious.
 
 - `apps/api`: Laravel 13 + Inertia v3 + Vue + TypeScript. REST API for the storefront and the admin panel (Vue starter kit).
-- `apps/web`: Nuxt with SSR, the public storefront. Not created yet.
+- `apps/web`: Nuxt 4 with SSR + TypeScript, the public storefront. Reads the API base from `runtimeConfig.public.apiBase` (`NUXT_PUBLIC_API_BASE`).
 - Services in `docker-compose.yml`: PostgreSQL 18, Redis 8 and Mailpit.
 
 ## Project status
 
 @docs/ROADMAP.md
 
-Record every decision as soon as it is made, not only when closing a task: domain model decisions in `docs/domain/<area>.md` (model, rules, examples, open questions), project-wide ones in `docs/ROADMAP.md` (Decisions). Keep the roadmap checklist pointing to each domain doc and its status. When closing a task: `composer ci:check` green, update `docs/ROADMAP.md` (status and checklist) and commit everything together.
+Record every decision as soon as it is made, not only when closing a task: domain model decisions in `docs/domain/<area>.md` (model, rules, examples, open questions), project-wide ones in `docs/ROADMAP.md` (Decisions). Keep the roadmap checklist pointing to each domain doc and its status. When closing a task: the `ci:check` of every app touched green, update `docs/ROADMAP.md` (status and checklist) and commit everything together.
 
 ## Commands
 
 - Services: `docker compose up -d` (from the repo root).
 - API dev server: `composer dev` in `apps/api`.
 - **Verification (single command):** `composer ci:check` in `apps/api`. Runs ESLint, vue-tsc, Pint, PHPStan and Pest — the same command CI runs.
+- Storefront dev server: `pnpm dev` in `apps/web` (port 3000).
+- **Storefront verification:** `pnpm ci:check` in `apps/web`. Runs ESLint, Prettier, `nuxt typecheck` and Vitest — the same command CI runs.
 
 ## Architecture and boundaries
 
@@ -47,8 +49,9 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - User role rule: `users_role_check` CHECK in the migration, covered by `tests/Feature/Users/UserRoleDatabaseRulesTest.php`.
 - Public catalog API (`/api/v1`): visibility, facets, sorting, pagination, `in_stock`, 422s, constant query count, variants, 404s, filter options, "no key data, stock, status or ids in any response", rate limit and CORS in `tests/Feature/Api/V1/*Test.php`.
 - Every authenticated app route must sit behind the `can:access-admin-panel` gate: `tests/Feature/AdminPanelRoutesTest.php`.
-- CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service.
-- Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`.
+- CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service; `.github/workflows/web.yml`, filtered by `apps/web/**`, runs `pnpm ci:check`.
+- `apps/web`: strict TypeScript (`nuxt typecheck`), ESLint (`@nuxt/eslint` + `eslint-config-prettier`), Prettier and Vitest (`test/unit` in node, `test/nuxt` in the Nuxt environment).
+- Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`, and npm in `apps/web`.
 
 ## Known pitfalls
 
@@ -63,6 +66,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Boost output in `apps/api` (`AGENTS.md`, `.claude/`, `.agents/`, `.mcp.json`, `opencode.json`, `boost.json`) is git-ignored. After a fresh clone, run `php artisan boost:install` there.
 - Write a product and its platforms in one transaction: the identity constraint trigger is deferred to commit and rejects a product with no platforms. Tests never commit, so call `checkDeferredConstraints()` to fire it.
 - CORS reads `STOREFRONT_URL` (the Nuxt origin): without it in `.env`, browsers block client-side calls to `/api/v1` (SSR calls are not affected).
+- `apps/web` pins TypeScript 5.9: `vue-tsc`/Volar and typescript-eslint do not support TypeScript 7 yet. Its `pnpm-workspace.yaml` only holds `allowBuilds` (esbuild); it is not a workspace of the repo.
 - The starter kit frontend uses Vite+ (`vp`), not `vite`.
 - Vite caches the types imported by `defineProps<...>()`: after changing one (e.g. `ProductFormOptions` in `resources/js/types`), restart `composer dev`, or the page drops the new props silently while `vue-tsc` and the tests pass.
 - `components/ui/native-select` is patched: options render `selected` from the select's value (`context.ts`), because Vue's SSR does not mark the selected option of a slotted select and the page shows the first option until hydration. Do not overwrite it when re-adding shadcn components.
@@ -71,6 +75,6 @@ Record every decision as soon as it is made, not only when closing a task: domai
 
 ## Definition of done
 
-- `composer ci:check` is green.
+- `composer ci:check` (and `pnpm ci:check` in `apps/web` when touched) is green.
 - New behavior has a test that fails without the change.
 - UI changes are verified in the browser.
