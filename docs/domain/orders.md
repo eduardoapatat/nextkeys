@@ -65,7 +65,7 @@ pending ──payment──▶ paid ──delivery──▶ completed
 - `paid`: payment confirmed (webhook). In the same transaction the reserved keys become `sold`.
 - `completed`: everything delivered. An order with only key-delivered lines goes `paid` → `completed` in the same transaction (the keys are assigned; the email is a notification, its failure does not undo the delivery). An order with physical lines stays `paid` until it ships (phase 5).
 - `cancelled` / `expired`: stock released (see *Reservation*).
-- Transitions are enforced in the database (a `BEFORE UPDATE OF status` trigger on `orders`), like the key lifecycle. `refunded` is not part of phase 3; it is added with refunds.
+- Transitions are enforced in the database (a `BEFORE UPDATE OF status` trigger on `orders`), like the key lifecycle. There is no `refunded` order status: a refund belongs to the payment attempt, and the order keeps its own status (see [`payments.md`](payments.md)).
 
 ## Reservation
 
@@ -109,6 +109,6 @@ Decided and implemented on 2026-11-20.
 - **No hold, assign keys on payment**: two customers could pay for the last key and one would need a refund.
 - **30-minute hold**: blocks stock twice as long for little gain with card payments.
 
-## Open questions
+## Resolved questions
 
-- **Late payment without stock.** With Transbank Webpay Plus the store does not commit an order that cannot be paid, so the customer is never charged (see [`payments.md`](payments.md)). A refund and a `refunded` status are only needed for a gateway that charges before asking the store.
+- **Late payment without stock** (resolved 2026-11-20). With Transbank Webpay Plus the store does not commit an order that cannot be paid, so the customer is never charged. The one payment that can still need a refund (committed but not recorded) is refunded automatically by the reconciliation job; the refund is recorded on the payment attempt, not as an order status (see [`payments.md`](payments.md)).
