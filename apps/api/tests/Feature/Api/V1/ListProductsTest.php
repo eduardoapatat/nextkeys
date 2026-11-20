@@ -39,7 +39,7 @@ it('exposes only the storefront fields of each product', function () {
     expect(array_keys($item))->toBe([
         'slug', 'type', 'price', 'in_stock', 'cover_url', 'title', 'platforms', 'region', 'activation_service',
     ])
-        ->and($item['type'])->toBe($product->type->value)
+        ->and($item['type'])->toBe(['slug' => $product->type->value, 'name' => $product->type->label()])
         ->and($item['price'])->toBe($product->price)
         ->and($item['title'])->toBe(['name' => $product->title->name])
         ->and($item['region'])->toBe(['slug' => $product->region?->slug, 'name' => $product->region?->name])

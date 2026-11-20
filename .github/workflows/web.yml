@@ -6,10 +6,12 @@ on:
       - main
     paths:
       - 'apps/web/**'
+      - 'contracts/**'
       - '.github/workflows/web.yml'
   pull_request:
     paths:
       - 'apps/web/**'
+      - 'contracts/**'
       - '.github/workflows/web.yml'
 
 permissions:

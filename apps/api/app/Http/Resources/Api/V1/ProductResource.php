@@ -23,7 +23,7 @@ class ProductResource extends JsonResource
 
         return [
             'slug' => $product->slug,
-            'type' => $product->type->value,
+            'type' => ['slug' => $product->type->value, 'name' => $product->type->label()],
             'price' => $product->price,
             'in_stock' => (bool) $product->in_stock,
             'cover_url' => $product->coverUrl(),

@@ -30,6 +30,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Keys are stored encrypted (`encrypted` cast) and are never exposed in listings or logs.
 - Key reservation and assignment use Postgres row locks (`lockForUpdate` / `SKIP LOCKED`), never an unlocked read-then-write.
 - Each app is an independent pnpm project. There is no workspace at the root.
+- `contracts/api/v1/*.json` is the only folder shared between the apps: data, never code. Laravel writes the fixtures (`ApiContractTest`), and `apps/web` parses them with its valibot schemas in tests. See `docs/domain/storefront.md`.
 
 ## Conventions
 
@@ -49,7 +50,9 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - User role rule: `users_role_check` CHECK in the migration, covered by `tests/Feature/Users/UserRoleDatabaseRulesTest.php`.
 - Public catalog API (`/api/v1`): visibility, facets, sorting, pagination, `in_stock`, 422s, constant query count, variants, 404s, filter options, "no key data, stock, status or ids in any response", rate limit and CORS in `tests/Feature/Api/V1/*Test.php`.
 - Every authenticated app route must sit behind the `can:access-admin-panel` gate: `tests/Feature/AdminPanelRoutesTest.php`.
-- CI in `.github/workflows/api.yml`, filtered by `apps/api/**`, with Postgres as a service; `.github/workflows/web.yml`, filtered by `apps/web/**`, runs `pnpm ci:check`.
+- API contract: `tests/Feature/Api/V1/ApiContractTest.php` fails when an `/api/v1` response changes shape against `contracts/api/v1/*.json`; `apps/web/test/unit/contract.test.ts` parses those fixtures with the valibot schemas (`app/api/schemas.ts`).
+- `apps/web` ESLint forbids value imports of `valibot` and of `app/api/schemas.ts` outside the schemas and the tests (`eslint.config.mjs`): use `import type`.
+- CI in `.github/workflows/api.yml`, filtered by `apps/api/**` and `contracts/**`, with Postgres as a service; `.github/workflows/web.yml`, filtered by `apps/web/**` and `contracts/**`, runs `pnpm ci:check`.
 - `apps/web`: strict TypeScript (`nuxt typecheck`), ESLint (`@nuxt/eslint` + `eslint-config-prettier`), Prettier and Vitest (`test/unit` in node, `test/nuxt` in the Nuxt environment).
 - Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`, and npm in `apps/web`.
 
@@ -72,6 +75,9 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - `components/ui/native-select` is patched: options render `selected` from the select's value (`context.ts`), because Vue's SSR does not mark the selected option of a slotted select and the page shows the first option until hydration. Do not overwrite it when re-adding shadcn components.
 - `shadcn-vue add` writes `import { cn } from "cn"` in new `components/ui` files; change it to `@/lib/utils`, or the build fails.
 - A data table `transform()` override stops the package from resolving relation columns (`from('title.name')`); add computed values as SQL aliases in `query()` instead.
+
+- After changing an API Resource, regenerate the fixtures with `CONTRACTS_UPDATE=1 php artisan test --filter=ApiContract` (in `apps/api`) and update the valibot schemas in `apps/web`.
+- `registerEndpoint` in `apps/web` tests only intercepts relative routes: the nuxt test project sets `apiBase` to `/api/v1` (`vitest.config.ts`). In the nuxt environment `import.meta.url` is not a `file:` URL; use `import.meta.dirname`.
 
 ## Definition of done
 

@@ -1,0 +1,8 @@
+{
+    "message": "La plataforma «does-not-exist» no existe.",
+    "errors": {
+        "platform.0": [
+            "La plataforma «does-not-exist» no existe."
+        ]
+    }
+}

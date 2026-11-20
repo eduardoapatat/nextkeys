@@ -16,6 +16,16 @@ export default defineConfig({
                     name: 'nuxt',
                     include: ['test/nuxt/**/*.test.ts'],
                     environment: 'nuxt',
+                    environmentOptions: {
+                        nuxt: {
+                            // registerEndpoint only intercepts relative routes.
+                            overrides: {
+                                runtimeConfig: {
+                                    public: { apiBase: '/api/v1' },
+                                },
+                            },
+                        },
+                    },
                 },
             }),
         ],

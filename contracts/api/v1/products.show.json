@@ -1,0 +1,180 @@
+{
+    "data": {
+        "slug": "starfall-steam-macos-windows-global",
+        "type": {
+            "slug": "digital_key",
+            "name": "Clave digital"
+        },
+        "price": 19990,
+        "in_stock": true,
+        "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+        "title": {
+            "name": "Starfall",
+            "description": "A space exploration RPG across a collapsing star system."
+        },
+        "platforms": [
+            {
+                "slug": "windows",
+                "name": "Windows"
+            },
+            {
+                "slug": "macos",
+                "name": "macOS"
+            }
+        ],
+        "region": {
+            "slug": "global",
+            "name": "Global"
+        },
+        "activation_service": {
+            "slug": "steam",
+            "name": "Steam"
+        },
+        "variants": [
+            {
+                "slug": "starfall-steam-macos-windows-global",
+                "type": {
+                    "slug": "digital_key",
+                    "name": "Clave digital"
+                },
+                "price": 19990,
+                "in_stock": true,
+                "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+                "title": {
+                    "name": "Starfall"
+                },
+                "platforms": [
+                    {
+                        "slug": "windows",
+                        "name": "Windows"
+                    },
+                    {
+                        "slug": "macos",
+                        "name": "macOS"
+                    }
+                ],
+                "region": {
+                    "slug": "global",
+                    "name": "Global"
+                },
+                "activation_service": {
+                    "slug": "steam",
+                    "name": "Steam"
+                }
+            },
+            {
+                "slug": "starfall-xbox-windows-xbox-series-global",
+                "type": {
+                    "slug": "digital_key",
+                    "name": "Clave digital"
+                },
+                "price": 20990,
+                "in_stock": true,
+                "cover_url": null,
+                "title": {
+                    "name": "Starfall"
+                },
+                "platforms": [
+                    {
+                        "slug": "windows",
+                        "name": "Windows"
+                    },
+                    {
+                        "slug": "xbox-series",
+                        "name": "Xbox Series"
+                    }
+                ],
+                "region": {
+                    "slug": "global",
+                    "name": "Global"
+                },
+                "activation_service": {
+                    "slug": "xbox",
+                    "name": "Xbox"
+                }
+            },
+            {
+                "slug": "starfall-playstation-store-ps5-latam",
+                "type": {
+                    "slug": "digital_key",
+                    "name": "Clave digital"
+                },
+                "price": 21990,
+                "in_stock": true,
+                "cover_url": null,
+                "title": {
+                    "name": "Starfall"
+                },
+                "platforms": [
+                    {
+                        "slug": "ps5",
+                        "name": "PS5"
+                    }
+                ],
+                "region": {
+                    "slug": "latam",
+                    "name": "LATAM"
+                },
+                "activation_service": {
+                    "slug": "playstation-store",
+                    "name": "PlayStation Store"
+                }
+            },
+            {
+                "slug": "starfall-playstation-store-ps4-ps5-latam",
+                "type": {
+                    "slug": "digital_key",
+                    "name": "Clave digital"
+                },
+                "price": 24990,
+                "in_stock": true,
+                "cover_url": null,
+                "title": {
+                    "name": "Starfall"
+                },
+                "platforms": [
+                    {
+                        "slug": "ps4",
+                        "name": "PS4"
+                    },
+                    {
+                        "slug": "ps5",
+                        "name": "PS5"
+                    }
+                ],
+                "region": {
+                    "slug": "latam",
+                    "name": "LATAM"
+                },
+                "activation_service": {
+                    "slug": "playstation-store",
+                    "name": "PlayStation Store"
+                }
+            },
+            {
+                "slug": "starfall-physical-ps5-north-america",
+                "type": {
+                    "slug": "physical",
+                    "name": "Físico"
+                },
+                "price": 34990,
+                "in_stock": true,
+                "cover_url": null,
+                "title": {
+                    "name": "Starfall"
+                },
+                "platforms": [
+                    {
+                        "slug": "ps5",
+                        "name": "PS5"
+                    }
+                ],
+                "region": {
+                    "slug": "north-america",
+                    "name": "North America"
+                },
+                "activation_service": null
+            }
+        ]
+    }
+}

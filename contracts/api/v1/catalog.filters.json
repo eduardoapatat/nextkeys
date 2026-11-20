@@ -1,0 +1,108 @@
+{
+    "data": {
+        "platforms": [
+            {
+                "slug": "android",
+                "name": "Android"
+            },
+            {
+                "slug": "ios",
+                "name": "iOS"
+            },
+            {
+                "slug": "macos",
+                "name": "macOS"
+            },
+            {
+                "slug": "ps4",
+                "name": "PS4"
+            },
+            {
+                "slug": "ps5",
+                "name": "PS5"
+            },
+            {
+                "slug": "switch",
+                "name": "Switch"
+            },
+            {
+                "slug": "switch-2",
+                "name": "Switch 2"
+            },
+            {
+                "slug": "windows",
+                "name": "Windows"
+            },
+            {
+                "slug": "xbox-one",
+                "name": "Xbox One"
+            },
+            {
+                "slug": "xbox-series",
+                "name": "Xbox Series"
+            }
+        ],
+        "types": [
+            {
+                "slug": "digital_key",
+                "name": "Clave digital"
+            },
+            {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            {
+                "slug": "physical",
+                "name": "Físico"
+            }
+        ],
+        "activation_services": [
+            {
+                "slug": "microsoft-account",
+                "name": "Microsoft Account"
+            },
+            {
+                "slug": "microsoft-store",
+                "name": "Microsoft Store"
+            },
+            {
+                "slug": "nintendo-eshop",
+                "name": "Nintendo eShop"
+            },
+            {
+                "slug": "playstation-store",
+                "name": "PlayStation Store"
+            },
+            {
+                "slug": "shield-account",
+                "name": "Shield Account"
+            },
+            {
+                "slug": "steam",
+                "name": "Steam"
+            },
+            {
+                "slug": "xbox",
+                "name": "Xbox"
+            }
+        ],
+        "regions": [
+            {
+                "slug": "europe",
+                "name": "Europe"
+            },
+            {
+                "slug": "global",
+                "name": "Global"
+            },
+            {
+                "slug": "latam",
+                "name": "LATAM"
+            },
+            {
+                "slug": "north-america",
+                "name": "North America"
+            }
+        ]
+    }
+}
