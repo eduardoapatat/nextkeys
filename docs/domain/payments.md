@@ -8,6 +8,7 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
   - It is the expected gateway for a Chilean store; Stripe is, per most sources, not available to businesses registered in Chile.
   - Its **commit** model fits the stock reservation: the charge is only confirmed when the store commits it, so the store decides with the order locked.
   - The payment form expires after **4 minutes** in production (10 in integration), well inside the 15-minute hold.
+- **PHP client: Laravel's HTTP client**, not the official `transbank/transbank-sdk` (decided 2026-11-20). Webpay Plus needs four calls (create, commit, status, refund); they live in the Transbank implementation of `PaymentGateway` and are tested with `Http::fake`, without network. The SDK was rejected: no release since 5.1.0 (2025-06-17), untested on PHP 8.5, and one more dependency for four endpoints.
 - **A second gateway may come later** (Mercado Pago Checkout Pro, or Stripe) as another `PaymentGateway` implementation, to prove the interface. Not planned yet.
 - **General rule for any gateway:** its payment window must be no longer than the order's reservation (`orders.expires_at`), so a late payment only happens when the gateway misbehaves.
 
@@ -28,10 +29,10 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
 
 ## Open questions
 
-- Commit deadline in the REST API and what happens to an authorization that is never committed (the old SOAP API reversed it after 30 seconds; the REST docs say control passes entirely to the store). Verify in the integration environment.
-- Refunds (Webpay `refund` / annulment) and a `refunded` order status: needed only if a committed payment must be undone (e.g. a second gateway with webhooks).
-- Reconciliation job for orders left mid-payment (status query by token).
-- PHP client: Transbank's official SDK or plain HTTP calls behind the interface.
+- **Commit deadline and uncommitted authorizations (researched 2026-11-20, not settled by the docs).** The REST docs only say "Se elimina el concepto de reversa realizada por Webpay" (control passes to the store) and give no commit deadline. The 30-second automatic reversal comes from the old SOAP API and Transbank's customer portal. A third-party report says an authorized but uncommitted payment stays `INITIALIZED` and can still be committed from the server. The token lives 5 minutes; `status` can be queried for 7 days. **The design does not depend on it:** decide with the order locked and commit right away on return, never later; if a payment ever ends up committed for an order that cannot take it, `refund` it (full reversal, or annulment; partial amounts allowed). First implementation step: authorize without committing in the integration environment and query `status` after some minutes to record the real behavior here.
+- Refunds (Webpay `refund`, which returns `REVERSED` or `NULLIFIED`) and a `refunded` order status: only as the safety net above, or for a second gateway that charges before asking the store.
+- Reconciliation job for orders left mid-payment (status query by token, within the 7 days).
+- Return parameters to handle: `token_ws` (normal), `TBK_TOKEN` + `TBK_ID_SESION` + `TBK_ORDEN_COMPRA` (cancelled), only `TBK_ID_SESION` + `TBK_ORDEN_COMPRA` (form timeout); the docs spell `TBK_ID_SESION` two ways, so confirm in integration.
 
 ## Research sources (2026-11-20)
 
