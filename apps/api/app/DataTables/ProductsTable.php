@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Enums\ProductKeyStatus;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Product;
 use App\Models\ProductKey;
@@ -11,8 +12,8 @@ use InertiaDataTable\Column;
 use InertiaDataTable\DataTable;
 
 /**
- * Products of the admin panel. No filters for now (docs/domain/catalog.md,
- * "Admin panel").
+ * Products of the admin panel. The only filter is the status, to find drafts
+ * and archived products (docs/domain/catalog.md, "Admin panel").
  */
 class ProductsTable extends DataTable
 {
@@ -51,7 +52,7 @@ class ProductsTable extends DataTable
             Column::option('platforms', 'Plataformas')->from('platforms.name')->badge(),
             Column::number('price', 'Precio')->money('CLP')->sortable(),
             Column::number('available_stock', 'Stock'),
-            Column::boolean('is_published', 'Publicado')->labels('Sí', 'No')->badge()->sortable(),
+            Column::option('status', 'Estado')->options(ProductStatus::class)->badge()->sortable()->filterMultiSelect(),
             Column::text('slug', 'Slug')->hidden(),
         ];
     }

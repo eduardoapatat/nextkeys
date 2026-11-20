@@ -10,6 +10,7 @@ it('rejects an invalid product row', function (array $overrides, string $constra
     'zero price' => [['price' => 0], 'products_price_positive'],
     'negative price' => [['price' => -1], 'products_price_positive'],
     'unknown type' => [['type' => 'gift_card'], 'products_type_check'],
+    'unknown status' => [['status' => 'deleted'], 'products_status_check'],
     'slug with spaces' => [['slug' => 'starfall steam'], 'products_slug_format'],
     'uppercase slug' => [['slug' => 'Starfall-steam'], 'products_slug_format'],
     'slug with leading hyphen' => [['slug' => '-starfall'], 'products_slug_format'],

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Catalog;
 
+use App\Enums\ProductStatus;
 use Illuminate\Http\UploadedFile;
 
 /**
@@ -23,7 +24,7 @@ final readonly class ProductData
         public array $platformIds,
         public int $price,
         public ?int $stock,
-        public bool $isPublished,
+        public ProductStatus $status,
         public ?string $slug,
         public ?UploadedFile $cover = null,
         public bool $removeCover = false,

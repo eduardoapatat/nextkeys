@@ -79,7 +79,7 @@ final class SaveProduct
                     'region_id' => $data->regionId,
                     'price' => $data->price,
                     'stock' => $data->stock,
-                    'is_published' => $data->isPublished,
+                    'status' => $data->status,
                     'slug' => $data->slug ?? $product->slug ?? $this->generatedSlug($type, $data),
                 ]);
 

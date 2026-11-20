@@ -3,9 +3,11 @@
 namespace App\Http\Requests\Catalog;
 
 use App\Actions\Catalog\ProductData;
+use App\Enums\ProductStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\Rule;
 
 /**
  * Checks only the shape of the product form. The catalog rules (per type,
@@ -26,6 +28,7 @@ class UpdateProductRequest extends FormRequest
             'platform_ids.*' => ['integer'],
             'price' => ['required', 'integer'],
             'stock' => ['nullable', 'integer'],
+            'status' => ['required', Rule::enum(ProductStatus::class)],
             'slug' => ['nullable', 'string', 'max:255'],
             'cover' => ['nullable', 'file'],
             'remove_cover' => ['nullable', 'boolean'],
@@ -41,7 +44,7 @@ class UpdateProductRequest extends FormRequest
             platformIds: array_values(array_map(fn (mixed $id): int => is_numeric($id) ? (int) $id : 0, $this->array('platform_ids'))),
             price: $this->integer('price'),
             stock: $this->filled('stock') ? $this->integer('stock') : null,
-            isPublished: $this->boolean('is_published'),
+            status: $this->enum('status', ProductStatus::class) ?? ProductStatus::Draft,
             slug: $this->filled('slug') ? $this->string('slug')->toString() : null,
             cover: $this->file('cover') instanceof UploadedFile ? $this->file('cover') : null,
             removeCover: $this->boolean('remove_cover'),

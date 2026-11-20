@@ -29,7 +29,7 @@ function coverDataOf(Product $product, mixed ...$overrides): mixed
         'platformIds' => $product->platforms()->pluck('platforms.id')->all(),
         'price' => $product->price,
         'stock' => $product->stock,
-        'isPublished' => $product->is_published,
+        'status' => $product->status,
         ...$overrides,
     ]);
 }

@@ -6,6 +6,7 @@ use App\Actions\Catalog\CreateProduct;
 use App\Actions\Catalog\DeleteProduct;
 use App\Actions\Catalog\UpdateProduct;
 use App\DataTables\ProductsTable;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Catalog\StoreProductRequest;
@@ -56,7 +57,7 @@ class ProductController extends Controller
                 'platform_ids' => $product->platforms()->pluck('platforms.id')->all(),
                 'price' => $product->price,
                 'stock' => $product->stock,
-                'is_published' => $product->is_published,
+                'status' => $product->status->value,
                 'slug' => $product->slug,
                 'cover_url' => $product->coverUrl(),
             ],
@@ -92,6 +93,10 @@ class ProductController extends Controller
             'types' => array_map(
                 fn (ProductType $type): array => ['value' => $type->value, 'label' => $type->label()],
                 ProductType::cases(),
+            ),
+            'statuses' => array_map(
+                fn (ProductStatus $status): array => ['value' => $status->value, 'label' => $status->label()],
+                ProductStatus::cases(),
             ),
             'titles' => $this->options(Title::query()),
             'activationServices' => $this->options(ActivationService::query()),

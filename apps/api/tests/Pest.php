@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Catalog\ProductData;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\ActivationService;
 use App\Models\Platform;
@@ -70,7 +71,7 @@ function insertProductRow(array $overrides = [], ?array $platformIds = null): in
         'region_id' => Region::factory()->create()->id,
         'price' => 19990,
         'stock' => null,
-        'is_published' => false,
+        'status' => 'draft',
         'created_at' => now(),
         'updated_at' => now(),
         ...$overrides,
@@ -107,7 +108,7 @@ function productData(mixed ...$overrides): ProductData
         'platformIds' => [Platform::factory()->create()->id],
         'price' => 19990,
         'stock' => null,
-        'isPublished' => false,
+        'status' => ProductStatus::Draft,
         'slug' => null,
         ...$overrides,
     ]);

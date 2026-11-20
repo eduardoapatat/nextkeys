@@ -62,6 +62,8 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Boost output in `apps/api` (`AGENTS.md`, `.claude/`, `.agents/`, `.mcp.json`, `opencode.json`, `boost.json`) is git-ignored. After a fresh clone, run `php artisan boost:install` there.
 - Write a product and its platforms in one transaction: the identity constraint trigger is deferred to commit and rejects a product with no platforms. Tests never commit, so call `checkDeferredConstraints()` to fire it.
 - The starter kit frontend uses Vite+ (`vp`), not `vite`.
+- Vite caches the types imported by `defineProps<...>()`: after changing one (e.g. `ProductFormOptions` in `resources/js/types`), restart `composer dev`, or the page drops the new props silently while `vue-tsc` and the tests pass.
+- `components/ui/native-select` is patched: options render `selected` from the select's value (`context.ts`), because Vue's SSR does not mark the selected option of a slotted select and the page shows the first option until hydration. Do not overwrite it when re-adding shadcn components.
 - `shadcn-vue add` writes `import { cn } from "cn"` in new `components/ui` files; change it to `@/lib/utils`, or the build fails.
 - A data table `transform()` override stops the package from resolving relation columns (`from('title.name')`); add computed values as SQL aliases in `query()` instead.
 

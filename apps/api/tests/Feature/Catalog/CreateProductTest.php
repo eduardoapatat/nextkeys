@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Catalog\CreateProduct;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\ActivationService;
 use App\Models\Platform;
@@ -27,7 +28,7 @@ it('creates a key product with its platforms and a generated slug', function () 
         regionId: $global->id,
         platformIds: [$windows->id, $macos->id],
         price: 19990,
-        isPublished: true,
+        status: ProductStatus::Archived,
     );
     checkDeferredConstraints();
 
@@ -36,7 +37,7 @@ it('creates a key product with its platforms and a generated slug', function () 
         ->slug->toBe('starfall-steam-macos-windows-global')
         ->price->toBe(19990)
         ->stock->toBeNull()
-        ->is_published->toBeTrue()
+        ->status->toBe(ProductStatus::Archived)
         ->and($product->platforms->pluck('id')->sort()->values()->all())
         ->toBe(collect([$windows->id, $macos->id])->sort()->values()->all());
 });

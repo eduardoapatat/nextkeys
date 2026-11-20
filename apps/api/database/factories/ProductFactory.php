@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\ActivationService;
 use App\Models\Platform;
@@ -33,7 +34,7 @@ class ProductFactory extends Factory
             'region_id' => Region::factory(),
             'price' => fake()->numberBetween(1, 100) * 1000 - 10,
             'stock' => null,
-            'is_published' => false,
+            'status' => ProductStatus::Draft,
         ];
     }
 
@@ -82,7 +83,14 @@ class ProductFactory extends Factory
     public function published(): static
     {
         return $this->state(fn (array $attributes) => [
-            'is_published' => true,
+            'status' => ProductStatus::Published,
+        ]);
+    }
+
+    public function archived(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => ProductStatus::Archived,
         ]);
     }
 

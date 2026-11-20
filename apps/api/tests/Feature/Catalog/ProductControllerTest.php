@@ -33,7 +33,7 @@ it('lists products with their stock and no key codes', function () {
             ->where('products.data.0.platforms', ['Windows'])
             ->where('products.data.0.activation_service', $product->activationService?->name)
             ->where('products.data.0.available_stock', 2)
-            ->where('products.data.0.is_published', true)
+            ->where('products.data.0.status', 'published')
             ->where('products.data.1.available_stock', 4)
             ->missing('products.data.0.keys'));
 });
@@ -52,7 +52,7 @@ it('creates a product from the form', function () {
         'platform_ids' => [$windows->id],
         'price' => 19990,
         'stock' => '',
-        'is_published' => true,
+        'status' => 'published',
         'slug' => '',
     ])
         ->assertSessionHasNoErrors()
@@ -62,7 +62,7 @@ it('creates a product from the form', function () {
     $this->assertDatabaseHas('products', [
         'slug' => 'starfall-steam-windows-global',
         'type' => 'digital_key',
-        'is_published' => true,
+        'status' => 'published',
     ]);
 });
 
@@ -71,11 +71,28 @@ it('requires the type and the shape of the fields', function () {
         ->assertSessionHasErrors([
             'type' => 'El campo tipo es obligatorio.',
             'title_id' => 'El campo título es obligatorio.',
+            'status' => 'El campo estado es obligatorio.',
             'price' => 'El campo precio debe ser un número entero.',
             'platform_ids.0' => 'El campo plataforma debe ser un número entero.',
         ]);
 
     expect(Product::query()->count())->toBe(0);
+});
+
+it('rejects an unknown status', function () {
+    $this->post(route('products.store'), ['status' => 'deleted'])
+        ->assertSessionHasErrors(['status' => 'El estado seleccionado no es válido.']);
+});
+
+it('filters the list by status', function () {
+    Product::factory()->published()->create();
+    $archived = Product::factory()->archived()->create();
+
+    $this->get(route('products.index', ['filter' => ['status' => 'archived']]))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('products.meta.total', 1)
+            ->where('products.data.0.id', $archived->id)
+            ->where('products.data.0.status', 'archived'));
 });
 
 it('returns the catalog rule errors of the Action', function () {
@@ -84,6 +101,7 @@ it('returns the catalog rule errors of the Action', function () {
         'title_id' => Title::factory()->create()->id,
         'platform_ids' => [Platform::factory()->create()->id],
         'price' => 9990,
+        'status' => 'draft',
     ])->assertSessionHasErrors([
         'activation_service_id' => 'El campo servicio de activación es obligatorio.',
         'region_id' => 'El campo región es obligatorio.',
@@ -99,7 +117,9 @@ it('shows the edit form with the product and the form options', function () {
             ->component('catalog/products/Edit')
             ->where('product.id', $product->id)
             ->where('product.type', 'physical')
+            ->where('product.status', 'draft')
             ->where('types.2', ['value' => 'physical', 'label' => 'Físico'])
+            ->where('statuses.2', ['value' => 'archived', 'label' => 'Archivado'])
             ->has('titles', 1)
             ->has('platforms', 1));
 });
@@ -114,6 +134,7 @@ it('ignores a type sent when updating a product', function () {
         'region_id' => $product->region_id,
         'platform_ids' => $product->platforms()->pluck('platforms.id')->all(),
         'price' => 29990,
+        'status' => 'draft',
         'slug' => '',
     ])
         ->assertSessionHasNoErrors()
@@ -136,6 +157,7 @@ it('uploads a cover through a spoofed PUT and shows it in the edit form', functi
         'region_id' => $product->region_id,
         'platform_ids' => $product->platforms()->pluck('platforms.id')->all(),
         'price' => $product->price,
+        'status' => 'draft',
         'cover' => UploadedFile::fake()->image('cover.webp', 600, 800),
     ])
         ->assertSessionHasNoErrors()
@@ -165,7 +187,7 @@ it('refuses to delete a product with keys', function () {
     $this->from(route('products.index'))
         ->delete(route('products.destroy', $product))
         ->assertRedirect(route('products.index'))
-        ->assertSessionHasErrors(['product' => 'Este producto tiene claves y no se puede eliminar. Despublícalo en su lugar.']);
+        ->assertSessionHasErrors(['product' => 'Este producto tiene claves y no se puede eliminar. Archívalo en su lugar.']);
 
     $this->assertModelExists($product);
 });

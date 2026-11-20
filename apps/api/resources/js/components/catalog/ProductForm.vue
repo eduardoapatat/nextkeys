@@ -15,6 +15,7 @@ import {
 import type {
     ProductFormOptions,
     ProductFormValues,
+    ProductStatusValue,
     ProductTypeValue,
 } from '@/types';
 
@@ -37,7 +38,7 @@ const form = useForm({
     platform_ids: props.product?.platform_ids ?? ([] as number[]),
     price: props.product?.price ?? null,
     stock: props.product?.stock ?? null,
-    is_published: props.product?.is_published ?? false,
+    status: props.product?.status ?? ('draft' as ProductStatusValue),
     slug: props.product?.slug ?? '',
     cover: null as File | null,
     remove_cover: false,
@@ -391,13 +392,22 @@ function submit(): void {
             </div>
         </div>
 
-        <Label class="flex items-center gap-2 font-normal">
-            <Checkbox
-                :model-value="form.is_published"
-                @update:model-value="form.is_published = $event === true"
-            />
-            Publicado (visible en la tienda)
-        </Label>
+        <div class="grid gap-2">
+            <Label for="status">Estado</Label>
+            <NativeSelect id="status" v-model="form.status" class="w-full">
+                <NativeSelectOption
+                    v-for="status in options.statuses"
+                    :key="status.value"
+                    :value="status.value"
+                >
+                    {{ status.label }}
+                </NativeSelectOption>
+            </NativeSelect>
+            <p class="text-sm text-muted-foreground">
+                Solo los productos publicados se ven en la tienda.
+            </p>
+            <InputError :message="form.errors.status" />
+        </div>
 
         <div class="flex items-center gap-3">
             <Button type="submit" :disabled="form.processing">

@@ -11,7 +11,7 @@ export type Product = {
     platforms?: string[];
     price?: number;
     available_stock?: number;
-    is_published?: boolean;
+    status?: string;
     slug?: string;
 };
 </script>
@@ -50,7 +50,7 @@ const columns = columnHelper.columns([
     columnHelper.accessor('region', { size: 130 }),
     columnHelper.accessor('platforms', { size: 200 }),
     columnHelper.accessor('price', { size: 110 }),
-    columnHelper.accessor('is_published', { size: 110 }),
+    columnHelper.accessor('status', { size: 120 }),
     columnHelper.accessor('available_stock', {
         size: 100,
         cell: ({ cell }) =>

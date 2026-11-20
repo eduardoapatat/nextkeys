@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Catalog\UpdateProduct;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use App\Models\Platform;
 use App\Models\Product;
@@ -17,7 +18,7 @@ function dataOf(Product $product, mixed ...$overrides): mixed
         'platformIds' => $product->platforms()->pluck('platforms.id')->all(),
         'price' => $product->price,
         'stock' => $product->stock,
-        'isPublished' => $product->is_published,
+        'status' => $product->status,
         'slug' => null,
         ...$overrides,
     ]);
@@ -26,13 +27,13 @@ function dataOf(Product $product, mixed ...$overrides): mixed
 it('keeps the slug when the admin leaves it empty', function () {
     $product = Product::factory()->create(['slug' => 'starfall-pc']);
 
-    app(UpdateProduct::class)->handle($product, dataOf($product, price: 24990, isPublished: true));
+    app(UpdateProduct::class)->handle($product, dataOf($product, price: 24990, status: ProductStatus::Published));
     checkDeferredConstraints();
 
     expect($product->refresh())
         ->slug->toBe('starfall-pc')
         ->price->toBe(24990)
-        ->is_published->toBeTrue();
+        ->status->toBe(ProductStatus::Published);
 });
 
 it('lets a product keep its own slug and identity', function () {

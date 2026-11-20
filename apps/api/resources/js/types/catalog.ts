@@ -1,5 +1,7 @@
 export type ProductTypeValue = 'digital_key' | 'license' | 'physical';
 
+export type ProductStatusValue = 'draft' | 'published' | 'archived';
+
 export type SelectOption<T extends string | number = number> = {
     value: T;
     label: string;
@@ -10,6 +12,7 @@ export type SelectOption<T extends string | number = number> = {
  */
 export type ProductFormOptions = {
     types: SelectOption<ProductTypeValue>[];
+    statuses: SelectOption<ProductStatusValue>[];
     titles: SelectOption[];
     activationServices: SelectOption[];
     regions: SelectOption[];
@@ -25,7 +28,7 @@ export type ProductFormValues = {
     platform_ids: number[];
     price: number;
     stock: number | null;
-    is_published: boolean;
+    status: ProductStatusValue;
     slug: string;
     cover_url: string | null;
 };

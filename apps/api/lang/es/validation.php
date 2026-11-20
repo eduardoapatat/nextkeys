@@ -46,6 +46,7 @@ return [
         'platform_ids.*' => 'plataforma',
         'price' => 'precio',
         'region_id' => 'región',
+        'status' => 'estado',
         'slug' => 'slug',
         'stock' => 'stock',
         'title_id' => 'título',

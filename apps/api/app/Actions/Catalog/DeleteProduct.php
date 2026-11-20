@@ -11,7 +11,7 @@ final class DeleteProduct
 {
     /**
      * Deletes a product nothing references (no keys yet), then its cover once
-     * the row is gone; a referenced product is unpublished instead.
+     * the row is gone; a referenced product is archived instead.
      *
      * The product row is locked first: inserting a key locks its product row
      * too (FOR KEY SHARE), so a concurrent import either already committed and
@@ -26,7 +26,7 @@ final class DeleteProduct
 
             if ($product->keys()->exists()) {
                 throw ValidationException::withMessages([
-                    'product' => 'Este producto tiene claves y no se puede eliminar. Despublícalo en su lugar.',
+                    'product' => 'Este producto tiene claves y no se puede eliminar. Archívalo en su lugar.',
                 ]);
             }
 

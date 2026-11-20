@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProductKeyStatus;
+use App\Enums\ProductStatus;
 use App\Enums\ProductType;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int|null $region_id
  * @property int $price
  * @property int|null $stock
- * @property bool $is_published
+ * @property ProductStatus $status
  * @property string|null $cover_image Path on the `public` disk.
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -34,7 +35,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read ActivationService|null $activationService
  * @property-read Region|null $region
  */
-#[Fillable(['title_id', 'type', 'slug', 'activation_service_id', 'region_id', 'price', 'stock', 'is_published', 'cover_image'])]
+#[Fillable(['title_id', 'type', 'slug', 'activation_service_id', 'region_id', 'price', 'stock', 'status', 'cover_image'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -114,7 +115,7 @@ class Product extends Model
             'type' => ProductType::class,
             'price' => 'integer',
             'stock' => 'integer',
-            'is_published' => 'boolean',
+            'status' => ProductStatus::class,
         ];
     }
 }
