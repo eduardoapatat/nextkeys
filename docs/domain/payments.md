@@ -8,7 +8,7 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
   - It is the expected gateway for a Chilean store; Stripe is, per most sources, not available to businesses registered in Chile.
   - Its **commit** model fits the stock reservation: the charge is only confirmed when the store commits it, so the store decides with the order locked.
   - The payment form expires after **4 minutes** in production (10 in integration), well inside the 15-minute hold.
-- **PHP client: Laravel's HTTP client**, not the official `transbank/transbank-sdk` (decided 2026-11-20). Webpay Plus needs four calls (create, commit, status, refund); they live in the Transbank implementation of `PaymentGateway` and are tested with `Http::fake`, without network. The SDK was rejected: no release since 5.1.0 (2025-06-17), its CI only tests PHP 8.2 (nothing newer, so untested on our 8.5), and one more dependency for four endpoints.
+- **PHP client: Laravel's HTTP client**, not the official `transbank/transbank-sdk` (decided 2026-11-20). Webpay Plus needs four calls (create, commit, status, refund); they live in the Transbank implementation of `PaymentGateway` and are tested with `Http::fake`, without network. The SDK was rejected: no release since 5.1.0 (2025-06-17), its CI only tests PHP 8.2 (nothing newer, so untested on our 8.5), it requires Guzzle 7 while this app runs Guzzle 8 (a `composer require --dry-run` only resolves by downgrading `guzzlehttp/guzzle`, `psr7` and `promises` one major version), and it is one more dependency for four endpoints.
 - **A second gateway may come later** (Mercado Pago Checkout Pro, or Stripe) as another `PaymentGateway` implementation, to prove the interface. Not planned yet.
 - **General rule for any gateway:** its payment window must be no longer than the order's reservation (`orders.expires_at`), so a late payment only happens when the gateway misbehaves.
 
@@ -17,7 +17,7 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
 1. `PlaceOrder` creates the `pending` order and reserves its stock (done, see [`orders.md`](orders.md)).
 2. The gateway creates a transaction for the order's `reference` and **server-side `total`**; the customer is redirected to Webpay.
 3. Webpay sends the customer back to `return_url` with `token_ws` (paid or rejected), with `TBK_TOKEN` (cancelled by the customer) or without a token (form timed out). Each case is handled; the official docs disagree on the timeout parameters, so the integration environment decides.
-4. On `token_ws`: lock the order. If it can still be paid (`pending`, or `expired` with stock that can be reserved again), **commit**, check the amount and the response code, then `MarkOrderPaid`. Otherwise **do not commit**: the customer is not charged and sees that the order expired.
+4. On `token_ws`: lock the order. If it can still be paid (`pending`, or `expired` with stock that can be reserved again), **commit**, check the amount and the response code, then `MarkOrderPaid`. Otherwise **do not commit**: the customer is not charged and sees that the order expired. The commit happens **in the same request, within seconds** of the return (the window is under a minute, see *Integration environment experiments*); it is never queued. The order lock waits with a short timeout so a busy lock cannot push the commit past the window.
 5. The return page only shows the result; nothing is delivered from the browser's word alone.
 6. Delivery: keys by email through the queue (to be designed).
 
@@ -27,11 +27,31 @@ Status: **direction decided** (2026-11-20), detailed design pending. Phase 3.
 - **Boleta electrónica** (SII) is mandatory for real sales. NextKeys is fictitious: at most a simulated receipt, never a real tax document.
 - **Derecho a retracto** (Ley 19.496 art. 3 bis): 10 days for distance purchases, 90 if the store does not send a written confirmation of the conditions. An exclusion (Decreto 52, in force since 2025-02-28) must be shown **before payment**, prominently (font no smaller than the price) and in the terms. Whether delivered digital keys qualify was **not confirmed** in the sources read; the storefront (phase 4) shows the notice before payment and the confirmation email states the conditions.
 
+## Integration environment experiments (2026-11-20)
+
+No official page states what happens to an authorized payment the store never commits, so it was measured against `webpay3gint.transbank.cl` with the public test credentials of the official SDK (`597055555532`) and the approved VISA test card, using plain HTTP calls (the scripts were throwaway, not part of the repo):
+
+| Case | Result |
+|---|---|
+| Paid, not committed | `status` = `INITIALIZED`, with `vci` = `TSY` and the card's last digits. It **stays `INITIALIZED`** (polled every 2 minutes for an hour), even after the commit window closed. |
+| Commit 20, 30, 35 and 42 s after the customer is back on `return_url` | `AUTHORIZED`, `response_code` 0. |
+| Commit 50 s, 60 s, 2, 3, 4, 6 and 20 min, and 1 hour after the return | 422 `Transaction has an invalid finished state: aborted`. |
+| Commit twice | The second call returns 200 with the same body: commit is idempotent, so retrying after a network error is safe. |
+| Refund before commit | 422 `Transaction is unfinished, it is not possible to refund it yet`: an uncommitted payment cannot be refunded, and does not need to be. |
+| Refund after commit | `REVERSED` (within the 3 hours); a second refund returns 422 `Transaction already REVERSED`. |
+| Commit of a transaction never paid | 422 `Invalid status '0' for transaction while authorizing`. |
+
+Conclusions:
+
+- **The commit window is under a minute** (between 42 and 50 s after the return in integration, close to the 30-second acknowledgement of the old API). Production was not measured; the design commits at once, so the exact number does not matter.
+- **Not committing is a clean refusal.** Transbank aborts the transaction by itself and the store is never paid; there is nothing to refund. Whether the issuing bank shows a temporary hold to the cardholder cannot be observed in integration (customer complaints mention holds released within 24 to 48 hours).
+- **`status` cannot tell an aborted payment from one still committable**: both read `INITIALIZED`. Only a commit attempt answers, and it is safe to repeat.
+- **The only payment that needs a refund** is one committed (`AUTHORIZED`) whose order was not recorded as paid, e.g. the server failed between the commit and `MarkOrderPaid`. The reconciliation job looks for those through `status` (within its 7 days) and either records the order as paid, if it can still take it, or refunds.
+- Refunds: within 3 hours of the commit a full refund is a reversal (`REVERSED`); afterwards an annulment (`NULLIFIED`), partial for credit cards, full only for debit and prepaid, up to 90 days (official product docs).
+
 ## Open questions
 
-- **Commit deadline and uncommitted authorizations (researched 2026-11-20, not settled by the docs).** The REST docs only say "Se elimina el concepto de reversa realizada por Webpay" (control passes to the store) and give no commit deadline. The 30-second automatic reversal comes from the old SOAP API and Transbank's customer portal. A third-party report says an authorized but uncommitted payment stays `INITIALIZED` and can still be committed from the server. The token lives 5 minutes; `status` can be queried for 7 days. **The design does not depend on it:** decide with the order locked and commit right away on return, never later; if a payment ever ends up committed for an order that cannot take it, `refund` it (full reversal, or annulment; partial amounts allowed). First implementation step: authorize without committing in the integration environment and query `status` after some minutes to record the real behavior here. A second research round (2026-11-20) confirmed that no official page answers it: the official example projects only list the statuses (`INITIALIZED`, `AUTHORIZED`, `REVERSED`, `FAILED`, `NULLIFIED`, `PARTIALLY_NULLIFIED`, `CAPTURED`) and the 7-day `status` window. Transbank's own WooCommerce plugin (PR 396, 2026-10) serializes the return handling with a transaction lock and only changes a transaction that is still initialized, the same pattern as our order lock. The reconciliation job therefore also looks for transactions left `AUTHORIZED` without a paid order and refunds them.
-- Refunds (Webpay `refund`, which returns `REVERSED` or `NULLIFIED`) and a `refunded` order status: only as the safety net above, or for a second gateway that charges before asking the store.
-- Reconciliation job for orders left mid-payment (status query by token, within the 7 days).
+- Refund policy for the one case left (see below: committed but not recorded): refund automatically through `PaymentGateway` or flag it in the panel. Needs a `refunded` order status either way.
 - Return parameters to handle: `token_ws` (normal), `TBK_TOKEN` + `TBK_ID_SESION` + `TBK_ORDEN_COMPRA` (cancelled), only `TBK_ID_SESION` + `TBK_ORDEN_COMPRA` (form timeout); the docs spell `TBK_ID_SESION` two ways, so confirm in integration.
 
 ## Research sources (2026-11-20)
