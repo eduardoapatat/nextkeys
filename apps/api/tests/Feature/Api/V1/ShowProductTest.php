@@ -61,9 +61,17 @@ it('returns the public URL of the cover', function () {
 });
 
 it('hides products that are not published', function (string $slug) {
-    $this->getJson(route('api.v1.products.show', $slug))->assertNotFound();
+    $this->getJson(route('api.v1.products.show', $slug))
+        ->assertNotFound()
+        ->assertExactJson(['message' => 'Producto no encontrado.']);
 })->with([
     'draft' => [fn () => Product::factory()->create()->slug],
     'archived' => [fn () => Product::factory()->archived()->create()->slug],
     'unknown slug' => ['does-not-exist'],
 ]);
+
+it('answers an unknown API route without framework details', function () {
+    $this->getJson('/api/v1/does-not-exist')
+        ->assertNotFound()
+        ->assertExactJson(['message' => 'Recurso no encontrado.']);
+});

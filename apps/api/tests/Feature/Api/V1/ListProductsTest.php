@@ -215,3 +215,14 @@ it('runs the same number of queries whatever the page size', function () {
 
     expect($queriesFor())->toBe($withOneProduct);
 });
+
+it('summarizes validation errors in Spanish, naming each parameter in Spanish', function (array $query, string $message) {
+    $this->getJson(route('api.v1.products.index', $query))
+        ->assertUnprocessable()
+        ->assertJsonPath('message', $message);
+})->with([
+    'sort' => [['sort' => 'popular'], 'El orden seleccionado no es válido.'],
+    'page' => [['page' => 'two'], 'El campo página debe ser un número entero.'],
+    'one more error' => [['platform' => 'nope,nada'], 'La plataforma «nope» no existe. (y 1 error más)'],
+    'several more errors' => [['platform' => 'nope,nada', 'sort' => 'popular'], 'El orden seleccionado no es válido. (y 2 errores más)'],
+]);

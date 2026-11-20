@@ -59,6 +59,19 @@ class ListProductsRequest extends FormRequest
         ];
     }
 
+    /**
+     * Spanish names of the parameters, used in the generic rule messages.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'sort' => 'orden',
+            'page' => 'página',
+        ];
+    }
+
     public function filters(): ProductListingFilters
     {
         return new ProductListingFilters(
