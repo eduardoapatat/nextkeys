@@ -1,6 +1,6 @@
 # Orders domain model
 
-Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action, called by the Webpay return and reconciliation. No storefront endpoints yet (checkout comes with Sanctum in phase 4). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email in *Confirmation email and key delivery* (implemented 2026-11-20).
+Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action, called by the Webpay return and reconciliation. No storefront endpoints yet (checkout comes with Sanctum in phase 4). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email in _Confirmation email and key delivery_ (implemented 2026-11-20).
 
 ## Overview
 
@@ -18,27 +18,27 @@ User (customer)
 
 ### `orders`
 
-| column | notes |
-|---|---|
-| `user_id` | FK to `users`, required |
-| `reference` | Public identifier for the API, URLs and emails (never the `id`, the public API exposes no ids). `NK-` + 6 random Crockford base32 characters (e.g. `NK-7QF2K9`), unique, regenerated on collision. A ULID was rejected: unreadable for customers and support |
-| `status` | `OrderStatus` (see *Statuses*), CHECK |
-| `total` | Integer CLP, sum of the lines' `line_total`. `CHECK (total > 0)` |
-| `expires_at` | End of the reservation: `created_at + 15 min`. The only expiry of the order's stock (keys have no expiry of their own) |
-| `paid_at`, `completed_at`, `cancelled_at` | Nullable timestamps of each transition |
+| column                                    | notes                                                                                                                                                                                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `user_id`                                 | FK to `users`, required                                                                                                                                                                                                                                      |
+| `reference`                               | Public identifier for the API, URLs and emails (never the `id`, the public API exposes no ids). `NK-` + 6 random Crockford base32 characters (e.g. `NK-7QF2K9`), unique, regenerated on collision. A ULID was rejected: unreadable for customers and support |
+| `status`                                  | `OrderStatus` (see _Statuses_), CHECK                                                                                                                                                                                                                        |
+| `total`                                   | Integer CLP, sum of the lines' `line_total`. `CHECK (total > 0)`                                                                                                                                                                                             |
+| `expires_at`                              | End of the reservation: `created_at + 15 min`. The only expiry of the order's stock (keys have no expiry of their own)                                                                                                                                       |
+| `paid_at`, `completed_at`, `cancelled_at` | Nullable timestamps of each transition                                                                                                                                                                                                                       |
 
 ### `order_items`
 
 One row per product in the order.
 
-| column | notes |
-|---|---|
-| `order_id` | FK to `orders`, cascade on delete |
-| `product_id` | FK to `products`, **restrict**: a product with orders cannot be deleted; it is archived instead (`DeleteProduct` already returns that error) |
-| `quantity` | 1 to 5 (`CHECK`): one checkout cannot hold a product's whole stock for 15 minutes. Applies to every type |
-| `unit_price` | Product price when the order was created. `CHECK (unit_price > 0)` |
-| `line_total` | `unit_price * quantity`, CHECK |
-| `title_name`, `product_type` | Snapshot for receipts and "My library": the line keeps saying what was bought if the product is later renamed or archived |
+| column                       | notes                                                                                                                                        |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `order_id`                   | FK to `orders`, cascade on delete                                                                                                            |
+| `product_id`                 | FK to `products`, **restrict**: a product with orders cannot be deleted; it is archived instead (`DeleteProduct` already returns that error) |
+| `quantity`                   | 1 to 5 (`CHECK`): one checkout cannot hold a product's whole stock for 15 minutes. Applies to every type                                     |
+| `unit_price`                 | Product price when the order was created. `CHECK (unit_price > 0)`                                                                           |
+| `line_total`                 | `unit_price * quantity`, CHECK                                                                                                               |
+| `title_name`, `product_type` | Snapshot for receipts and "My library": the line keeps saying what was bought if the product is later renamed or archived                    |
 
 `(order_id, product_id)` is unique: the same product twice is one line with a larger quantity.
 
@@ -64,7 +64,7 @@ pending ──payment──▶ paid ──delivery──▶ completed
 - `pending`: created at checkout; its stock is held until `expires_at`.
 - `paid`: payment confirmed (webhook). In the same transaction the reserved keys become `sold`.
 - `completed`: everything delivered. An order with only key-delivered lines goes `paid` → `completed` in the same transaction (the keys are assigned; the email is a notification, its failure does not undo the delivery). An order with physical lines stays `paid` until it ships (phase 5).
-- `cancelled` / `expired`: stock released (see *Reservation*).
+- `cancelled` / `expired`: stock released (see _Reservation_).
 - Transitions are enforced in the database (a `BEFORE UPDATE OF status` trigger on `orders`), like the key lifecycle. There is no `refunded` order status: a refund belongs to the payment attempt, and the order keeps its own status (see [`payments.md`](payments.md)).
 
 ## Reservation

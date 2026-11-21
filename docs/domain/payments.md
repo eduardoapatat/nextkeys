@@ -9,7 +9,7 @@ Status: **implemented** (2026-11-20) in the integration environment; checkout an
   - Its **commit** model fits the stock reservation: the charge is only confirmed when the store commits it, so the store decides with the order locked.
   - The payment form expires after **4 minutes** in production (10 in integration), well inside the 15-minute hold.
 - **PHP client: Laravel's HTTP client**, not the official `transbank/transbank-sdk` (decided 2026-11-20, confirmed after reading the SDK source). Webpay Plus needs four calls (create, commit, status, refund); they live in the Transbank implementation of `PaymentGateway` and are tested with `Http::fake`, without network. Why not the SDK:
-  - The released 5.1.0 (2025-06-17) requires Guzzle 7 while this app runs Guzzle 8 (`composer require --dry-run` only resolves by downgrading `guzzlehttp/guzzle`, `psr7` and `promises`), and its CI only tests PHP 8.2. The SDK *is* maintained: version 6.0.0 (PHP >= 8.4, Guzzle ^8, CI on 8.4 and 8.5, no behavior changes) sits in a draft PR since 2026-09-10, unreleased. Revisit if it ships and the client grows.
+  - The released 5.1.0 (2025-06-17) requires Guzzle 7 while this app runs Guzzle 8 (`composer require --dry-run` only resolves by downgrading `guzzlehttp/guzzle`, `psr7` and `promises`), and its CI only tests PHP 8.2. The SDK _is_ maintained: version 6.0.0 (PHP >= 8.4, Guzzle ^8, CI on 8.4 and 8.5, no behavior changes) sits in a draft PR since 2026-09-10, unreleased. Revisit if it ships and the client grows.
   - Traps in its code that our client must not copy: `isApproved()` also returns true for `REVERSED`, `NULLIFIED` and `PARTIALLY_NULLIFIED`; the default timeout is 600 s (the commit window is under a minute); every exception carries the failed request **with the `Tbk-Api-Key-Secret` header**, so logging it leaks the key; network errors escape unwrapped; a 2xx with invalid JSON yields objects full of nulls without an error; the token goes into the URL unvalidated.
 - **Committed but unrecorded payments are refunded automatically** (decided 2026-11-20). It is the only case that needs a refund: a commit that succeeded (`AUTHORIZED`) while the order was not recorded as paid, e.g. the server failed between the commit and `MarkOrderPaid`. The reconciliation job finds it through `status` (within the 7 days): if the order can still take the payment it records it as paid; otherwise it refunds through `PaymentGateway` at once (a full reversal while within the 3 hours), without waiting for an admin, and the panel shows the refunded payment on the order so there is a record. The refund state lives on the **payment attempt** (`refunded`), not on the order: the order keeps its own status (`expired` or `cancelled`), so `OrderStatus` gains no new transition. Rejected alternative: only flagging it in the panel for an admin to decide, which leaves the customer charged for nothing until someone acts.
 - **A second gateway may come later** (Mercado Pago Checkout Pro, or Stripe) as another `PaymentGateway` implementation, to prove the interface. Not planned yet.
@@ -25,7 +25,7 @@ Status: **implemented** (2026-11-20) in the integration environment; checkout an
    - only `TBK_ORDEN_COMPRA` + `TBK_ID_SESION`: the form timed out. Never commit; the attempt is abandoned.
    - all four (`token_ws` and `TBK_TOKEN`): the customer came back from a Webpay error page (only reproducible in production). Never commit: commit only when `token_ws` arrives **without** `TBK_TOKEN`.
    - The attempt is found by `buy_order` (`TBK_ORDEN_COMPRA`) or by token, never trusted from the request alone: the token must match the stored one and have the documented format (64 hex characters).
-4. On `token_ws`: lock the order. If it can still be paid (`pending`, or `expired` with stock that can be reserved again), **commit**; approved means exactly `response_code` 0 **and** `status` `AUTHORIZED`, and the returned `amount` and `buy_order` must match the attempt; then `MarkOrderPaid`. A rejection (`response_code` -1 to -5, status `FAILED`) leaves the order `pending` for another attempt. Otherwise **do not commit**: the customer is not charged and sees that the order expired. The commit happens **in the same request, within seconds** of the return (the window is under a minute, see *Integration environment experiments*); it is never queued. The order lock waits with a short timeout so a busy lock cannot push the commit past the window.
+4. On `token_ws`: lock the order. If it can still be paid (`pending`, or `expired` with stock that can be reserved again), **commit**; approved means exactly `response_code` 0 **and** `status` `AUTHORIZED`, and the returned `amount` and `buy_order` must match the attempt; then `MarkOrderPaid`. A rejection (`response_code` -1 to -5, status `FAILED`) leaves the order `pending` for another attempt. Otherwise **do not commit**: the customer is not charged and sees that the order expired. The commit happens **in the same request, within seconds** of the return (the window is under a minute, see _Integration environment experiments_); it is never queued. The order lock waits with a short timeout so a busy lock cannot push the commit past the window.
 5. The return page only shows the result; nothing is delivered from the browser's word alone.
 6. Delivery: keys by email through the queue, see [`orders.md` → Confirmation email and key delivery](orders.md#confirmation-email-and-key-delivery).
 
@@ -35,18 +35,18 @@ Status: **implemented** (2026-11-20) in the integration environment; checkout an
 
 One row per attempt to pay an order; an order has at most **5** (`payments.max_attempts`, `CHECK (number BETWEEN 1 AND 5)`), well under the card brands' retry blocks.
 
-| column | notes |
-|---|---|
-| `order_id` | FK to `orders`, restrict |
-| `number` | 1 to 5, unique per order |
-| `gateway` | `webpay_plus` (CHECK) |
-| `buy_order` | `{reference}-{number}` (`NK-7QF2K9-2`), unique. An attempt whose create call fails still counts: its `buy_order` may have reached Transbank, so it is never reused |
-| `token` | 64 lowercase hex characters (CHECK), unique, null until create answers |
-| `amount` | integer CLP, the order's `total` when the attempt starts |
-| `status` | `PaymentAttemptStatus` (below) |
-| receipt | `response_code`, `authorization_code`, `payment_type_code`, `installments_number`, `installments_amount`, `card_last_digits`, `transaction_date`, `accounting_date`, from the commit (or `status`) response. `vci` is neither stored nor validated |
-| refund | `refund_type` (`reversed` / `nullified`), `refunded_amount`, `refunded_at` |
-| `finished_at` | when it left `initialized` |
+| column        | notes                                                                                                                                                                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `order_id`    | FK to `orders`, restrict                                                                                                                                                                                                                           |
+| `number`      | 1 to 5, unique per order                                                                                                                                                                                                                           |
+| `gateway`     | `webpay_plus` (CHECK)                                                                                                                                                                                                                              |
+| `buy_order`   | `{reference}-{number}` (`NK-7QF2K9-2`), unique. An attempt whose create call fails still counts: its `buy_order` may have reached Transbank, so it is never reused                                                                                 |
+| `token`       | 64 lowercase hex characters (CHECK), unique, null until create answers                                                                                                                                                                             |
+| `amount`      | integer CLP, the order's `total` when the attempt starts                                                                                                                                                                                           |
+| `status`      | `PaymentAttemptStatus` (below)                                                                                                                                                                                                                     |
+| receipt       | `response_code`, `authorization_code`, `payment_type_code`, `installments_number`, `installments_amount`, `card_last_digits`, `transaction_date`, `accounting_date`, from the commit (or `status`) response. `vci` is neither stored nor validated |
+| refund        | `refund_type` (`reversed` / `nullified`), `refunded_amount`, `refunded_at`                                                                                                                                                                         |
+| `finished_at` | when it left `initialized`                                                                                                                                                                                                                         |
 
 Statuses: `initialized` (sent to Webpay), `authorized` (committed and recorded on the order), `rejected` (the bank said no), `cancelled` (the customer cancelled in Webpay), `aborted` (never committed: form timeout, order no longer payable, or the commit window passed; nothing charged), `refunded` (charged and refunded automatically). A trigger allows only `initialized` → any other; CHECKs tie the receipt to `authorized` / `refunded` and `refunded_at` to `refunded`.
 
@@ -97,7 +97,7 @@ From the official docs source (`transbank-developers-docs`) and the SDK code; ev
 - **Create:** `POST {base}` with `buy_order` (max 26; letters, digits and `|_=&%.,~:/?[+!@()>-`; unique per transaction), `session_id` (max 61), `amount` (integer CLP), `return_url` (max 256, HTTPS when deployed). Returns `token` (64 characters) and `url`.
 - **Commit:** `PUT {base}/{token}` without body. **Status:** `GET {base}/{token}`, for 7 days after creation. Both return `vci`, `amount`, `status`, `buy_order`, `session_id`, `card_detail.card_number` (last 4), `accounting_date` (MMDD), `transaction_date` (ISO 8601), `authorization_code`, `payment_type_code` (`VD` debit, `VN` normal credit, `VC` installments, `SI` 3 without interest, `S2` 2 without interest, `NC` N without interest, `VP` prepaid), `response_code`, `installments_number` and, optionally, `installments_amount` and `balance`. **`vci` must not be validated** (official warning).
 - **Refund:** `POST {base}/{token}/refunds` with `{"amount": n}`. Returns `type` `REVERSED` (full, within 3 hours of the commit; nothing else in the body) or `NULLIFIED` (after 3 hours, up to 90 days; partial only for credit cards; with `authorization_code`, `authorization_date`, `nullified_amount`, `balance` and `response_code`, success when 0). Refund business codes: 304, 245, 22, 316, 308, 274, 16, 292, 284 (period exceeded), 310 (already nullified), 311 (amount over balance), 312, 315, 53 (no partial refund with installments).
-- **Errors:** HTTP 400, 401 (bad credentials), 404 (transaction not found), 405, 406, 415, 422 (business rule) and 500, with body `{"error_message": "..."}`. Create, commit and status have no documented business codes; the observed 422 messages are listed in *Integration environment experiments*.
+- **Errors:** HTTP 400, 401 (bad credentials), 404 (transaction not found), 405, 406, 415, 422 (business rule) and 500, with body `{"error_message": "..."}`. Create, commit and status have no documented business codes; the observed 422 messages are listed in _Integration environment experiments_.
 - **Client rules** (from the SDK traps): short timeouts (a few seconds to connect, well under the commit window in total); every failure, including network errors and malformed 2xx bodies, becomes one gateway exception without credentials; responses are parsed into typed objects that reject missing required fields; the token is validated before it goes into a URL.
 - **Card brand retry limits:** Mastercard blocks the 8th rejected retry within 24 hours and Visa the 16th within 30 days (code -11), so payment attempts per order are capped.
 - Not documented anywhere: idempotency (measured: commit is idempotent), retries, HTTP timeouts, behavior on a duplicate `buy_order`, minimum and maximum amounts.
@@ -121,27 +121,27 @@ From the official docs source (`transbank-developers-docs`) and the SDK code; ev
 
 No official page states what happens to an authorized payment the store never commits, so it was measured against `webpay3gint.transbank.cl` with the public test credentials of the official SDK (`597055555532`) and the approved VISA test card, using plain HTTP calls (the scripts were throwaway, not part of the repo):
 
-| Case | Result |
-|---|---|
-| Paid, not committed | `status` = `INITIALIZED`, with `vci` = `TSY` and the card's last digits. It **stays `INITIALIZED`** (polled every 2 minutes for an hour), even after the commit window closed. |
-| Commit 20, 30, 35 and 42 s after the customer is back on `return_url` | `AUTHORIZED`, `response_code` 0. |
-| Commit 50 s, 60 s, 2, 3, 4, 6 and 20 min, and 1 hour after the return | 422 `Transaction has an invalid finished state: aborted`. |
-| Commit twice | The second call returns 200 with the same body: commit is idempotent, so retrying after a network error is safe. |
-| Refund before commit | 422 `Transaction is unfinished, it is not possible to refund it yet`: an uncommitted payment cannot be refunded, and does not need to be. |
-| Refund after commit | `REVERSED` (within the 3 hours); a second refund returns 422 `Transaction already REVERSED`. |
-| Commit of a transaction never paid | 422 `Invalid status '0' for transaction while authorizing`. |
+| Case                                                                  | Result                                                                                                                                                                         |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Paid, not committed                                                   | `status` = `INITIALIZED`, with `vci` = `TSY` and the card's last digits. It **stays `INITIALIZED`** (polled every 2 minutes for an hour), even after the commit window closed. |
+| Commit 20, 30, 35 and 42 s after the customer is back on `return_url` | `AUTHORIZED`, `response_code` 0.                                                                                                                                               |
+| Commit 50 s, 60 s, 2, 3, 4, 6 and 20 min, and 1 hour after the return | 422 `Transaction has an invalid finished state: aborted`.                                                                                                                      |
+| Commit twice                                                          | The second call returns 200 with the same body: commit is idempotent, so retrying after a network error is safe.                                                               |
+| Refund before commit                                                  | 422 `Transaction is unfinished, it is not possible to refund it yet`: an uncommitted payment cannot be refunded, and does not need to be.                                      |
+| Refund after commit                                                   | `REVERSED` (within the 3 hours); a second refund returns 422 `Transaction already REVERSED`.                                                                                   |
+| Commit of a transaction never paid                                    | 422 `Invalid status '0' for transaction while authorizing`.                                                                                                                    |
 
 Conclusions:
 
 - **The commit window is under a minute** (between 42 and 50 s after the return in integration, close to the 30-second acknowledgement of the old API). Production was not measured; the design commits at once, so the exact number does not matter.
 - **Not committing is a clean refusal.** Transbank aborts the transaction by itself and the store is never paid; there is nothing to refund. Whether the issuing bank shows a temporary hold to the cardholder cannot be observed in integration (customer complaints mention holds released within 24 to 48 hours).
 - **`status` cannot tell an aborted payment from one still committable**: both read `INITIALIZED`. Only a commit attempt answers, and it is safe to repeat.
-- **The only payment that needs a refund** is one committed (`AUTHORIZED`) whose order was not recorded as paid, e.g. the server failed between the commit and `MarkOrderPaid`. The reconciliation job looks for those through `status` (within its 7 days) and either records the order as paid, if it can still take it, or refunds automatically (see *Decisions*).
+- **The only payment that needs a refund** is one committed (`AUTHORIZED`) whose order was not recorded as paid, e.g. the server failed between the commit and `MarkOrderPaid`. The reconciliation job looks for those through `status` (within its 7 days) and either records the order as paid, if it can still take it, or refunds automatically (see _Decisions_).
 - Refunds: within 3 hours of the commit a full refund is a reversal (`REVERSED`); afterwards an annulment (`NULLIFIED`), partial for credit cards, full only for debit and prepaid, up to 90 days (official product docs).
 
 ## Resolved questions
 
-- **Return parameters** (resolved 2026-11-20): the attempt is found by `token_ws`, `TBK_TOKEN` or `TBK_ORDEN_COMPRA`, never by `TBK_ID_SESION`, so its two spellings in the docs do not matter (see *Return route*).
+- **Return parameters** (resolved 2026-11-20): the attempt is found by `token_ws`, `TBK_TOKEN` or `TBK_ORDEN_COMPRA`, never by `TBK_ID_SESION`, so its two spellings in the docs do not matter (see _Return route_).
 
 ## Research sources (2026-11-20)
 

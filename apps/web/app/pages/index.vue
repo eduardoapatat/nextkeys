@@ -86,7 +86,6 @@ const tabs = [
                 v-if="home.programs.length"
                 :products="home.programs.slice(0, 8)"
             />
-            <HomeActivationGuide />
             <HomeBenefits />
             <HomeFaq />
         </div>

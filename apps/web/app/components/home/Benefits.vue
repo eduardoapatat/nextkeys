@@ -27,28 +27,25 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
 </script>
 
 <template>
-    <section
-        aria-labelledby="benefits-heading"
-        class="surface-brand rounded-card px-2 sm:px-4"
-    >
+    <section aria-labelledby="benefits-heading">
         <h2 id="benefits-heading" class="sr-only">Por qué comprar aquí</h2>
-        <ul class="grid divide-line sm:grid-cols-2 sm:divide-x lg:grid-cols-4">
+        <ul class="grid gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <li
                 v-for="benefit in benefits"
                 :key="benefit.title"
-                class="flex gap-3 px-1 py-5 sm:px-5"
+                class="flex flex-col gap-4 rounded-card border border-line bg-bg-subtle p-5"
             >
-                <UiIcon
-                    :name="benefit.icon"
-                    :size="24"
-                    class="mt-0.5 shrink-0 text-fg"
-                />
+                <span
+                    class="grid size-12 place-items-center rounded-card bg-brand text-on-cover"
+                >
+                    <UiIcon :name="benefit.icon" :size="24" />
+                </span>
                 <p>
                     <strong
-                        class="block font-display text-lg font-extrabold tracking-wide text-fg uppercase"
+                        class="block font-display text-xl font-extrabold tracking-wide text-fg uppercase"
                         >{{ benefit.title }}</strong
                     >
-                    <span class="text-sm text-fg-muted">{{
+                    <span class="mt-1 block text-fg-muted">{{
                         benefit.text
                     }}</span>
                 </p>

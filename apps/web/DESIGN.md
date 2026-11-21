@@ -200,7 +200,7 @@ components:
 
 **Creative North Star: "The Key Store in Daylight"**
 
-The storefront is a bright, well-signed key store: a white floor with navy print, turquoise signage that frames the shop (the header with its menu bar, the banner slider, the benefits band and the footer), and one warm coral that says "do this" (the primary action, the cart count, the current menu item, prices on stickers). Everything else is quiet: soft blue-grey panels, hairline borders, and the game covers carrying the color.
+The storefront is a bright, well-signed key store: a white floor with navy print, turquoise signage that frames the shop (the header with its menu bar, the banner slider, the platform band and the footer), and one warm coral that says "do this" (the primary action, the cart count, the current menu item, prices on stickers). Everything else is quiet: soft blue-grey panels, hairline borders, and the game covers carrying the color.
 
 Density is that of a working key store: one strict grid of product cards, each with its cover on top, the title, type and region, where it is activated, and the price with "Agregar" at the foot. Every cover wears its platform's retail band, so a listing reads as PS5, Xbox, Switch or Steam at a glance. Real cover art comes from IGDB; when a product has none, the system prints a typographic cover on a deep tint. Motion is soft and physical: covers tilt toward the pointer, buttons press to 0.97, lists rise in with a short stagger, and everything falls back to opacity and color under `prefers-reduced-motion`.
 
@@ -282,7 +282,7 @@ All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.c
 
 ## Layout
 
-One centered container (80rem max) with a 16px side gutter at every width. The page opens with the turquoise header (logo, search, account, cart) and the deep-turquoise menu bar, and closes with the turquoise newsletter band and the night-turquoise footer. The home stacks its zones with 64px between them (80px from `md`): the banner slider, the tabbed shelf at full container width (no side menu), a full-width turquoise band with the platform tiles and type links (its background spans the viewport, its content stays in the container), then Programas (the licenses on product cards), "¿Cómo activo mi clave?" (one tab per activation service with its mark, three numbered step cards on Mist), the turquoise benefits band and the frequently asked questions (native `details` rows with a chevron that turns 90deg). The shelf is titled "Juegos" and lists keys and boxes only.
+One centered container (80rem max) with a 16px side gutter at every width. The page opens with the turquoise header (logo, search, account, cart) and the deep-turquoise menu bar, and closes with the turquoise newsletter band and the night-turquoise footer. The home stacks its zones with 64px between them (80px from `md`): the banner slider, the tabbed shelf at full container width (no side menu), a full-width turquoise band with the platform tiles and type links (its background spans the viewport, its content stays in the container), then Programas (the licenses on product cards), the benefits as four Mist cards (a turquoise icon key, the title in display caps, a muted line), and the frequently asked questions at full container width: each question a turquoise bar (bold white text, chevron down that turns up when open, 2px apart), the answer on white below it. The shelf is titled "Juegos" and lists keys and boxes only.
 
 Listings use the card grid: 2 columns, 3 from `sm`, 4 from `xl`, with 20px between columns and 40px between rows. Card facts stack in fixed order (title, type · region, "Se activa en …"), and the price row is pushed to the card's foot so prices align across a row.
 
@@ -307,7 +307,7 @@ Mostly flat. Surfaces are tonal steps (white, Mist, Mist Raised, turquoise) sepa
 
 ## Shapes
 
-Small, practical corners: 4px for controls (buttons, inputs, stickers, the cart pill) and 6px for cards, covers, the banner, the benefits band and panels. Borders are 1px hairlines; dashed borders mark paper-like or provisional things (receipt rules, the empty state). Prices are never rotated; the error sign is rotated -2deg. The receipt is clipped with an 8px zig-zag tear at top and bottom.
+Small, practical corners: 4px for controls (buttons, inputs, stickers, the cart pill) and 6px for cards, covers, the banner, the benefits cards and panels. Borders are 1px hairlines; dashed borders mark paper-like or provisional things (receipt rules, the empty state). Prices are never rotated; the error sign is rotated -2deg. The receipt is clipped with an 8px zig-zag tear at top and bottom.
 
 ## Components
 

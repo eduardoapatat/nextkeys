@@ -4,7 +4,12 @@
  * restates a rule from the domain docs (orders.md, payments.md,
  * catalog.md); change them together.
  */
-const questions = [
+const questions: { q: string; a: string; id?: string }[] = [
+    {
+        id: 'activar',
+        q: '¿Cómo activo mi clave?',
+        a: 'Cada producto dice dónde se activa (Steam, PlayStation Store, Xbox, Nintendo eShop o la cuenta del programa). Entra a esa tienda con tu cuenta, busca la opción para canjear un código y pega la clave que está en Mi biblioteca y en tu correo.',
+    },
     {
         q: '¿Cuándo recibo mi clave?',
         a: 'Apenas se aprueba el pago. La clave llega a tu correo y queda guardada en Mi biblioteca, donde la revelas cuando la vayas a activar.',
@@ -30,6 +35,17 @@ const questions = [
         a: 'Se despachan después del pago; el pedido queda pagado hasta entonces. Si el pedido también tiene claves, esas llegan al instante.',
     },
 ];
+
+// A link to one question (the footer's "/#activar") opens it.
+const route = useRoute();
+const open = ref<string>();
+onMounted(() => {
+    watch(
+        () => route.hash,
+        (hash) => (open.value = hash.slice(1) || undefined),
+        { immediate: true },
+    );
+});
 </script>
 
 <template>
@@ -37,22 +53,25 @@ const questions = [
         <h2 id="faq-heading" class="text-4xl text-fg uppercase md:text-5xl">
             Preguntas frecuentes
         </h2>
-        <div class="mt-6 border-t border-line">
+        <div class="mt-6 flex flex-col gap-0.5">
             <details
                 v-for="item in questions"
+                :id="item.id"
                 :key="item.q"
-                class="group border-b border-line"
+                :open="item.id !== undefined && item.id === open"
+                class="group"
             >
                 <summary
-                    class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-lg font-semibold text-fg hover:text-brand [&::-webkit-details-marker]:hidden"
+                    class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 rounded-control bg-brand px-5 py-4 text-lg font-bold text-on-cover transition-colors duration-150 hover:bg-brand-strong md:px-6 [&::-webkit-details-marker]:hidden"
                 >
                     {{ item.q }}
                     <UiIcon
                         name="chevronRight"
-                        class="text-fg-faint transition-transform duration-200 ease-out group-open:rotate-90"
+                        :size="20"
+                        class="rotate-90 transition-transform duration-200 ease-out group-open:-rotate-90"
                     />
                 </summary>
-                <p class="max-w-prose pb-5 text-fg-muted">{{ item.a }}</p>
+                <p class="px-5 py-5 text-fg-muted md:px-6">{{ item.a }}</p>
             </details>
         </div>
     </section>
