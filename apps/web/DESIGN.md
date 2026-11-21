@@ -38,29 +38,29 @@ colors:
     cover-6: '#1f5a5e'
 typography:
     display:
-        fontFamily: 'Barlow Condensed, Barlow, ui-sans-serif, sans-serif'
+        fontFamily: 'Barlow Condensed, Rubik, ui-sans-serif, sans-serif'
         fontSize: '3.75rem'
         fontWeight: 700
         lineHeight: 1.05
         letterSpacing: '-0.01em'
     headline:
-        fontFamily: 'Barlow Condensed, Barlow, ui-sans-serif, sans-serif'
+        fontFamily: 'Barlow Condensed, Rubik, ui-sans-serif, sans-serif'
         fontSize: '1.875rem'
         fontWeight: 700
         lineHeight: 1.05
         letterSpacing: '-0.01em'
     title:
-        fontFamily: 'Barlow, ui-sans-serif, system-ui, sans-serif'
+        fontFamily: 'Rubik, ui-sans-serif, system-ui, sans-serif'
         fontSize: '1rem'
         fontWeight: 600
         lineHeight: 1.375
     body:
-        fontFamily: 'Barlow, ui-sans-serif, system-ui, sans-serif'
+        fontFamily: 'Rubik, ui-sans-serif, system-ui, sans-serif'
         fontSize: '1rem'
         fontWeight: 400
         lineHeight: 1.5
     label:
-        fontFamily: 'Barlow Condensed, Barlow, ui-sans-serif, sans-serif'
+        fontFamily: 'Barlow Condensed, Rubik, ui-sans-serif, sans-serif'
         fontSize: '1rem'
         fontWeight: 700
         lineHeight: 1
@@ -208,20 +208,20 @@ A cool, dark room with four lit materials (case light, sticker, receipt, whitebo
 
 ## Typography
 
-**Display Font:** Barlow Condensed (with Barlow, ui-sans-serif)
-**Body Font:** Barlow (with ui-sans-serif, system-ui)
+**Display Font:** Barlow Condensed (with Rubik, ui-sans-serif)
+**Body Font:** Rubik (with ui-sans-serif, system-ui); replaced Barlow on 2026-11-21 at the user's request: wider, softly rounded, easier at small sizes
 **Label/Mono Font:** JetBrains Mono (with ui-monospace) for receipts, codes, references and station numbers; Permanent Marker (with Barlow Condensed) for whiteboard notes.
 
-**Character:** Shop signage over a workhorse sans. The condensed caps read like the lettering on a counter and on game boxes; Barlow keeps product facts plain; the monospace is the receipt printer; the marker is a person writing on the board.
+**Character:** Shop signage over a workhorse sans. The condensed caps read like the lettering on a counter and on game boxes; Rubik keeps product facts plain and friendly; the monospace is the receipt printer; the marker is a person writing on the board.
 
-All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.css`: Barlow 400/500/600, Barlow Condensed 500/700, JetBrains Mono 400/600, Permanent Marker 400.
+All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.css`: Rubik (variable, 400 to 700), Barlow Condensed 500/700, JetBrains Mono 400/600, Permanent Marker 400.
 
 ### Hierarchy
 
 - **Display** (700, 3rem mobile to 3.75rem desktop, up to 4.5rem on the product page, line-height 1.05, uppercase): one page title per view ("CARRITO", "MI BIBLIOTECA", the product name).
 - **Headline** (700, 1.875rem to 3rem, line-height 1.05, uppercase): section headings ("ELIGE TU PLATAFORMA"), the display-case heading, category tiles.
-- **Title** (Barlow 600, 1rem, line-height 1.375, sentence case): product names on station cards and cart lines.
-- **Body** (Barlow 400, 1rem, line-height 1.5, pretty wrapping): descriptions and notes; facts in definition lists drop to 0.875rem.
+- **Title** (Rubik 600, 1rem, line-height 1.375, sentence case): product names on station cards and cart lines.
+- **Body** (Rubik 400, 1rem, line-height 1.5, pretty wrapping): descriptions and notes; facts in definition lists drop to 0.875rem.
 - **Label** (Barlow Condensed 700, 0.875 to 1.125rem, tracking 0.025em, uppercase): buttons, nav links, tabs, the cart pill.
 - **Receipt** (JetBrains Mono 400, 0.875rem; header line 0.75rem with 0.2em tracking, uppercase): everything printed on paper, order references and key codes.
 - **Marker** (Permanent Marker 400, 1.5 to 1.875rem, sentence case): the error page's whiteboard sign only.
@@ -283,7 +283,7 @@ The yellow price label stuck on a box: condensed bold CLP figure, tabular, rotat
 
 ### Station Card
 
-A product as a numbered spot on the counter. Cover (3:4, tilting) with its sticker, then "PC 01" in faint monospace, the title in Barlow 600, and three fixed fact slots: platforms; type and region; "Se activa en …". The whole card is one link; hover turns the title yellow and lifts the cover.
+A product as a numbered spot on the counter. Cover (3:4, tilting) with its sticker, then "PC 01" in faint monospace, the title in Rubik 600, and three fixed fact slots: platforms; type and region; "Se activa en …". The whole card is one link; hover turns the title yellow and lifts the cover.
 
 ### Product Cover
 
@@ -313,7 +313,7 @@ Error page only: an off-white board sign in marker ("Fuera de servicio").
 
 ### Navigation
 
-The header is the counter: logo, search on a Melamine field, account links in Chalk Muted, and the cart as a secondary key whose count pill turns yellow once the cart has items. Under it, from `md`, the menu bar follows Koparion's main menu (requested by the user on 2026-11-21): a near-black strip (bar, #050608, 52px) with Inicio, Catálogo, the platform families and the product types in bold uppercase Barlow 16px (Chalk), 20px side padding, a 2px gap between items (two yellow items never touch), horizontally scrollable. The current page (path and query, `aria-current`) and the hovered item (fine pointers only) fill the full strip height in sticker yellow with Sticker Ink text, like a button (no raised tab or folded corner); the fill fades in over 150ms. Styles live in `.menu-tab` (`main.css`). Tabs on the shelf use the same caps with a 2px yellow underline on the active one. On small screens a drawer slides in from the left (200ms out, 280ms in on a drawer curve).
+The header is the counter: logo, search on a Melamine field, account links in Chalk Muted, and the cart as a secondary key whose count pill turns yellow once the cart has items. Under it, from `md`, the menu bar follows Koparion's main menu (requested by the user on 2026-11-21): a near-black strip (bar, #050608, 52px) with Inicio, Catálogo, the platform families and the product types in bold uppercase Rubik 16px (Chalk), 20px side padding, a 2px gap between items (two yellow items never touch), horizontally scrollable. The current page (path and query, `aria-current`) and the hovered item (fine pointers only) fill the full strip height in sticker yellow with Sticker Ink text, like a button (no raised tab or folded corner); the fill fades in over 150ms. Styles live in `.menu-tab` (`main.css`). Tabs on the shelf use the same caps with a 2px yellow underline on the active one. On small screens a drawer slides in from the left (200ms out, 280ms in on a drawer curve).
 
 ### Empty State
 

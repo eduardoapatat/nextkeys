@@ -5,7 +5,7 @@ useHead({
     link: [
         {
             rel: 'preload',
-            href: '/fonts/barlow-400-latin.woff2',
+            href: '/fonts/rubik-latin.woff2',
             as: 'font',
             type: 'font/woff2',
             crossorigin: '',

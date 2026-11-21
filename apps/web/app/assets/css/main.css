@@ -63,8 +63,8 @@
     --color-transparent: transparent;
     --color-current: currentColor;
 
-    --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Barlow Condensed', 'Barlow', ui-sans-serif, sans-serif;
+    --font-sans: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Barlow Condensed', 'Rubik', ui-sans-serif, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
     --font-marker: 'Permanent Marker', 'Barlow Condensed', cursive;
 
