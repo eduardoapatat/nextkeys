@@ -112,7 +112,7 @@ const control =
                     <div aria-labelledby="deal-heading" class="max-w-xl">
                         <h2
                             id="deal-heading"
-                            class="flex items-center gap-2 font-display text-lg font-bold tracking-wide text-sticker uppercase"
+                            class="flex items-center gap-2 font-display text-lg font-extrabold tracking-wide text-sticker uppercase"
                         >
                             Oferta del día
                             <span
@@ -123,7 +123,7 @@ const control =
                             </span>
                         </h2>
                         <p
-                            class="mt-2 text-4xl leading-none text-chalk uppercase md:text-6xl font-display font-bold"
+                            class="mt-2 text-4xl leading-none text-chalk uppercase md:text-6xl font-display font-extrabold"
                         >
                             <NuxtLink
                                 :to="`/${deal.slug}`"

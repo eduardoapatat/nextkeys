@@ -11,7 +11,7 @@ withDefaults(
 
 <template>
     <p
-        class="inline-flex flex-col items-start rounded-control font-display leading-none font-bold shadow-sticker"
+        class="inline-flex flex-col items-start rounded-control font-display leading-none font-extrabold shadow-sticker"
         :class="[
             inStock
                 ? 'bg-sticker text-sticker-ink'

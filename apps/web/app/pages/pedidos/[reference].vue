@@ -100,7 +100,7 @@ async function cancel() {
                 >
                     <p
                         role="status"
-                        class="flex items-center gap-2 font-display text-2xl font-bold uppercase"
+                        class="flex items-center gap-2 font-display text-2xl font-extrabold uppercase"
                     >
                         <UiIcon
                             name="check"
@@ -228,7 +228,7 @@ async function cancel() {
             >
                 <p
                     role="alert"
-                    class="font-display text-2xl font-bold uppercase"
+                    class="font-display text-2xl font-extrabold uppercase"
                 >
                     <strong
                         >Orden de Compra

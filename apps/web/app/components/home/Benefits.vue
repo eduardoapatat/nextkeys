@@ -44,7 +44,7 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
                 />
                 <p>
                     <strong
-                        class="block font-display text-lg font-bold tracking-wide text-chalk uppercase"
+                        class="block font-display text-lg font-extrabold tracking-wide text-chalk uppercase"
                         >{{ benefit.title }}</strong
                     >
                     <span class="text-sm text-chalk-muted">{{

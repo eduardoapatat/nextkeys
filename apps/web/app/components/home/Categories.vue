@@ -34,7 +34,7 @@ const typeNotes: Record<string, string> = {
                 >
                     <span>
                         <span
-                            class="block font-display text-3xl leading-none font-bold text-chalk uppercase group-hover:text-crt md:text-4xl"
+                            class="block font-display text-3xl leading-none font-extrabold text-chalk uppercase group-hover:text-crt md:text-4xl"
                             >{{ family.label }}</span
                         >
                         <span class="mt-1 block text-sm text-chalk-muted">{{
@@ -52,7 +52,7 @@ const typeNotes: Record<string, string> = {
                 >
                     <span>
                         <span
-                            class="block font-display text-xl font-bold text-chalk uppercase"
+                            class="block font-display text-xl font-extrabold text-chalk uppercase"
                             >{{ item.label }}</span
                         >
                         <span class="block text-sm text-chalk-muted">{{

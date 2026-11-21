@@ -214,7 +214,7 @@ A cool, dark room with four lit materials (case light, sticker, receipt, whitebo
 
 **Character:** Shop signage over a workhorse sans. The condensed caps read like the lettering on a counter and on game boxes; Rubik keeps product facts plain and friendly; the monospace is the receipt printer; the marker is a person writing on the board.
 
-All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.css`: Rubik (variable, 400 to 700), Sofia Sans Condensed (variable), JetBrains Mono 400/600, Permanent Marker 400.
+All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.css`: Rubik (variable, 400 to 700), Sofia Sans Condensed (variable; titles, buttons, stickers and covers at 800), JetBrains Mono 400/600, Permanent Marker 400.
 
 ### Hierarchy
 

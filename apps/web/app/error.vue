@@ -42,7 +42,7 @@ useHead({ title: heading });
             </p>
             <a
                 :href="catalogPath"
-                class="pressable inline-flex h-11 items-center rounded-control bg-sticker px-4 font-display font-bold tracking-wide text-sticker-ink uppercase hover:bg-sticker-hover"
+                class="pressable inline-flex h-11 items-center rounded-control bg-sticker px-4 font-display font-extrabold tracking-wide text-sticker-ink uppercase hover:bg-sticker-hover"
                 @click.prevent="clearError({ redirect: catalogPath })"
             >
                 Volver al catálogo

@@ -52,7 +52,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
         >
             <h2
                 id="side-categories-heading"
-                class="flex h-11 items-center rounded-t-card bg-panel-2 px-4 font-display text-lg font-bold tracking-wide text-chalk uppercase"
+                class="flex h-11 items-center rounded-t-card bg-panel-2 px-4 font-display text-lg font-extrabold tracking-wide text-chalk uppercase"
             >
                 Categorías
             </h2>
@@ -95,7 +95,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
                         :aria-selected="active === tab.id"
                         :aria-controls="`panel-${tab.id}`"
                         :tabindex="active === tab.id ? 0 : -1"
-                        class="relative h-12 px-4 font-display text-lg font-bold tracking-wide uppercase transition-colors duration-150"
+                        class="relative h-12 px-4 font-display text-lg font-extrabold tracking-wide uppercase transition-colors duration-150"
                         :class="
                             active === tab.id
                                 ? 'text-chalk'

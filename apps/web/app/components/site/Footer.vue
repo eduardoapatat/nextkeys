@@ -118,7 +118,7 @@ const columns = computed(() => [
                 :aria-label="column.title"
             >
                 <h2
-                    class="font-display text-sm font-bold tracking-wider text-chalk-faint uppercase"
+                    class="font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
                 >
                     {{ column.title }}
                 </h2>

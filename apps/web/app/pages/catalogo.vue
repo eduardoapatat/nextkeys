@@ -142,7 +142,7 @@ function pageLink(number: number) {
                 class="catalog-filters group rounded-card border border-line bg-ink-2 lg:border-0 lg:bg-transparent"
             >
                 <summary
-                    class="flex h-12 cursor-pointer list-none items-center justify-between px-4 font-display font-bold tracking-wide text-chalk uppercase lg:hidden"
+                    class="flex h-12 cursor-pointer list-none items-center justify-between px-4 font-display font-extrabold tracking-wide text-chalk uppercase lg:hidden"
                 >
                     <span class="flex items-center gap-2">
                         <UiIcon name="filter" />Filtros
@@ -174,7 +174,7 @@ function pageLink(number: number) {
                             class="flex flex-col gap-1"
                         >
                             <legend
-                                class="mb-2 font-display text-sm font-bold tracking-wider text-chalk-faint uppercase"
+                                class="mb-2 font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
                             >
                                 {{ facetLabels[facet] }}
                             </legend>

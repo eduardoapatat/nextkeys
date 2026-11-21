@@ -113,7 +113,7 @@ const {
                         class="tabular col-start-2 flex flex-col items-end text-right sm:col-start-auto"
                     >
                         <span
-                            class="font-display text-2xl font-bold text-chalk"
+                            class="font-display text-2xl font-extrabold text-chalk"
                             >{{
                                 line.product
                                     ? formatClp(

@@ -92,7 +92,7 @@ const searchNote = ref(false);
                 >
                 <NuxtLink
                     to="/carrito"
-                    class="pressable relative flex h-10 items-center gap-2 rounded-control border border-line-strong bg-panel px-3 font-display font-bold tracking-wide text-chalk uppercase hover:border-chalk-faint"
+                    class="pressable relative flex h-10 items-center gap-2 rounded-control border border-line-strong bg-panel px-3 font-display font-extrabold tracking-wide text-chalk uppercase hover:border-chalk-faint"
                     :aria-label="`Carrito, ${cart.count.value} ${cart.count.value === 1 ? 'producto' : 'productos'}`"
                 >
                     <UiIcon name="cart" />

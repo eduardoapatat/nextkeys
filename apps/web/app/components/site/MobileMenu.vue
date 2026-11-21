@@ -71,7 +71,7 @@ const link =
                 </ul>
                 <div>
                     <p
-                        class="px-3 pb-1 font-display text-sm font-bold tracking-wider text-chalk-faint uppercase"
+                        class="px-3 pb-1 font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
                     >
                         Plataformas
                     </p>
@@ -94,7 +94,7 @@ const link =
                 </div>
                 <div>
                     <p
-                        class="px-3 pb-1 font-display text-sm font-bold tracking-wider text-chalk-faint uppercase"
+                        class="px-3 pb-1 font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
                     >
                         Tipos
                     </p>

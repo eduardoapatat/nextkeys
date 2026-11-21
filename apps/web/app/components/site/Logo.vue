@@ -1,7 +1,7 @@
 <template>
     <NuxtLink
         to="/"
-        class="group flex items-center gap-2 font-display text-2xl leading-none font-bold tracking-tight text-chalk uppercase"
+        class="group flex items-center gap-2 font-display text-2xl leading-none font-extrabold tracking-tight text-chalk uppercase"
     >
         <span
             aria-hidden="true"

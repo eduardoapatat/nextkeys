@@ -18,7 +18,7 @@ const props = withDefaults(
 );
 
 const classes = computed(() => [
-    'pressable inline-flex items-center justify-center gap-2 rounded-control font-display font-bold uppercase tracking-wide whitespace-nowrap',
+    'pressable inline-flex items-center justify-center gap-2 rounded-control font-display font-extrabold uppercase tracking-wide whitespace-nowrap',
     'transition-[transform,background-color,border-color,color] duration-150 ease-out',
     'disabled:cursor-not-allowed disabled:opacity-50',
     {

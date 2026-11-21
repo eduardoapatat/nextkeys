@@ -45,14 +45,14 @@ const platforms = computed(() =>
         >
             <p
                 aria-hidden="true"
-                class="truncate bg-ink/55 px-[8%] py-[3.5%] font-display font-bold tracking-wider uppercase"
+                class="truncate bg-ink/55 px-[8%] py-[3.5%] font-display font-extrabold tracking-wider uppercase"
                 :class="size === 'sm' ? 'text-[0.6rem]' : 'text-xs'"
             >
                 {{ platforms }}
             </p>
             <p
                 aria-hidden="true"
-                class="mt-auto px-[8%] font-display leading-[0.92] font-bold tracking-tight text-balance uppercase"
+                class="mt-auto px-[8%] font-display leading-[0.92] font-extrabold tracking-tight text-balance uppercase"
                 :class="
                     {
                         sm: 'text-lg',
