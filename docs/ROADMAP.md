@@ -6,7 +6,7 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 5. Physical products (phase 4 closed; the storefront's visual design is still pending).
-- **Next task:** to be chosen: the storefront's visual design, or phase 5 (addresses, shipments and shipping status).
+- **Next task:** the storefront's visual design, in progress ([`storefront.md` → Visual design](domain/storefront.md#visual-design)); then phase 5 (addresses, shipments and shipping status).
 
 ## Phases
 

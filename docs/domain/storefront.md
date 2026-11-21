@@ -102,6 +102,20 @@ Decided on 2026-11-20.
 
 - **`/biblioteca`** lists the key lines by hint, grouped by order, with "Mostrar claves" per line; the revealed codes live only in the page (never in `useState`, the payload or the cookie). The API side is in [`orders.md` → My library](orders.md#my-library-phase-4).
 
+### Visual design
+
+Decided on 2026-11-21; in progress.
+
+- **Tailwind CSS v4** (the panel's major version, `^4.1`) through `@tailwindcss/vite`. The design tokens (colors, type, spacing, radii, shadows, easing) live in the Tailwind CSS file (`@theme`), not in a JS config.
+- **World: "Cibercafé de barrio"** (chosen in Impeccable's direction round; the contract lives in `apps/web/.impeccable/surfaces/app-pages-index-vue.md`, the product record in `apps/web/PRODUCT.md`). The counter of a neighborhood cibercafé at midnight: a lit display case of games, a whiteboard of prices, numbered stations and thermal receipts.
+- **Tokens** in `app/assets/css/main.css`: `ink`/`panel` grounds, `chalk` text, `paper` for receipts, `sticker` yellow for prices and the primary action, `crt` blue for focus and active states, six `cover-*` tints, Emil's `--ease-out`/`--ease-in-out`. All text pairs measured at AA or better. `test/unit/design-tokens.test.ts` fails when a `.vue` file uses a raw color.
+- **Type, self-hosted** in `public/fonts` (fetched with `impeccable font-fetch`, no font dependency): Barlow Condensed for signage and headings, Barlow for UI, JetBrains Mono for receipts and codes, Permanent Marker only for short whiteboard notes.
+- **Icons** are authored SVG paths in `components/ui/Icon.vue` (one 1.75 stroke on a 24px grid), not an icon library.
+- **Own Vue components on Tailwind, no shadcn-vue.** The apps share no code (no workspace), so "sharing" would mean copying files, and the panel's light admin look does not fit a dark game store. Menus, tabs and dialogs use native elements and ARIA (`<dialog>`, `role="tablist"`). Any other dependency is asked first.
+- **Generated covers.** When `cover_url` is `null` (the demo seeder sets none), Nuxt draws a typographic cover from the title, the platforms and a color derived from the slug. The API is not changed.
+- **Structure taken from the Koparion template** (structure only: no style, no content): header with search, account and cart count; navigation; hero; category blocks (platforms and types); deal of the day with a countdown; tabbed cover grid; category side menu; benefits; newsletter; full footer. No promo strip above the hero.
+- **Sections without API data** stay, with `#` links and clearly static example content. The tabs use real products: "Novedades" is the API's `newest` sort; "En oferta" and "Destacados" are real products in another order, marked "selección de ejemplo". The deal of the day is a real product with a countdown and its real price: no invented discount. The header search has no API behind it yet (name search is deferred).
+
 ## Open questions
 
-- Visual design (component library; Tailwind/shadcn-vue shared with the admin): pending.
+- None open on the visual design yet; the design system is recorded here as it is built.

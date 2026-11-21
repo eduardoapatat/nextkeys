@@ -1,0 +1,198 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+/*
+ * NextKeys design tokens: a neighborhood cibercafé at midnight.
+ * The night room is the ground, the lit display case is the only bright zone,
+ * receipts print on thermal paper, prices wear yellow stickers.
+ * Components use these tokens only (test/unit/design-tokens.test.ts).
+ */
+@theme {
+    --color-*: initial;
+
+    /* Night room and melamine. */
+    --color-ink: #0f1319;
+    --color-ink-2: #141922;
+    --color-panel: #1d232c;
+    --color-panel-2: #262e39;
+    --color-line: #313a47;
+    --color-line-strong: #4a5564;
+
+    /* Text on the dark ground: 15:1 and 8.4:1 on ink. */
+    --color-chalk: #ece7dc;
+    --color-chalk-muted: #a7afb9;
+    --color-chalk-faint: #7d8794;
+
+    /* Thermal receipt. */
+    --color-paper: #efe8d8;
+    --color-paper-ink: #22201b;
+    --color-paper-muted: #5d5749;
+    --color-paper-line: #cfc6b2;
+
+    /* Price stickers and the primary action. */
+    --color-sticker: #f2c230;
+    --color-sticker-hover: #f7d35c;
+    --color-sticker-ink: #1a1405;
+
+    /* CRT glow: active state and focus. */
+    --color-crt: #9cc8d6;
+    --color-crt-deep: #1f3640;
+
+    --color-danger: #e2735f;
+    --color-danger-deep: #3a1f1b;
+    --color-ok: #8fc79a;
+    --color-ok-deep: #1c3324;
+
+    /* Generated covers: one deep tint per product, picked from the slug. */
+    --color-cover-1: #6b2d3a;
+    --color-cover-2: #234b6b;
+    --color-cover-3: #2f5a3c;
+    --color-cover-4: #6a4a1f;
+    --color-cover-5: #4b3270;
+    --color-cover-6: #1f5a5e;
+
+    --color-transparent: transparent;
+    --color-current: currentColor;
+
+    --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Barlow Condensed', 'Barlow', ui-sans-serif, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --font-marker: 'Permanent Marker', 'Barlow Condensed', cursive;
+
+    --radius-card: 6px;
+    --radius-control: 4px;
+
+    /* Overhead light of the display case, and a box resting on glass. */
+    --shadow-case:
+        0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35);
+    --shadow-lift:
+        0 18px 32px -12px rgb(0 0 0 / 0.65), 0 4px 10px rgb(0 0 0 / 0.4);
+    --shadow-sticker: 0 3px 8px -2px rgb(0 0 0 / 0.55);
+    --shadow-receipt: 0 12px 28px -10px rgb(0 0 0 / 0.6);
+
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+    --animate-rise: rise 320ms var(--ease-out) both;
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    }
+}
+
+@layer base {
+    html {
+        color-scheme: dark;
+        background-color: var(--color-ink);
+        color: var(--color-chalk);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        scrollbar-color: var(--color-line-strong) var(--color-ink);
+        accent-color: var(--color-sticker);
+        caret-color: var(--color-sticker);
+    }
+
+    body {
+        min-height: 100dvh;
+        line-height: 1.5;
+    }
+
+    ::selection {
+        background-color: var(--color-sticker);
+        color: var(--color-sticker-ink);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-crt);
+        outline-offset: 2px;
+    }
+
+    a {
+        text-underline-offset: 0.2em;
+        text-decoration-thickness: 1px;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+    }
+
+    /* Prices, counts and references line up in columns. */
+    data,
+    time,
+    .tabular {
+        font-variant-numeric: tabular-nums;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 1ms !important;
+            animation-delay: 0ms !important;
+            transition-property:
+                opacity, color, background-color, border-color !important;
+        }
+    }
+}
+
+@layer components {
+    /* The light that follows the pointer across a tilted cover. */
+    .cover-glare {
+        background: radial-gradient(
+            circle at center,
+            rgb(255 255 255 / 0.16),
+            transparent 45%
+        );
+    }
+
+    /* Press feedback for anything pressable (Emil: 0.97, 160ms ease-out). */
+    .pressable {
+        transition: transform 160ms var(--ease-out);
+    }
+
+    .pressable:active:not(:disabled) {
+        transform: scale(0.97);
+    }
+
+    /* The light that follows the pointer across a tilted cover. */
+    .cover-glare {
+        background: radial-gradient(
+            circle at center,
+            rgb(255 255 255 / 0.16),
+            transparent 45%
+        );
+    }
+
+    /* Thermal receipt: torn zig-zag edges top and bottom. */
+    .receipt {
+        background-color: var(--color-paper);
+        color: var(--color-paper-ink);
+        --tear: 8px;
+        mask:
+            conic-gradient(
+                    from -45deg at bottom,
+                    #0000,
+                    #000 1deg 90deg,
+                    #0000 91deg
+                )
+                bottom / var(--tear) 51% repeat-x,
+            conic-gradient(
+                    from 135deg at top,
+                    #0000,
+                    #000 1deg 90deg,
+                    #0000 91deg
+                )
+                top / var(--tear) 51% repeat-x;
+        padding-block: calc(var(--tear) + 1.25rem);
+        filter: drop-shadow(0 12px 18px rgb(0 0 0 / 0.45));
+    }
+}

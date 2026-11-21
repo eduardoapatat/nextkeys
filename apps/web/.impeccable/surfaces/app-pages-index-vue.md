@@ -1,0 +1,26 @@
+---
+version: 1
+slug: 'app-pages-index-vue'
+primary_target: 'app/pages/index.vue'
+related_targets: []
+---
+
+# Storefront home
+
+Scope: `/` (home), mode Persuade. The other storefront pages (catalog, product, cart, checkout, result, orders, library, account) are Operate and inherit this world.
+
+Audience: a recruiter or tech lead walking the demo for a few minutes; it must read as a real Chilean game-key store. Action: open a product and add it to the cart. Proof: real catalog, CLP prices, platforms, region and activation from the API. Constraints: Koparion section structure (no promo strip above the hero), dark, covers lead, card hover tilt, reduced motion, Spanish UI, no invented discounts or reviews.
+
+## Direction contract
+
+THESIS: The store is the counter of a neighborhood cibercafé at midnight: a lit glass display case of games, a whiteboard of prices and a thermal receipt. It refuses the category default of a black page, one neon accent and a carousel hero.
+
+OWN-WORLD: Night-room ink ground (#0f1319) and dark melamine panels (#1d232c); the display case is the only bright zone, lit from above. Thermal-paper cream (#efe8d8) for receipts (cart, order, result), sticker yellow (#f2c230) for price stickers and the primary action, CRT cool blue (#9cc8d6) for active and focus. Condensed signage caps for headings and numbered "puestos", a workhorse sans for UI, a monospace for receipts and codes; marker hand only on whiteboard notes. Cards are numbered stations on one strict grid; platform, region and activation always sit in the same slots.
+
+STORY: The visitor sees a lit case of real games with real CLP prices, understands at once what each one is and where it activates, opens one and adds it; the cart prints as a receipt.
+
+FIRST VIEWPORT: Header bar (logo, search on the counter, account, cart with count). Below, the lit display case fills about two thirds of the width: one lead cover at billing scale plus four smaller ones, each with a yellow price sticker and an "Agregar" button. To the right, the whiteboard: "Precios de hoy" with real products and prices, and the deal-of-the-day countdown. Primary action: "Agregar al carrito" on the lead cover.
+
+FORM: Cibercafé de barrio, position 6 on the ordered list, seed:a6d1fe050f5a8abe. Raises: one strict station grid (ASCII), one truth per field in fixed slots (six-pack), billing-rank cover scale (combo sheet), sections stacked as light bands from the lit case to quieter zones (cyclorama).
+
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

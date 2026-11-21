@@ -29,7 +29,14 @@ describe('catalog listing', () => {
         expect(page.findAll('article')).toHaveLength(productPage.data.length);
         expect(page.text()).toContain('Shield Antivirus');
         expect(page.text()).toContain('$14.990');
-        expect(page.text()).toContain('Sin carátula');
+        // Without cover_url the storefront prints a cover from the product.
+        expect(
+            page
+                .find(
+                    '[data-cover="generated"][aria-label="Carátula de Shield Antivirus"]',
+                )
+                .exists(),
+        ).toBe(true);
         expect(page.find('img[alt="Carátula de Starfall"]').exists()).toBe(
             true,
         );

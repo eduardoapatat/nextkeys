@@ -63,6 +63,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - CI in `.github/workflows/api.yml`, filtered by `apps/api/**` and `contracts/**`, with Postgres as a service; `.github/workflows/web.yml`, filtered by `apps/web/**` and `contracts/**`, runs `pnpm ci:check`.
 - Storefront cart (`nk_cart` cookie): `apps/web/test/unit/cart.test.ts` (caps, invalid cookie) and `test/nuxt/cart.test.ts` (add, edit, remove, unavailable line blocks checkout).
 - `apps/web`: strict TypeScript (`nuxt typecheck`), ESLint (`@nuxt/eslint` + `eslint-config-prettier`), Prettier and Vitest (`test/unit` in node, `test/nuxt` in the Nuxt environment).
+- `apps/web` design tokens: `test/unit/design-tokens.test.ts` fails when a `.vue` file uses a raw color (hex, `rgb()`, `bg-[#…]`); colors live in `app/assets/css/main.css` (`@theme`).
 - Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`, and npm in `apps/web`.
 
 ## Known pitfalls

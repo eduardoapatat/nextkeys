@@ -2,6 +2,22 @@
 useHead({
     htmlAttrs: { lang: 'es' },
     titleTemplate: (title) => (title ? `${title} · NextKeys` : 'NextKeys'),
+    link: [
+        {
+            rel: 'preload',
+            href: '/fonts/barlow-400-latin.woff2',
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: '',
+        },
+        {
+            rel: 'preload',
+            href: '/fonts/barlow-condensed-700-latin.woff2',
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: '',
+        },
+    ],
 });
 </script>
 
@@ -12,19 +28,3 @@ useHead({
         <NuxtPage />
     </div>
 </template>
-
-<style>
-/* Prototype only: just enough to read it. The visual design is pending. */
-body {
-    font-family: system-ui, sans-serif;
-    line-height: 1.5;
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 1rem;
-}
-
-img {
-    max-width: 16rem;
-    height: auto;
-}
-</style>
