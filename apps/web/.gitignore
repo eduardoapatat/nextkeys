@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Agent skills installed locally (npx skills add)
+.claude
+skills-lock.json
