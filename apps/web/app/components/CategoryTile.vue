@@ -28,8 +28,11 @@ const props = withDefaults(
         label: string;
         note: string;
         size?: 'md' | 'lg';
+        // Where the `art` slot sits: beside the text (bottom right, the text
+        // narrows) or above it (top right, next to the arrow).
+        art?: 'beside' | 'above';
     }>(),
-    { size: 'lg' },
+    { size: 'lg', art: 'beside' },
 );
 
 interface Symbol {
@@ -180,7 +183,12 @@ const patternSize: Partial<Record<TileKind, number>> = {
         <span
             v-if="$slots.art"
             aria-hidden="true"
-            class="absolute right-0 bottom-0 -z-10 h-[78%] w-2/5 origin-bottom-right transition-transform duration-300 ease-out group-hover:scale-105"
+            class="absolute right-0 -z-10 transition-transform duration-300 ease-out group-hover:scale-105"
+            :class="
+                art === 'beside'
+                    ? 'bottom-0 h-[78%] w-2/5 origin-bottom-right'
+                    : 'top-0 h-1/2 w-3/5 origin-top-right'
+            "
         >
             <slot name="art" />
         </span>
@@ -225,7 +233,7 @@ const patternSize: Partial<Record<TileKind, number>> = {
             </svg>
             <UiIcon name="arrowRight" />
         </span>
-        <span :class="{ 'max-w-[58%]': $slots.art }">
+        <span :class="{ 'max-w-[58%]': $slots.art && art === 'beside' }">
             <span
                 class="block font-display leading-none font-extrabold uppercase"
                 :class="

@@ -86,6 +86,9 @@ const typeNotes: Record<(typeof productTypeLinks)[number]['type'][0], string> =
                             :label="item.label"
                             :note="typeNotes[item.type[0]]"
                             size="md"
+                            :art="
+                                item.type[0] === 'license' ? 'above' : 'beside'
+                            "
                         >
                             <template v-if="item.type[0] === 'license'" #art>
                                 <HomeLicenseArt />

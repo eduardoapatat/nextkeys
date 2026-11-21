@@ -34,16 +34,14 @@ const apps = [
 </script>
 
 <template>
-    <span
-        class="absolute right-11 bottom-3 grid grid-cols-2 gap-2 md:right-4 md:bottom-4"
-    >
+    <span class="absolute top-4 right-11 flex gap-2 md:top-5 md:right-13">
         <span
             v-for="(app, index) in apps"
             :key="app.label"
-            class="grid size-11 place-items-center rounded-control bg-on-cover shadow-case md:size-12"
-            :class="index % 2 ? 'md:translate-y-2' : ''"
+            class="grid size-9 place-items-center rounded-control bg-on-cover shadow-case md:size-10"
+            :class="index % 2 ? 'translate-y-1.5' : ''"
         >
-            <svg viewBox="0 0 24 24" class="size-7 md:size-8">
+            <svg viewBox="0 0 24 24" class="size-6 md:size-7">
                 <path :d="app.d" :class="app.tone" />
                 <path
                     :d="app.detail"
