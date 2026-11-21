@@ -21,7 +21,7 @@ Decided on 2026-11-20. These survive the visual redesign.
   - `products.index.json`, `products.show.json`, `catalog.filters.json`: the three endpoints.
   - `products.index.422.json`, `products.show.404.json`: the error bodies.
 - **Laravel writes the fixtures.** They are never hand-written in `apps/web`. `tests/Feature/Api/V1/ApiContractTest.php` seeds the demo catalog and requests each endpoint.
-  - It fails when the *shape* of the real response differs from its fixture's: the same keys, recursively, with list items merged and a nullable object accepted as `null`.
+  - It fails when the _shape_ of the real response differs from its fixture's: the same keys, recursively, with list items merged and a nullable object accepted as `null`.
   - `CONTRACTS_UPDATE=1` rewrites the fixtures from the real responses.
   - When an API Resource changes, the API CI fails until the fixtures are regenerated.
 - **Nuxt has hand-written valibot schemas** (`v.strictObject`) in `app/api/schemas.ts`, and the types are derived from them with `InferOutput`.
