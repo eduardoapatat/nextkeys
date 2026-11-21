@@ -38,13 +38,13 @@ colors:
     cover-6: '#1f5a5e'
 typography:
     display:
-        fontFamily: 'Saira Condensed, Rubik, ui-sans-serif, sans-serif'
+        fontFamily: 'Sofia Sans Condensed, Rubik, ui-sans-serif, sans-serif'
         fontSize: '3.75rem'
         fontWeight: 700
         lineHeight: 1.05
         letterSpacing: '-0.01em'
     headline:
-        fontFamily: 'Saira Condensed, Rubik, ui-sans-serif, sans-serif'
+        fontFamily: 'Sofia Sans Condensed, Rubik, ui-sans-serif, sans-serif'
         fontSize: '1.875rem'
         fontWeight: 700
         lineHeight: 1.05
@@ -60,7 +60,7 @@ typography:
         fontWeight: 400
         lineHeight: 1.5
     label:
-        fontFamily: 'Saira Condensed, Rubik, ui-sans-serif, sans-serif'
+        fontFamily: 'Sofia Sans Condensed, Rubik, ui-sans-serif, sans-serif'
         fontSize: '1rem'
         fontWeight: 700
         lineHeight: 1
@@ -71,7 +71,7 @@ typography:
         fontWeight: 400
         lineHeight: 1.5
     marker:
-        fontFamily: 'Permanent Marker, Saira Condensed, cursive'
+        fontFamily: 'Permanent Marker, Sofia Sans Condensed, cursive'
         fontSize: '1.875rem'
         fontWeight: 400
         lineHeight: 1.2
@@ -208,13 +208,13 @@ A cool, dark room with four lit materials (case light, sticker, receipt, whitebo
 
 ## Typography
 
-**Display Font:** Saira Condensed (with Rubik, ui-sans-serif); replaced Saira Condensed on 2026-11-21 at the user's request
+**Display Font:** Sofia Sans Condensed (with Rubik, ui-sans-serif); replaced Barlow Condensed on 2026-11-21 at the user's request (Saira Condensed was tried and rejected)
 **Body Font:** Rubik (with ui-sans-serif, system-ui); replaced Barlow on 2026-11-21 at the user's request: wider, softly rounded, easier at small sizes
-**Label/Mono Font:** JetBrains Mono (with ui-monospace) for receipts, codes, references and station numbers; Permanent Marker (with Saira Condensed) for whiteboard notes.
+**Label/Mono Font:** JetBrains Mono (with ui-monospace) for receipts, codes, references and station numbers; Permanent Marker (with Sofia Sans Condensed) for whiteboard notes.
 
 **Character:** Shop signage over a workhorse sans. The condensed caps read like the lettering on a counter and on game boxes; Rubik keeps product facts plain and friendly; the monospace is the receipt printer; the marker is a person writing on the board.
 
-All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.css`: Rubik (variable, 400 to 700), Saira Condensed 500/700, JetBrains Mono 400/600, Permanent Marker 400.
+All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.css`: Rubik (variable, 400 to 700), Sofia Sans Condensed (variable), JetBrains Mono 400/600, Permanent Marker 400.
 
 ### Hierarchy
 
@@ -222,7 +222,7 @@ All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.c
 - **Headline** (700, 1.875rem to 3rem, line-height 1.05, uppercase): section headings ("ELIGE TU PLATAFORMA"), the display-case heading, category tiles.
 - **Title** (Rubik 600, 1rem, line-height 1.375, sentence case): product names on station cards and cart lines.
 - **Body** (Rubik 400, 1rem, line-height 1.5, pretty wrapping): descriptions and notes; facts in definition lists drop to 0.875rem.
-- **Label** (Saira Condensed 700, 0.875 to 1.125rem, tracking 0.025em, uppercase): buttons, nav links, tabs, the cart pill.
+- **Label** (Sofia Sans Condensed 700, 0.875 to 1.125rem, tracking 0.025em, uppercase): buttons, nav links, tabs, the cart pill.
 - **Receipt** (JetBrains Mono 400, 0.875rem; header line 0.75rem with 0.2em tracking, uppercase): everything printed on paper, order references and key codes.
 - **Marker** (Permanent Marker 400, 1.5 to 1.875rem, sentence case): the error page's whiteboard sign only.
 

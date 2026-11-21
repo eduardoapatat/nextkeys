@@ -12,7 +12,7 @@ useHead({
         },
         {
             rel: 'preload',
-            href: '/fonts/saira-condensed-700-latin.woff2',
+            href: '/fonts/sofia-sans-condensed-latin.woff2',
             as: 'font',
             type: 'font/woff2',
             crossorigin: '',
