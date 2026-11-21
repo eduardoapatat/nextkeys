@@ -28,7 +28,7 @@ function isCurrent(to: Parameters<typeof router.resolve>[0]): boolean {
 <template>
     <nav aria-label="Principal" class="bg-bar">
         <ul
-            class="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 [scrollbar-width:none]"
+            class="mx-auto flex max-w-7xl gap-0.5 overflow-x-auto px-4 [scrollbar-width:none]"
         >
             <li v-for="item in items" :key="item.label" class="shrink-0">
                 <NuxtLink
