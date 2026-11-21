@@ -2,8 +2,8 @@
 import type { CatalogFilters } from '~/api/schemas';
 
 /**
- * Category blocks: the platform families and the product types, each a real
- * catalog filter. The platform names under each family come from the API.
+ * The full-width coral band: the platform families and the product types,
+ * each a real catalog filter (the home has no side menu). The platform names under each family come from the API.
  */
 const props = defineProps<{ filters: CatalogFilters }>();
 
@@ -22,49 +22,61 @@ const typeNotes: Record<string, string> = {
 </script>
 
 <template>
-    <section aria-labelledby="categories-heading">
-        <h2 id="categories-heading" class="text-3xl text-fg uppercase">
-            Elige tu plataforma
-        </h2>
-        <ul class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <li v-for="family in platformFamilies" :key="family.label">
-                <NuxtLink
-                    :to="catalogLink({ platform: [...family.platform] })"
-                    class="pressable group flex h-full flex-col justify-end gap-6 pt-8 rounded-card border border-line bg-surface p-4 hover:border-brand"
-                >
-                    <span>
-                        <span
-                            class="block font-display text-3xl leading-none font-extrabold text-fg uppercase group-hover:text-brand md:text-4xl"
-                            >{{ family.label }}</span
-                        >
-                        <span class="mt-1 block text-sm text-fg-muted">{{
-                            platformNames(family.platform)
-                        }}</span>
-                    </span>
-                </NuxtLink>
-            </li>
-        </ul>
-        <ul class="mt-3 grid gap-3 sm:grid-cols-3">
-            <li v-for="item in productTypeLinks" :key="item.label">
-                <NuxtLink
-                    :to="catalogLink({ type: [...item.type] })"
-                    class="pressable group flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3 hover:border-accent"
-                >
-                    <span>
-                        <span
-                            class="block font-display text-xl font-extrabold text-fg uppercase"
-                            >{{ item.label }}</span
-                        >
-                        <span class="block text-sm text-fg-muted">{{
-                            typeNotes[item.type[0]]
-                        }}</span>
-                    </span>
-                    <UiIcon
-                        name="arrowRight"
-                        class="text-fg-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent"
-                    />
-                </NuxtLink>
-            </li>
-        </ul>
+    <section
+        aria-labelledby="categories-heading"
+        class="surface-accent py-12 md:py-16"
+    >
+        <div class="mx-auto max-w-7xl px-4">
+            <h2
+                id="categories-heading"
+                class="text-4xl text-fg uppercase md:text-5xl"
+            >
+                Elige tu plataforma
+            </h2>
+            <ul class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-4">
+                <li v-for="family in platformFamilies" :key="family.label">
+                    <NuxtLink
+                        :to="catalogLink({ platform: [...family.platform] })"
+                        class="pressable group flex h-full min-h-36 flex-col justify-between gap-6 rounded-card bg-surface p-4 shadow-tag hover:shadow-lift md:p-5"
+                    >
+                        <UiIcon
+                            name="arrowRight"
+                            class="self-end text-fg-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:text-fg"
+                        />
+                        <span>
+                            <span
+                                class="block font-display text-3xl leading-none font-extrabold text-fg uppercase md:text-4xl"
+                                >{{ family.label }}</span
+                            >
+                            <span class="mt-1 block text-sm text-fg-muted">{{
+                                platformNames(family.platform)
+                            }}</span>
+                        </span>
+                    </NuxtLink>
+                </li>
+            </ul>
+            <ul class="mt-4 grid gap-3 sm:grid-cols-3 md:gap-4">
+                <li v-for="item in productTypeLinks" :key="item.label">
+                    <NuxtLink
+                        :to="catalogLink({ type: [...item.type] })"
+                        class="pressable group flex items-center justify-between gap-4 rounded-card border border-line-strong px-4 py-3 hover:bg-surface"
+                    >
+                        <span>
+                            <span
+                                class="block font-display text-xl font-extrabold text-fg uppercase"
+                                >{{ item.label }}</span
+                            >
+                            <span class="block text-sm text-fg-muted">{{
+                                typeNotes[item.type[0]]
+                            }}</span>
+                        </span>
+                        <UiIcon
+                            name="arrowRight"
+                            class="text-fg transition-transform duration-200 group-hover:translate-x-1"
+                        />
+                    </NuxtLink>
+                </li>
+            </ul>
+        </div>
     </section>
 </template>

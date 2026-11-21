@@ -34,12 +34,18 @@ describe('home', () => {
         ]);
     });
 
-    it('puts the newest product in the case with a working add to cart', async () => {
+    it('shows the shelf right after the banner, without a side menu', async () => {
         const page = await mountSuspended(HomePage, { route: '/' });
-        const caseSection = page.find('[aria-labelledby="case-heading"]');
+        const main = page.find('main');
 
-        expect(caseSection.find('h2').text()).toBe(newest.title.name);
-        await caseSection
+        expect(main.find('h1').text()).toContain('NextKeys');
+        expect(main.find('[aria-labelledby="case-heading"]').exists()).toBe(
+            false,
+        );
+        expect(main.find('nav').exists()).toBe(false);
+
+        const shelf = page.find('#panel-novedades');
+        await shelf
             .find(
                 `button[aria-label="Agregar ${newest.title.name} al carrito"]`,
             )
@@ -101,10 +107,11 @@ describe('home', () => {
         ).toBeDefined();
     });
 
-    it('links the category blocks to the filtered catalog', async () => {
+    it('links the platforms and types from the accent band', async () => {
         const page = await mountSuspended(HomePage, { route: '/' });
         const categories = page.find('[aria-labelledby="categories-heading"]');
 
+        expect(categories.classes()).toContain('surface-accent');
         expect(
             categories.find('a[href="/catalogo?platform=ps5,ps4"]').text(),
         ).toContain('PlayStation');

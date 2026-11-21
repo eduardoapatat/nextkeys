@@ -234,6 +234,24 @@
         color: var(--color-fg);
     }
 
+    /*
+     * The full-width coral band of the home: dark text (6.9:1) and white
+     * cards; actions inside turn navy, since coral on coral would vanish.
+     */
+    .surface-accent {
+        --color-bg: #ff6b4a;
+        --color-line: rgb(26 10 5 / 0.25);
+        --color-line-strong: rgb(26 10 5 / 0.55);
+        --color-fg: #1a0a05;
+        --color-fg-muted: #3d1409;
+        --color-fg-faint: #4a1a0f;
+        --color-accent: #0b1f33;
+        --color-accent-hover: #155566;
+        --color-accent-fg: #ffffff;
+        background-color: var(--color-bg);
+        color: var(--color-fg);
+    }
+
     /* The light that follows the pointer across a tilted cover. */
     .cover-glare {
         background: radial-gradient(
@@ -341,12 +359,6 @@
             display: block;
             height: auto;
         }
-    }
-
-    /* The display case: the newest games on a soft panel. */
-    .display-case {
-        background-color: var(--color-bg-subtle);
-        border: 1px solid var(--color-line);
     }
 
     /*

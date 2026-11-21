@@ -45,18 +45,23 @@ const deliveryNote = computed(() =>
                 <CoverTilt :max="10">
                     <ProductCover :product="product" size="lg" eager />
                 </CoverTilt>
-                <PriceSticker
-                    :price="product.price"
-                    :in-stock="product.in_stock"
-                    size="lg"
-                    class="absolute -right-4 -bottom-4"
-                />
             </div>
 
             <div class="flex flex-col gap-6">
                 <h1 class="text-5xl text-fg uppercase md:text-7xl">
                     {{ product.title.name }}
                 </h1>
+                <p
+                    class="font-display text-5xl leading-none font-extrabold md:text-6xl"
+                    :class="product.in_stock ? 'text-fg' : 'text-fg-faint'"
+                >
+                    <data :value="product.price" class="tabular">{{
+                        formatClp(product.price)
+                    }}</data>
+                    <span class="ml-1 align-top text-base text-fg-muted"
+                        >CLP</span
+                    >
+                </p>
                 <ProductFacts :product="product" />
                 <p class="flex items-start gap-2 text-sm text-fg-muted">
                     <UiIcon

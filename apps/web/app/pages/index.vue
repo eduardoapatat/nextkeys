@@ -3,7 +3,7 @@ import { fetchCatalogFilters, fetchProducts } from '~/api/catalog';
 
 useHead({ title: 'Claves y juegos al instante' });
 
-// Three real orderings of the catalog: newest for the case and "Novedades",
+// Three real orderings of the catalog: newest for the deal and "Novedades",
 // cheapest for the banner receipt and the example offers, by name for
 // the banner covers and the example featured selection.
 const { data, error } = await useAsyncData('home', async () => {
@@ -52,19 +52,21 @@ const tabs = [
 </script>
 
 <template>
-    <main
-        class="mx-auto flex max-w-7xl flex-col gap-16 px-4 py-6 md:gap-20 md:py-8"
-    >
-        <div class="flex flex-col gap-6">
+    <main class="flex flex-col gap-16 py-6 md:gap-20 md:py-8">
+        <h1 class="sr-only">NextKeys: claves y juegos al instante</h1>
+        <div
+            class="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 md:gap-20"
+        >
             <HomeBanner
                 :deal="deal"
                 :receipt="home.cheapest[0]"
                 :fan="home.byName"
             />
-            <HomeDisplayCase :products="home.newest" />
+            <HomeShelfTabs :tabs="tabs" />
         </div>
         <HomeCategories :filters="home.filters" />
-        <HomeShelfTabs :tabs="tabs" :filters="home.filters" />
-        <HomeBenefits />
+        <div class="mx-auto w-full max-w-7xl px-4">
+            <HomeBenefits />
+        </div>
     </main>
 </template>

@@ -18,6 +18,10 @@ describe('product page', () => {
         });
 
         expect(page.find('h1').text()).toBe('Hades');
+        // The price sits in the details column, next to the title.
+        expect(page.find('article h1 ~ p data').text()).toBe(
+            formatClp(product.data.price),
+        );
         expect(page.text()).toContain(product.data.title.description);
         // A digital key says where it is delivered.
         expect(page.text()).toContain('Entrega inmediata');
