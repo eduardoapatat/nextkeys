@@ -10,13 +10,13 @@ it('shows a published product with its title and the shape the storefront expect
     $this->getJson(route('api.v1.products.show', $product->slug))
         ->assertOk()
         ->assertExactJsonStructure(['data' => [
-            'slug', 'type' => ['slug', 'name'], 'price', 'in_stock', 'cover_url',
+            'slug', 'type' => ['slug', 'name'], 'price', 'in_stock', 'cover_url', 'cover_band',
             'title' => ['name', 'description'],
             'platforms' => ['*' => ['slug', 'name']],
             'region' => ['slug', 'name'],
             'activation_service' => ['slug', 'name'],
             'variants' => ['*' => [
-                'slug', 'type' => ['slug', 'name'], 'price', 'in_stock', 'cover_url',
+                'slug', 'type' => ['slug', 'name'], 'price', 'in_stock', 'cover_url', 'cover_band',
                 'title' => ['name'],
                 'platforms' => ['*' => ['slug', 'name']],
                 'region' => ['slug', 'name'],

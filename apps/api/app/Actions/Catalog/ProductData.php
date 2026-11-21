@@ -16,6 +16,7 @@ final readonly class ProductData
      * @param  list<int>  $platformIds
      * @param  ?string  $slug  Null keeps the current slug on update and generates one on create.
      * @param  ?UploadedFile  $cover  A new cover; null keeps the current one unless $removeCover.
+     * @param  bool  $coverBand  Whether the storefront frames the cover in its platform's case.
      */
     public function __construct(
         public int $titleId,
@@ -28,5 +29,6 @@ final readonly class ProductData
         public ?string $slug,
         public ?UploadedFile $cover = null,
         public bool $removeCover = false,
+        public bool $coverBand = true,
     ) {}
 }

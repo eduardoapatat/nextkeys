@@ -26,6 +26,7 @@ const productFields = {
     price: v.pipe(v.number(), v.integer()),
     in_stock: v.boolean(),
     cover_url: v.nullable(v.string()),
+    cover_band: v.boolean(),
     platforms: v.array(Reference),
     region: v.nullable(Reference),
     activation_service: v.nullable(Reference),

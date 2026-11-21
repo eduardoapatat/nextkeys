@@ -42,6 +42,7 @@ const form = useForm({
     slug: props.product?.slug ?? '',
     cover: null as File | null,
     remove_cover: false,
+    cover_band: props.product?.cover_band ?? true,
 });
 
 const coverInput = ref<InstanceType<typeof Input> | null>(null);
@@ -390,6 +391,25 @@ function submit(): void {
                     <InputError :message="form.errors.cover" />
                 </div>
             </div>
+            <div class="flex items-start gap-2">
+                <Checkbox
+                    id="cover_band"
+                    :model-value="form.cover_band"
+                    @update:model-value="form.cover_band = $event === true"
+                    class="mt-0.5"
+                />
+                <div class="grid gap-1">
+                    <Label for="cover_band"
+                        >Mostrar la banda de plataforma sobre la portada</Label
+                    >
+                    <p class="text-sm text-muted-foreground">
+                        La tienda enmarca la portada como la caja de su
+                        plataforma (PS5, Xbox, Switch…). Desactívala si la
+                        imagen ya trae su banda.
+                    </p>
+                </div>
+            </div>
+            <InputError :message="form.errors.cover_band" />
         </div>
 
         <div class="grid gap-2">

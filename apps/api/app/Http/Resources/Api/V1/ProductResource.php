@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
             'price' => $product->price,
             'in_stock' => (bool) $product->in_stock,
             'cover_url' => $product->coverUrl(),
+            'cover_band' => $product->cover_band,
             'title' => $this->title(),
             'platforms' => ReferenceResource::collection($product->platforms),
             'region' => $product->region === null ? null : new ReferenceResource($product->region),

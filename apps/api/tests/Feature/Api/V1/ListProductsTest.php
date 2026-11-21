@@ -37,7 +37,7 @@ it('exposes only the storefront fields of each product', function () {
     $item = $this->getJson(route('api.v1.products.index'))->assertOk()->json('data.0');
 
     expect(array_keys($item))->toBe([
-        'slug', 'type', 'price', 'in_stock', 'cover_url', 'title', 'platforms', 'region', 'activation_service',
+        'slug', 'type', 'price', 'in_stock', 'cover_url', 'cover_band', 'title', 'platforms', 'region', 'activation_service',
     ])
         ->and($item['type'])->toBe(['slug' => $product->type->value, 'name' => $product->type->label()])
         ->and($item['price'])->toBe($product->price)

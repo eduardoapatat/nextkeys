@@ -74,6 +74,7 @@ final class SaveProduct
             return DB::transaction(function () use ($product, $type, $data, $cover): Product {
                 $product->fill([
                     'cover_image' => $cover,
+                    'cover_band' => $data->coverBand,
                     'title_id' => $data->titleId,
                     'activation_service_id' => $data->activationServiceId,
                     'region_id' => $data->regionId,

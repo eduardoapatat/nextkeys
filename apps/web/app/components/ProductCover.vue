@@ -2,17 +2,19 @@
 import type { ProductSummary } from '~/api/schemas';
 
 /**
- * A game case at 3:4: the frame and band of the product's platform (official
- * marks, see `platformBox`) around the front. The front is the uploaded cover
+ * A cover at 3:4 under its platform's band (official marks, see
+ * `platformBox`). A physical game is also framed by its case, like the box
+ * on a shelf; keys and licenses only carry the band. The front is the uploaded cover
  * when there is one; otherwise it prints the title, type and region on a
- * tint derived from the slug.
+ * tint derived from the slug. An uploaded cover with `cover_band` off
+ * already carries its own band, so it shows bare.
  */
 const props = withDefaults(
     defineProps<{
         product: Pick<
             ProductSummary,
             'slug' | 'cover_url' | 'platforms' | 'type' | 'region'
-        > & { title: { name: string } };
+        > & { title: { name: string }; cover_band?: boolean };
         size?: 'sm' | 'md' | 'lg';
         eager?: boolean;
     }>(),
@@ -24,8 +26,12 @@ const platformNames = computed(() =>
     props.product.platforms.map((platform) => platform.name).join(', '),
 );
 const box = computed(() => platformBox(props.product.platforms));
+const boxed = computed(
+    () => !props.product.cover_url || props.product.cover_band !== false,
+);
 
-const tone: Record<BoxTone, string> = {
+// The band: the platform's color with its mark.
+const band: Record<BoxTone, string> = {
     ps5: 'bg-box-ps5 text-ink',
     ps4: 'bg-box-ps4 text-chalk',
     xbox: 'bg-box-xbox text-chalk',
@@ -34,23 +40,55 @@ const tone: Record<BoxTone, string> = {
     multi: 'bg-box-multi text-chalk',
 };
 
+// Only a physical game is a box: its case frames the band and the art on
+// the top, right and bottom (the left edge is the art, like a case front). The PS5 case is blue under a white band.
+const physical = computed(() => props.product.type.slug === 'physical');
+const caseColor: Record<BoxTone, string> = {
+    ps5: 'bg-box-ps5-case',
+    ps4: 'bg-box-ps4',
+    xbox: 'bg-box-xbox',
+    nintendo: 'bg-box-nintendo',
+    pc: 'bg-box-pc',
+    multi: 'bg-box-multi',
+};
+
 const frame = {
-    sm: { case: 'px-0.75 pb-0.75', band: 'h-4.5 text-[0.55rem] px-0.5' },
-    md: { case: 'px-1.25 pb-1.25', band: 'h-6 text-[0.7rem] px-1' },
-    lg: { case: 'px-1.75 pb-1.75', band: 'h-8 text-sm px-1.5' },
+    sm: {
+        case: 'pt-0.75 pr-0.75 pb-0.75',
+        band: 'h-4.5 text-[0.55rem] pl-1 pr-0.5',
+    },
+    md: {
+        case: 'pt-1.25 pr-1.25 pb-1.25',
+        band: 'h-6 text-[0.7rem] pl-1.5 pr-1',
+    },
+    lg: {
+        case: 'pt-1.75 pr-1.75 pb-1.75',
+        band: 'h-8 text-sm pl-2 pr-1.5',
+    },
 };
 </script>
 
 <template>
+    <img
+        v-if="!boxed"
+        :src="product.cover_url!"
+        :alt="label"
+        :loading="eager ? 'eager' : 'lazy'"
+        class="aspect-3/4 w-full rounded-card bg-panel-2 object-cover"
+    />
     <div
+        v-else
         class="relative flex aspect-3/4 w-full flex-col overflow-hidden rounded-card"
-        :class="[tone[box.tone], frame[size].case]"
+        :class="
+            physical ? [caseColor[box.tone], frame[size].case] : 'bg-panel-2'
+        "
         data-cover-box
         :data-tone="box.tone"
+        :data-case="physical ? 'physical' : undefined"
     >
         <p
             class="flex shrink-0 items-center gap-[0.6em] overflow-hidden py-[0.35em] font-display leading-none font-extrabold tracking-wide whitespace-nowrap uppercase"
-            :class="frame[size].band"
+            :class="[band[box.tone], frame[size].band]"
             :aria-label="`Plataformas: ${platformNames}`"
         >
             <template v-for="(item, index) in box.items" :key="index">
@@ -71,7 +109,10 @@ const frame = {
             </template>
         </p>
 
-        <div class="relative min-h-0 flex-1 overflow-hidden rounded-[2px]">
+        <div
+            class="relative min-h-0 flex-1 overflow-hidden"
+            :class="{ 'rounded-br-[2px]': physical }"
+        >
             <img
                 v-if="product.cover_url"
                 :src="product.cover_url"

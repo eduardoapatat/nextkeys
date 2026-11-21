@@ -26,6 +26,20 @@ describe('product cover', () => {
             true,
         );
         expect(cover.find('[data-cover="generated"]').exists()).toBe(true);
+        expect(cover.attributes('data-case')).toBeUndefined();
+    });
+
+    it('frames only a physical game in its case', async () => {
+        const cover = await mountSuspended(ProductCover, {
+            props: {
+                product: {
+                    ...product,
+                    type: { slug: 'physical', name: 'Físico' },
+                },
+            },
+        });
+
+        expect(cover.attributes('data-case')).toBe('physical');
     });
 
     it('frames an uploaded cover the same way', async () => {
@@ -40,6 +54,21 @@ describe('product cover', () => {
         });
 
         expect(cover.attributes('data-tone')).toBe('nintendo');
+        expect(cover.find('img[alt="Carátula de Hades"]').exists()).toBe(true);
+    });
+
+    it('shows an uploaded cover bare when its band is turned off', async () => {
+        const cover = await mountSuspended(ProductCover, {
+            props: {
+                product: {
+                    ...product,
+                    cover_url: '/covers/hades.jpg',
+                    cover_band: false,
+                },
+            },
+        });
+
+        expect(cover.find('[data-cover-box]').exists()).toBe(false);
         expect(cover.find('img[alt="Carátula de Hades"]').exists()).toBe(true);
     });
 });

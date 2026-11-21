@@ -32,6 +32,7 @@ class UpdateProductRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255'],
             'cover' => ['nullable', 'file'],
             'remove_cover' => ['nullable', 'boolean'],
+            'cover_band' => ['nullable', 'boolean'],
         ];
     }
 
@@ -48,6 +49,7 @@ class UpdateProductRequest extends FormRequest
             slug: $this->filled('slug') ? $this->string('slug')->toString() : null,
             cover: $this->file('cover') instanceof UploadedFile ? $this->file('cover') : null,
             removeCover: $this->boolean('remove_cover'),
+            coverBand: $this->boolean('cover_band', true),
         );
     }
 }

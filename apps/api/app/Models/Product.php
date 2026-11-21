@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int|null $stock
  * @property ProductStatus $status
  * @property string|null $cover_image Path on the `public` disk.
+ * @property bool $cover_band Whether the storefront frames the cover in its platform's case.
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Title $title
@@ -38,7 +39,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read Region|null $region
  * @property-read bool|null $in_stock Only selected by the `withInStock()` scope.
  */
-#[Fillable(['title_id', 'type', 'slug', 'activation_service_id', 'region_id', 'price', 'stock', 'status', 'cover_image'])]
+#[Fillable(['title_id', 'type', 'slug', 'activation_service_id', 'region_id', 'price', 'stock', 'status', 'cover_image', 'cover_band'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -181,6 +182,7 @@ class Product extends Model
             'stock' => 'integer',
             'status' => ProductStatus::class,
             'in_stock' => 'boolean',
+            'cover_band' => 'boolean',
         ];
     }
 }

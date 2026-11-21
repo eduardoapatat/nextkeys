@@ -8,6 +8,7 @@
         "price": 19990,
         "in_stock": true,
         "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+        "cover_band": true,
         "title": {
             "name": "Starfall",
             "description": "A space exploration RPG across a collapsing star system."
@@ -40,6 +41,7 @@
                 "price": 19990,
                 "in_stock": true,
                 "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+                "cover_band": true,
                 "title": {
                     "name": "Starfall"
                 },
@@ -71,6 +73,7 @@
                 "price": 20990,
                 "in_stock": true,
                 "cover_url": null,
+                "cover_band": true,
                 "title": {
                     "name": "Starfall"
                 },
@@ -102,6 +105,7 @@
                 "price": 21990,
                 "in_stock": true,
                 "cover_url": null,
+                "cover_band": true,
                 "title": {
                     "name": "Starfall"
                 },
@@ -129,6 +133,7 @@
                 "price": 24990,
                 "in_stock": true,
                 "cover_url": null,
+                "cover_band": true,
                 "title": {
                     "name": "Starfall"
                 },
@@ -160,6 +165,7 @@
                 "price": 34990,
                 "in_stock": true,
                 "cover_url": null,
+                "cover_band": true,
                 "title": {
                     "name": "Starfall"
                 },

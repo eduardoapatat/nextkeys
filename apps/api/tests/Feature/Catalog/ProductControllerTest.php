@@ -170,6 +170,36 @@ it('uploads a cover through a spoofed PUT and shows it in the edit form', functi
         ->assertInertia(fn (Assert $page) => $page->where('product.cover_url', Storage::disk('public')->url($path)));
 });
 
+it('turns the cover band off and on from the form, on by default', function () {
+    $product = Product::factory()->create();
+    $fields = fn (array $extra) => [
+        '_method' => 'put',
+        'title_id' => $product->title_id,
+        'activation_service_id' => $product->activation_service_id,
+        'region_id' => $product->region_id,
+        'platform_ids' => $product->platforms()->pluck('platforms.id')->all(),
+        'price' => $product->price,
+        'status' => 'draft',
+        ...$extra,
+    ];
+
+    expect($product->refresh()->cover_band)->toBeTrue();
+
+    $this->post(route('products.update', $product), $fields(['cover_band' => '0']))
+        ->assertSessionHasNoErrors();
+    expect($product->refresh()->cover_band)->toBeFalse();
+
+    $this->get(route('products.edit', $product))
+        ->assertInertia(fn (Assert $page) => $page->where('product.cover_band', false));
+
+    $this->post(route('products.update', $product), $fields([]))
+        ->assertSessionHasNoErrors();
+    expect($product->refresh()->cover_band)->toBeTrue();
+
+    $this->post(route('products.update', $product), $fields(['cover_band' => 'maybe']))
+        ->assertSessionHasErrors('cover_band');
+});
+
 it('deletes a product without keys', function () {
     $product = Product::factory()->create();
 

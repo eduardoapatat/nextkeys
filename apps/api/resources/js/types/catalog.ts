@@ -31,6 +31,7 @@ export type ProductFormValues = {
     status: ProductStatusValue;
     slug: string;
     cover_url: string | null;
+    cover_band: boolean;
 };
 
 export type TitleFormValues = {

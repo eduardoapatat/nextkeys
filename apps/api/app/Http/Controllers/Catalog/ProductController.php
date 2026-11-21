@@ -60,6 +60,7 @@ class ProductController extends Controller
                 'status' => $product->status->value,
                 'slug' => $product->slug,
                 'cover_url' => $product->coverUrl(),
+                'cover_band' => $product->cover_band,
             ],
         ]);
     }
