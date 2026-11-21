@@ -64,68 +64,130 @@ async function pay() {
 </script>
 
 <template>
-    <main v-if="customer">
-        <h1>Pagar</h1>
+    <main v-if="customer" class="mx-auto max-w-3xl px-4 py-8 md:py-10">
+        <h1 class="text-5xl text-chalk uppercase md:text-6xl">Pagar</h1>
 
-        <FormErrors :messages="errors" />
-        <p v-if="notice" role="status">{{ notice }}</p>
+        <div class="mt-6 flex flex-col gap-3">
+            <FormErrors :messages="errors" />
+            <p
+                v-if="notice"
+                role="status"
+                class="rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-chalk"
+            >
+                {{ notice }}
+            </p>
+        </div>
 
-        <p v-if="lines.length === 0">
-            Tu carrito está vacío.
-            <NuxtLink :to="catalogLink()">Ver el catálogo</NuxtLink>
-        </p>
-        <template v-else>
-            <h2>Resumen</h2>
-            <ul>
-                <li v-for="line in lines" :key="line.slug">
-                    {{ line.quantity }} ×
-                    {{ line.product?.title.name ?? line.slug }}
-                    <template v-if="line.product">
-                        ({{ variantLabel(line.product) }}) ·
-                        {{ formatClp(line.product.price * line.quantity) }}
-                    </template>
-                    <strong v-if="!line.available"> No disponible</strong>
+        <EmptyState
+            v-if="lines.length === 0"
+            message="Tu carrito está vacío."
+            class="mt-6"
+        >
+            <UiButton :to="catalogLink()" variant="primary"
+                >Ver el catálogo</UiButton
+            >
+        </EmptyState>
+        <ThermalReceipt v-else title="Resumen" class="mt-6">
+            <h2 class="sr-only">Resumen</h2>
+            <ul class="flex flex-col gap-3 py-4">
+                <li
+                    v-for="line in lines"
+                    :key="line.slug"
+                    class="flex justify-between gap-4"
+                >
+                    <span class="min-w-0">
+                        {{ line.quantity }} ×
+                        {{ line.product?.title.name ?? line.slug }}
+                        <span
+                            v-if="line.product"
+                            class="block text-xs text-paper-muted"
+                            >{{ variantLabel(line.product) }}</span
+                        >
+                        <strong v-if="!line.available" class="text-board-red">
+                            No disponible</strong
+                        >
+                    </span>
+                    <span v-if="line.product" class="tabular shrink-0">{{
+                        formatClp(line.product.price * line.quantity)
+                    }}</span>
                 </li>
             </ul>
 
-            <section aria-labelledby="total-heading">
-                <h2 id="total-heading">Total</h2>
-                <p>
-                    <strong>{{ formatClp(total) }}</strong>
+            <section
+                aria-labelledby="total-heading"
+                class="flex flex-col gap-3 border-t border-dashed border-paper-line pt-4"
+            >
+                <p class="flex items-baseline justify-between">
+                    <span
+                        id="total-heading"
+                        role="heading"
+                        aria-level="2"
+                        class="font-semibold"
+                        >Total</span
+                    >
+                    <strong class="tabular text-base">{{
+                        formatClp(total)
+                    }}</strong>
                 </p>
-                <WithdrawalNotice :has-physical-items="hasPhysicalItems" />
+                <WithdrawalNotice
+                    :has-physical-items="hasPhysicalItems"
+                    class="rounded-control border border-paper-line p-3 text-paper-ink"
+                />
             </section>
 
-            <p v-if="!ready">
-                Hay productos no disponibles.
-                <NuxtLink to="/carrito">Revisa tu carrito</NuxtLink>.
-            </p>
-            <section
-                v-else-if="!customer.email_verified"
-                aria-labelledby="verify-heading"
-            >
-                <h2 id="verify-heading">Verifica tu correo</h2>
-                <p>
-                    Para pagar necesitas verificar tu correo: ahí te enviamos
-                    las claves. Revisa el enlace que mandamos a
-                    {{ customer.email }}.
+            <div class="mt-5 font-sans">
+                <p v-if="!ready" class="text-paper-ink">
+                    Hay productos no disponibles.
+                    <NuxtLink to="/carrito" class="underline"
+                        >Revisa tu carrito</NuxtLink
+                    >.
                 </p>
-                <button type="button" @click="resend">
-                    Reenviar el correo
-                </button>
-            </section>
-            <p v-else-if="pendingOrder">
-                Tienes un pedido pendiente:
-                <NuxtLink :to="`/pedidos/${pendingOrder.reference}`">
-                    {{ pendingOrder.reference }}
-                </NuxtLink>
-                . Págalo o cancélalo antes de hacer otro.
-            </p>
-            <form v-else aria-label="Pagar" @submit.prevent="pay">
-                <button type="submit" :disabled="pending">
-                    Pagar con Webpay
-                </button>
-            </form>
-        </template>
+                <section
+                    v-else-if="!customer.email_verified"
+                    aria-labelledby="verify-heading"
+                    class="flex flex-col items-start gap-3"
+                >
+                    <h2
+                        id="verify-heading"
+                        class="text-2xl text-paper-ink uppercase"
+                    >
+                        Verifica tu correo
+                    </h2>
+                    <p class="text-paper-ink">
+                        Para pagar necesitas verificar tu correo: ahí te
+                        enviamos las claves. Revisa el enlace que mandamos a
+                        {{ customer.email }}.
+                    </p>
+                    <UiButton variant="primary" @click="resend"
+                        >Reenviar el correo</UiButton
+                    >
+                </section>
+                <p v-else-if="pendingOrder" class="text-paper-ink">
+                    Tienes un pedido pendiente:
+                    <NuxtLink
+                        :to="`/pedidos/${pendingOrder.reference}`"
+                        class="font-mono font-semibold underline"
+                    >
+                        {{ pendingOrder.reference }}
+                    </NuxtLink>
+                    . Págalo o cancélalo antes de hacer otro.
+                </p>
+                <form v-else aria-label="Pagar" @submit.prevent="pay">
+                    <UiButton
+                        type="submit"
+                        variant="primary"
+                        size="lg"
+                        class="w-full"
+                        :disabled="pending"
+                    >
+                        <UiIcon name="lock" />{{
+                            pending
+                                ? 'Conectando con Webpay…'
+                                : 'Pagar con Webpay'
+                        }}
+                    </UiButton>
+                </form>
+            </div>
+        </ThermalReceipt>
     </main>
 </template>
