@@ -30,14 +30,14 @@ async function submit() {
 </script>
 
 <template>
-    <main>
+    <main class="account-page">
         <h1>Crear cuenta</h1>
 
         <form @submit.prevent="submit">
             <FormErrors :messages="errors" />
 
             <p>
-                <label for="name">Nombre</label><br />
+                <label for="name">Nombre</label>
                 <input
                     id="name"
                     v-model="form.name"
@@ -47,7 +47,7 @@ async function submit() {
                 />
             </p>
             <p>
-                <label for="email">Correo electrónico</label><br />
+                <label for="email">Correo electrónico</label>
                 <input
                     id="email"
                     v-model="form.email"
@@ -57,7 +57,7 @@ async function submit() {
                 />
             </p>
             <p>
-                <label for="password">Contraseña</label><br />
+                <label for="password">Contraseña</label>
                 <input
                     id="password"
                     v-model="form.password"
@@ -67,8 +67,7 @@ async function submit() {
                 />
             </p>
             <p>
-                <label for="password_confirmation">Repite la contraseña</label
-                ><br />
+                <label for="password_confirmation">Repite la contraseña</label>
                 <input
                     id="password_confirmation"
                     v-model="form.password_confirmation"
@@ -81,7 +80,13 @@ async function submit() {
                 Te enviaremos un correo para verificar tu dirección: la
                 necesitas verificada para pagar, porque ahí llegan las claves.
             </p>
-            <button type="submit" :disabled="pending">Crear cuenta</button>
+            <UiButton
+                type="submit"
+                variant="primary"
+                size="lg"
+                :disabled="pending"
+                >Crear cuenta</UiButton
+            >
         </form>
 
         <p>

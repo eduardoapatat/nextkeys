@@ -28,7 +28,7 @@ async function submit() {
 </script>
 
 <template>
-    <main>
+    <main class="account-page">
         <h1>Restablecer contraseña</h1>
 
         <template v-if="done">
@@ -44,7 +44,7 @@ async function submit() {
 
             <p>Cuenta: {{ email }}</p>
             <p>
-                <label for="password">Contraseña nueva</label><br />
+                <label for="password">Contraseña nueva</label>
                 <input
                     id="password"
                     v-model="form.password"
@@ -54,8 +54,7 @@ async function submit() {
                 />
             </p>
             <p>
-                <label for="password_confirmation">Repite la contraseña</label
-                ><br />
+                <label for="password_confirmation">Repite la contraseña</label>
                 <input
                     id="password_confirmation"
                     v-model="form.password_confirmation"
@@ -64,9 +63,14 @@ async function submit() {
                     required
                 />
             </p>
-            <button type="submit" :disabled="pending">
+            <UiButton
+                type="submit"
+                variant="primary"
+                size="lg"
+                :disabled="pending"
+            >
                 Cambiar contraseña
-            </button>
+            </UiButton>
         </form>
     </main>
 </template>

@@ -41,17 +41,19 @@ async function signOut() {
 </script>
 
 <template>
-    <main v-if="customer">
+    <main v-if="customer" class="account-page">
         <h1>Mi cuenta</h1>
 
         <FormErrors :messages="errors" />
         <p v-if="notice" role="status">{{ notice }}</p>
 
-        <dl>
-            <dt>Nombre</dt>
-            <dd>{{ customer.name }}</dd>
-            <dt>Correo electrónico</dt>
-            <dd>{{ customer.email }}</dd>
+        <dl
+            class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-card border border-line bg-ink-2 p-6"
+        >
+            <dt class="text-chalk-faint">Nombre</dt>
+            <dd class="text-chalk">{{ customer.name }}</dd>
+            <dt class="text-chalk-faint">Correo electrónico</dt>
+            <dd class="truncate text-chalk">{{ customer.email }}</dd>
         </dl>
 
         <section
@@ -59,21 +61,36 @@ async function signOut() {
             aria-labelledby="verify-heading"
         >
             <h2 id="verify-heading">Verifica tu correo</h2>
-            <p>
+            <p class="text-chalk-muted">
                 Para pagar necesitas verificar tu correo: ahí te enviamos las
                 claves. Revisa el enlace que mandamos a {{ customer.email }}.
             </p>
-            <button type="button" :disabled="pending" @click="resend">
+            <UiButton
+                variant="primary"
+                class="self-start"
+                :disabled="pending"
+                @click="resend"
+            >
                 Reenviar el correo
-            </button>
+            </UiButton>
         </section>
 
-        <p><NuxtLink to="/pedidos">Mis pedidos</NuxtLink></p>
+        <nav aria-label="Tu actividad" class="grid grid-cols-2 gap-3">
+            <UiButton to="/pedidos" size="lg"
+                ><UiIcon name="receipt" />Mis pedidos</UiButton
+            >
+            <UiButton to="/biblioteca" size="lg"
+                ><UiIcon name="library" />Mi biblioteca</UiButton
+            >
+        </nav>
 
-        <p>
-            <button type="button" :disabled="pending" @click="signOut">
-                Cerrar sesión
-            </button>
-        </p>
+        <UiButton
+            variant="ghost"
+            class="self-start"
+            :disabled="pending"
+            @click="signOut"
+        >
+            Cerrar sesión
+        </UiButton>
     </main>
 </template>

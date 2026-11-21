@@ -24,7 +24,7 @@ async function submit() {
 </script>
 
 <template>
-    <main>
+    <main class="account-page">
         <h1>Recuperar contraseña</h1>
 
         <p v-if="notice" role="status">{{ notice }}</p>
@@ -32,7 +32,7 @@ async function submit() {
             <FormErrors :messages="errors" />
 
             <p>
-                <label for="email">Correo electrónico</label><br />
+                <label for="email">Correo electrónico</label>
                 <input
                     id="email"
                     v-model="email"
@@ -41,7 +41,13 @@ async function submit() {
                     required
                 />
             </p>
-            <button type="submit" :disabled="pending">Enviar enlace</button>
+            <UiButton
+                type="submit"
+                variant="primary"
+                size="lg"
+                :disabled="pending"
+                >Enviar enlace</UiButton
+            >
         </form>
 
         <p><NuxtLink to="/cuenta/ingresar">Volver a ingresar</NuxtLink></p>

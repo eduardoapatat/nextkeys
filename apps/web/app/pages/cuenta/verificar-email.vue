@@ -42,7 +42,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <main>
+    <main class="account-page">
         <h1>Verificar correo</h1>
 
         <p v-if="status === 'pending'" role="status">Verificando…</p>
