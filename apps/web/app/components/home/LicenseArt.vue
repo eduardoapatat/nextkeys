@@ -1,89 +1,59 @@
 <script setup lang="ts">
 /**
- * The licenses tile's picture, drawn by hand: a desktop with a spreadsheet,
- * a slide and a document open in front, the way a program license ends up
- * being used. No product logos: the windows are generic. Fixed colors
- * (box-*, board-*) since the band redefines the role tokens.
+ * The licenses tile's picture: the kinds of programs the store sells as app
+ * icons drawn by hand (a document, a spreadsheet, an antivirus shield and a
+ * cloud subscription). Generic glyphs, no product logos. Fixed colors
+ * (box-*, accent, tile-*) since the band redefines the role tokens.
  */
+const apps = [
+    {
+        label: 'document',
+        tone: 'fill-box-ps4',
+        d: 'M5 2h10l5 5v15H5zM15 2v5h5',
+        detail: 'M8 11h9M8 14h9M8 17h6',
+    },
+    {
+        label: 'spreadsheet',
+        tone: 'fill-box-xbox',
+        d: 'M3 4h18v16H3z',
+        detail: 'M3 9h18M3 14.5h18M9 4v16M15 4v16',
+    },
+    {
+        label: 'antivirus',
+        tone: 'fill-accent',
+        d: 'M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5z',
+        detail: 'M8.5 12.5l2.5 2.5 4.5-5',
+    },
+    {
+        label: 'cloud',
+        tone: 'fill-tile-license',
+        d: 'M7 19a5 5 0 0 1-.6-10A6.5 6.5 0 0 1 19 9.5a4.8 4.8 0 0 1-.5 9.5z',
+        detail: 'M12 16v-5m-2.5 2.5L12 11l2.5 2.5',
+    },
+] as const;
 </script>
 
 <template>
-    <svg
-        viewBox="0 0 220 150"
-        preserveAspectRatio="xMaxYMax meet"
-        class="absolute right-2 bottom-0 size-full drop-shadow-lg"
+    <span
+        class="absolute right-11 bottom-3 grid grid-cols-2 gap-2 md:right-4 md:bottom-4"
     >
-        <!-- Spreadsheet, at the back. -->
-        <g transform="translate(96 6)">
-            <rect width="120" height="84" rx="5" class="fill-on-cover" />
-            <rect width="120" height="14" rx="5" class="fill-box-xbox" />
-            <rect y="9" width="120" height="5" class="fill-box-xbox" />
-            <g class="stroke-board-line" stroke-width="1">
+        <span
+            v-for="(app, index) in apps"
+            :key="app.label"
+            class="grid size-11 place-items-center rounded-control bg-on-cover shadow-case md:size-12"
+            :class="index % 2 ? 'md:translate-y-2' : ''"
+        >
+            <svg viewBox="0 0 24 24" class="size-7 md:size-8">
+                <path :d="app.d" :class="app.tone" />
                 <path
-                    d="M8 30h104M8 42h104M8 54h104M8 66h104M38 22v54M68 22v54M98 22v54"
+                    :d="app.detail"
+                    fill="none"
+                    class="stroke-on-cover"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                 />
-            </g>
-            <rect
-                x="39"
-                y="43"
-                width="29"
-                height="11"
-                class="fill-box-xbox opacity-25"
-            />
-        </g>
-
-        <!-- Slide, in the middle. -->
-        <g transform="translate(50 30)">
-            <rect width="112" height="78" rx="5" class="fill-on-cover" />
-            <rect width="112" height="14" rx="5" class="fill-accent" />
-            <rect y="9" width="112" height="5" class="fill-accent" />
-            <rect
-                x="12"
-                y="24"
-                width="56"
-                height="8"
-                rx="2"
-                class="fill-board-muted"
-            />
-            <circle cx="86" cy="50" r="15" class="fill-accent opacity-80" />
-            <path d="M86 50V35a15 15 0 0 1 15 15Z" class="fill-tile-steam" />
-            <rect
-                x="12"
-                y="42"
-                width="44"
-                height="5"
-                rx="2"
-                class="fill-board-line"
-            />
-            <rect
-                x="12"
-                y="52"
-                width="36"
-                height="5"
-                rx="2"
-                class="fill-board-line"
-            />
-        </g>
-
-        <!-- Document, in front. -->
-        <g transform="translate(6 56)">
-            <rect width="104" height="94" rx="5" class="fill-on-cover" />
-            <rect width="104" height="14" rx="5" class="fill-box-ps4" />
-            <rect y="9" width="104" height="5" class="fill-box-ps4" />
-            <rect
-                x="12"
-                y="24"
-                width="48"
-                height="7"
-                rx="2"
-                class="fill-board-muted"
-            />
-            <g class="fill-board-line">
-                <rect x="12" y="38" width="80" height="4" rx="2" />
-                <rect x="12" y="47" width="74" height="4" rx="2" />
-                <rect x="12" y="56" width="80" height="4" rx="2" />
-                <rect x="12" y="65" width="58" height="4" rx="2" />
-            </g>
-        </g>
-    </svg>
+            </svg>
+        </span>
+    </span>
 </template>
