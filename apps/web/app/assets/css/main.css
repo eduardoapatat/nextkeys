@@ -61,12 +61,16 @@
     --color-box-pc: #16181c;
     --color-box-multi: #3a3f47;
 
-    /* Platform tiles: the light end of each family's gradient. */
+    /* Home category tiles: the light end of each gradient. */
     --color-tile-playstation: #0a72d9;
     --color-tile-xbox: #1f9a1f;
     --color-tile-nintendo: #ff2a3a;
     --color-tile-steam: #2a475e;
     --color-tile-steam-deep: #171a21;
+    --color-tile-key: #ff7a52;
+    --color-tile-license: #24476b;
+    --color-tile-license-deep: #0b1f33;
+    --color-tile-physical: #6b4a9a;
 
     /* Text on covers and colored bands: always light, in any theme. */
     --color-on-cover: #ffffff;

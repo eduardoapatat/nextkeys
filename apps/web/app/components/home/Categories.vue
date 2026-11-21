@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { CatalogFilters } from '~/api/schemas';
-import type { TileFamily } from '~/components/PlatformTile.vue';
+import type { TileKind } from '~/components/CategoryTile.vue';
 
 /**
- * The full-width turquoise band: the console families as drawn tiles
- * (PlatformTile) and Steam, where PC games are activated (the cover band
- * says the same), and and the product types,
- * each a real catalog filter (the home has no side menu). The platform names under each family come from the API.
+ * The full-width turquoise band, the home's only shortcut to the filters
+ * (it has no side menu): hand-drawn tiles (CategoryTile) for the console
+ * families, Steam and the product types, each a real catalog filter. Steam
+ * is where PC games are activated, as the cover band says. The platform
+ * names under each family come from the API.
  */
 const props = defineProps<{ filters: CatalogFilters }>();
 
@@ -23,24 +24,25 @@ const tiles = computed(() => [
     ...platformFamilies
         .filter((family) => family.id !== 'pc')
         .map((family) => ({
-            family: family.id as TileFamily,
+            kind: family.id as TileKind,
             label: family.label,
-            platforms: platformNames(family.platform),
+            note: platformNames(family.platform),
             to: catalogLink({ platform: [...family.platform] }),
         })),
     {
-        family: 'steam' as const,
+        kind: 'steam' as const,
         label: 'Steam',
-        platforms: 'Juegos para escritorio',
+        note: 'Juegos para escritorio',
         to: catalogLink({ activation_service: ['steam'] }),
     },
 ]);
 
-const typeNotes: Record<string, string> = {
-    digital_key: 'Llega a tu correo y a tu biblioteca',
-    license: 'Programas con su clave de activación',
-    physical: 'La caja, para tu estante',
-};
+const typeNotes: Record<(typeof productTypeLinks)[number]['type'][0], string> =
+    {
+        digital_key: 'Llega a tu correo y a tu biblioteca',
+        license: 'Programas con su clave de activación',
+        physical: 'La caja, para tu estante',
+    };
 </script>
 
 <template>
@@ -56,35 +58,31 @@ const typeNotes: Record<string, string> = {
                 Elige tu plataforma
             </h2>
             <ul class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-4">
-                <li v-for="tile in tiles" :key="tile.family">
+                <li v-for="tile in tiles" :key="tile.kind">
                     <NuxtLink
                         :to="tile.to"
                         class="pressable group block h-full rounded-card shadow-case hover:shadow-lift"
                     >
-                        <PlatformTile
-                            :family="tile.family"
+                        <CategoryTile
+                            :kind="tile.kind"
                             :label="tile.label"
-                            :platforms="tile.platforms"
+                            :note="tile.note"
                         />
                     </NuxtLink>
                 </li>
             </ul>
-            <ul class="mt-4 grid gap-3 sm:grid-cols-3 md:gap-4">
+            <ul class="mt-3 grid gap-3 sm:grid-cols-3 md:mt-4 md:gap-4">
                 <li v-for="item in productTypeLinks" :key="item.label">
                     <NuxtLink
                         :to="catalogLink({ type: [...item.type] })"
-                        class="pressable group flex items-center justify-between gap-4 rounded-card border border-line-strong px-4 py-3 hover:bg-surface-2"
+                        class="pressable group block h-full rounded-card shadow-case hover:shadow-lift"
                     >
-                        <span>
-                            <span
-                                class="block font-display text-xl font-extrabold text-fg uppercase"
-                                >{{ item.label }}</span
-                            >
-                            <span class="block text-sm text-fg-muted">{{
-                                typeNotes[item.type[0]]
-                            }}</span>
-                        </span>
-                        <UiIcon name="arrowRight" class="text-fg" />
+                        <CategoryTile
+                            :kind="item.type[0]"
+                            :label="item.label"
+                            :note="typeNotes[item.type[0]]"
+                            size="md"
+                        />
                     </NuxtLink>
                 </li>
             </ul>
