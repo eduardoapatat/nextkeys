@@ -4,8 +4,8 @@ import { fetchCatalogFilters, fetchProducts } from '~/api/catalog';
 useHead({ title: 'Claves y juegos al instante' });
 
 // Three real orderings of the catalog: newest for the case and "Novedades",
-// cheapest for the whiteboard and the example offers, by name for the
-// example featured selection.
+// cheapest for the banner receipt and the example offers, by name for
+// the banner covers and the example featured selection.
 const { data, error } = await useAsyncData('home', async () => {
     const [newest, cheapest, byName, filters] = await Promise.all([
         fetchProducts({ sort: 'newest' }),
@@ -55,9 +55,13 @@ const tabs = [
     <main
         class="mx-auto flex max-w-7xl flex-col gap-16 px-4 py-6 md:gap-20 md:py-8"
     >
-        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div class="flex flex-col gap-6">
+            <HomeBanner
+                :deal="deal"
+                :receipt="home.cheapest[0]"
+                :fan="home.byName"
+            />
             <HomeDisplayCase :products="home.newest" />
-            <HomeWhiteboard :prices="home.cheapest.slice(0, 6)" :deal="deal" />
         </div>
         <HomeCategories :filters="home.filters" />
         <HomeShelfTabs :tabs="tabs" :filters="home.filters" />

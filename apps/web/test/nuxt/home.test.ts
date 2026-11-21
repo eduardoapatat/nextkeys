@@ -61,6 +61,24 @@ describe('home', () => {
         ).toBe(true);
     });
 
+    it('opens with a banner slider whose first slide is the deal', async () => {
+        const page = await mountSuspended(HomePage, { route: '/' });
+        const banner = page.find('[aria-roledescription="carrusel"]');
+        const slides = banner.findAll('[aria-roledescription="lámina"]');
+
+        expect(slides).toHaveLength(3);
+        expect(slides[0]!.find('#deal-heading').exists()).toBe(true);
+        expect(slides[0]!.attributes('inert')).toBeUndefined();
+        expect(slides[1]!.attributes('inert')).toBeDefined();
+        expect(page.text()).not.toContain('Precios de hoy');
+
+        const pause = banner.find('button[aria-label="Pausar el carrusel"]');
+        await pause.trigger('click');
+        expect(
+            banner.find('button[aria-label="Reanudar el carrusel"]').exists(),
+        ).toBe(true);
+    });
+
     it('marks the tabs without API data as an example selection', async () => {
         const page = await mountSuspended(HomePage, { route: '/' });
 

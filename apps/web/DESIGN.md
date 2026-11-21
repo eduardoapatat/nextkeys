@@ -167,7 +167,7 @@ The world refuses the category default for game-key stores: a black page with a 
 - Sticker yellow marks prices and the one primary action per view.
 - CRT blue means "active" and "focused", nothing else.
 - Thermal paper and monospace for every money summary: cart, checkout, payment result, order.
-- Condensed signage caps for headings and buttons, a plain sans for reading, marker only on the whiteboard.
+- Condensed signage caps for headings and buttons, a plain sans for reading, marker only on the whiteboard sign.
 - Numbered stations on one grid, facts always in the same slot.
 
 ## Colors
@@ -223,17 +223,17 @@ All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.c
 - **Body** (Barlow 400, 1rem, line-height 1.5, pretty wrapping): descriptions and notes; facts in definition lists drop to 0.875rem.
 - **Label** (Barlow Condensed 700, 0.875 to 1.125rem, tracking 0.025em, uppercase): buttons, nav links, tabs, the cart pill.
 - **Receipt** (JetBrains Mono 400, 0.875rem; header line 0.75rem with 0.2em tracking, uppercase): everything printed on paper, order references and key codes.
-- **Marker** (Permanent Marker 400, 1.5 to 1.875rem, sentence case): whiteboard headings only.
+- **Marker** (Permanent Marker 400, 1.5 to 1.875rem, sentence case): the error page's whiteboard sign only.
 
 ### Named Rules
 
 **The Tabular Price Rule.** Every price, count, countdown and reference uses tabular figures (`data`, `time` and `.tabular` get them by default) and comes from the API in CLP.
 
-**The Marker Stays on the Board Rule.** Permanent Marker appears only on the whiteboard. Nowhere else is hand-written.
+**The Marker Stays on the Board Rule.** Permanent Marker appears only on the whiteboard sign of the error page. Nowhere else is hand-written.
 
 ## Layout
 
-One centered container (80rem max) with a 16px side gutter at every width. The home stacks its zones from bright to quiet: the lit display case and the whiteboard share the first row (case fluid, board fixed at 22rem from `lg`), then platform tiles, then the shelf with its category sidebar (15rem) and tabs, then benefits, then the newsletter and footer on the darker back-room band. Zones are separated by 64px (80px from `md`).
+One centered container (80rem max) with a 16px side gutter at every width. The home stacks its zones from bright to quiet: the banner slider and the lit display case below it (24px apart), then platform tiles, then the shelf with its category sidebar (15rem) and tabs, then benefits, then the newsletter and footer on the darker back-room band. Zones are separated by 64px (80px from `md`).
 
 Listings use the station grid: 2 columns, 3 from `sm`, 4 from `xl`, with 20px between columns and 40px between rows so the fact slots under each cover never crowd the next cover. Station facts are a two-column definition grid: platforms span the row, type left and region right, activation spans the last row.
 
@@ -247,7 +247,7 @@ Depth is physical and comes from one light source: the tube above the display ca
 
 ### Shadow Vocabulary
 
-- **Case** (`0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35)`): the display case, covers at rest, the whiteboard.
+- **Case** (`0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35)`): the display case, covers at rest, the fanned banner covers.
 - **Lift** (`0 18px 32px -12px rgb(0 0 0 / 0.65), 0 4px 10px rgb(0 0 0 / 0.4)`): a cover picked up on hover.
 - **Sticker** (`0 3px 8px -2px rgb(0 0 0 / 0.55)`): price stickers and the primary button, which is a sticker.
 - **Receipt** (`drop-shadow(0 12px 18px rgb(0 0 0 / 0.45))` as a filter, so it follows the torn edge).
@@ -296,9 +296,13 @@ Wraps a cover; on fine hover pointers without reduced motion it rotates up to 7d
 
 Cream paper, monospace print, torn zig-zag edges, dashed rules between blocks and a centered tracked header ("NEXTKEYS · DETALLE"). It holds the cart summary, the checkout total, the payment result and the order detail. The primary action may sit on the paper.
 
-### Whiteboard
+### Banner slider
 
-Home only: an off-white board in a melamine frame, "Precios de hoy" in marker with dotted leaders running from each product to its price, and "Oferta del día" inside a dashed Marker Red frame with a live countdown to Santiago midnight in monospace.
+Home only, first zone: a dark ink-2 band (not lit: the display case stays the one lit zone) with three slides on a scroll-snap track. The deal of the day (sticker-yellow label, monospace countdown to Santiago midnight, the price sticker and the tilted cover), "Paga con Webpay" with a thermal receipt slip, and "Tu clave, al instante" with three fanned covers. Dots (the active one in sticker yellow), pause and arrow buttons sit on the bottom edge. It advances every 7s, pauses on hover, focus and its pause button, never moves on its own under reduced motion, and off-screen slides are `inert`.
+
+### Whiteboard sign
+
+Error page only: an off-white board sign in marker ("Fuera de servicio").
 
 ### Inputs / Fields
 

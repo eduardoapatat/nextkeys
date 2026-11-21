@@ -527,14 +527,14 @@
             },
             "marker": {
                 "displayName": "Marker",
-                "purpose": "Whiteboard headings only."
+                "purpose": "The error page's whiteboard sign only."
             }
         },
         "shadows": [
             {
                 "name": "case",
                 "value": "0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35)",
-                "purpose": "Display case, covers at rest, whiteboard."
+                "purpose": "Display case, covers at rest, the fanned banner covers."
             },
             {
                 "name": "lift",
@@ -684,12 +684,12 @@
             "css": ".ds-receipt{--tear:8px;width:300px;padding:calc(var(--tear) + 1.25rem) 24px;background:#efe8d8;color:#22201b;font:400 0.875rem/1.5 'JetBrains Mono',monospace;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 90deg,#0000 91deg) bottom/var(--tear) 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 90deg,#0000 91deg) top/var(--tear) 51% repeat-x;filter:drop-shadow(0 12px 18px rgb(0 0 0 / 0.45));}.ds-rhead{margin:0 0 12px;padding-bottom:12px;border-bottom:1px dashed #cfc6b2;text-align:center;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#5d5749;}.ds-row{display:flex;justify-content:space-between;margin:4px 0;font-variant-numeric:tabular-nums;}.ds-total{margin-top:12px;padding-top:12px;border-top:1px dashed #cfc6b2;font-weight:600;font-size:1rem;}"
         },
         {
-            "name": "Whiteboard",
+            "name": "Banner slider",
             "kind": "custom",
-            "refersTo": "whiteboard",
-            "description": "Home-only price board in marker with dotted leaders and the deal of the day.",
-            "html": "<aside class=\"ds-board\"><h2>Precios de hoy</h2><a href=\"#\"><span>Shield Antivirus</span><i></i><b>$14.990</b></a><a href=\"#\"><span>Starfall</span><i></i><b>$19.990</b></a></aside>",
-            "css": ".ds-board{width:300px;padding:20px;border:4px solid #262e39;border-radius:6px;background:#e6e9e4;color:#1d2b4a;font-family:'Barlow',sans-serif;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.7),0 2px 6px rgb(0 0 0 / 0.35);}.ds-board h2{margin:0 0 8px;font:400 1.875rem 'Permanent Marker',cursive;}.ds-board a{display:flex;align-items:baseline;gap:8px;padding:8px 0;border-bottom:1px solid #c6ccc5;color:inherit;text-decoration:none;font-weight:600;}.ds-board a:hover{color:#b3362b;}.ds-board i{flex:1;align-self:flex-end;margin-bottom:4px;border-bottom:2px dotted #c6ccc5;}.ds-board b{font:700 1.25rem 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums;}"
+            "refersTo": "banner-slider",
+            "description": "Home banner: scroll-snap slides (deal of the day, Webpay, library) with dots, pause and arrows on the bottom edge.",
+            "html": "<section class=\"ds-banner\"><h2>Oferta del día</h2><p>Starfall</p><span>$21.990</span><nav><i class=\"on\"></i><i></i><i></i></nav></section>",
+            "css": ".ds-banner{width:420px;padding:28px;border:1px solid #313a47;border-radius:6px;background:#141922;color:#ece7dc;font-family:'Barlow',sans-serif}.ds-banner h2{margin:0;font:700 16px 'Barlow Condensed',sans-serif;text-transform:uppercase;color:#f2c230}.ds-banner p{margin:6px 0 16px;font:700 44px/1 'Barlow Condensed',sans-serif;text-transform:uppercase}.ds-banner span{display:inline-block;padding:6px 10px;border-radius:4px;background:#f2c230;color:#1a1405;font:700 26px 'Barlow Condensed',sans-serif;transform:rotate(-2deg)}.ds-banner nav{display:flex;gap:8px;margin-top:24px}.ds-banner i{width:24px;height:4px;border-radius:9px;background:#4a5564}.ds-banner i.on{background:#f2c230}"
         }
     ],
     "narrative": {
@@ -700,7 +700,7 @@
             "Sticker yellow marks prices and the one primary action per view.",
             "CRT blue means \"active\" and \"focused\", nothing else.",
             "Thermal paper and monospace for every money summary: cart, checkout, payment result, order.",
-            "Condensed signage caps for headings and buttons, a plain sans for reading, marker only on the whiteboard.",
+            "Condensed signage caps for headings and buttons, a plain sans for reading, marker only on the whiteboard sign.",
             "Numbered stations on one grid, facts always in the same slot."
         ],
         "rules": [
@@ -726,7 +726,7 @@
             },
             {
                 "name": "The Marker Stays on the Board Rule",
-                "body": "Permanent Marker appears only on the whiteboard. Nowhere else is hand-written.",
+                "body": "Permanent Marker appears only on the whiteboard sign of the error page. Nowhere else is hand-written.",
                 "section": "typography"
             },
             {

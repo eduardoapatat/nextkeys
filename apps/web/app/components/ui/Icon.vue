@@ -18,6 +18,8 @@ const paths = {
     chevronRight: 'M9 5l7 7-7 7',
     chevronLeft: 'M15 5l-7 7 7 7',
     arrowRight: 'M4 12h15M13 6l6 6-6 6',
+    pause: 'M8 5v14M16 5v14',
+    play: 'M7 4.5v15L19 12 7 4.5Z',
     check: 'M4.5 12.5 9.5 17.5 19.5 6.5',
     clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7v5l3.5 2',
     filter: 'M4 6h16M7 12h10M10 18h4',
