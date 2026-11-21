@@ -17,7 +17,7 @@ describe('product page', () => {
             route: `/${product.data.slug}`,
         });
 
-        expect(page.find('h1').text()).toBe('Starfall');
+        expect(page.find('h1').text()).toBe('Hades');
         expect(page.text()).toContain(product.data.title.description);
         // A digital key says where it is delivered.
         expect(page.text()).toContain('Entrega inmediata');

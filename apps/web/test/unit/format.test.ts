@@ -18,7 +18,7 @@ describe('variantLabel', () => {
 
     it('includes type, activation service, platforms, region and price', () => {
         const steam = variants.find(
-            (variant) => variant.slug === 'starfall-steam-macos-windows-global',
+            (variant) => variant.slug === 'hades-steam-macos-windows-global',
         );
 
         expect(steam && variantLabel(steam)).toBe(

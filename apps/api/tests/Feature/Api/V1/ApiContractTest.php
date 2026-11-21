@@ -71,7 +71,7 @@ beforeEach(function () {
     URL::forceRootUrl('http://localhost:8000');
 
     $this->seed(DatabaseSeeder::class);
-    Product::query()->where('slug', 'starfall-steam-macos-windows-global')->update(['cover_image' => 'covers/starfall.jpg']);
+    Product::query()->where('slug', 'hades-steam-macos-windows-global')->update(['cover_image' => 'covers/hades.jpg']);
 });
 
 /**
@@ -101,7 +101,7 @@ it('answers with the shape of its contract fixture', function (string $fixture, 
 })->with([
     'products.index' => ['products.index', '/api/v1/products', 200],
     'products.index.422' => ['products.index.422', '/api/v1/products?platform=does-not-exist', 422],
-    'products.show' => ['products.show', '/api/v1/products/starfall-steam-macos-windows-global', 200],
+    'products.show' => ['products.show', '/api/v1/products/hades-steam-macos-windows-global', 200],
     'products.show.404' => ['products.show.404', '/api/v1/products/does-not-exist', 404],
     'catalog.filters' => ['catalog.filters', '/api/v1/catalog/filters', 200],
 ]);
@@ -126,7 +126,7 @@ it('answers the order endpoints with the shape of their contract fixtures', func
 
     expectContract('orders.store.422', $this->postJson('/api/v1/orders', ['items' => [['slug' => 'does-not-exist', 'quantity' => 1]]])->assertUnprocessable());
 
-    $created = $this->postJson('/api/v1/orders', ['items' => [['slug' => 'starfall-steam-macos-windows-global', 'quantity' => 1]]])->assertCreated();
+    $created = $this->postJson('/api/v1/orders', ['items' => [['slug' => 'hades-steam-macos-windows-global', 'quantity' => 1]]])->assertCreated();
     expectContract('orders.store', $created);
     $reference = $created->json('data.reference');
 
@@ -149,5 +149,5 @@ it('answers the order endpoints with the shape of their contract fixtures', func
     expectContract('orders.show', $this->getJson("/api/v1/orders/{$reference}")->assertOk());
     expectContract('orders.index', $this->getJson('/api/v1/orders')->assertOk());
     expectContract('library.index', $this->getJson('/api/v1/library')->assertOk());
-    expectContract('library.keys', $this->postJson("/api/v1/library/{$reference}/starfall-steam-macos-windows-global/keys")->assertOk());
+    expectContract('library.keys', $this->postJson("/api/v1/library/{$reference}/hades-steam-macos-windows-global/keys")->assertOk());
 });

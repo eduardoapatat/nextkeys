@@ -27,19 +27,17 @@ describe('catalog listing', () => {
         const page = await mountSuspended(CatalogPage, { route: '/catalogo' });
 
         expect(page.findAll('article')).toHaveLength(productPage.data.length);
-        expect(page.text()).toContain('Shield Antivirus');
-        expect(page.text()).toContain('$14.990');
+        expect(page.text()).toContain('Norton 360 Deluxe');
+        expect(page.text()).toContain('$34.990');
         // Without cover_url the storefront prints a cover from the product.
         expect(
             page
                 .find(
-                    '[data-cover="generated"][aria-label="Carátula de Shield Antivirus"]',
+                    '[data-cover="generated"][aria-label="Carátula de Norton 360 Deluxe"]',
                 )
                 .exists(),
         ).toBe(true);
-        expect(page.find('img[alt="Carátula de Starfall"]').exists()).toBe(
-            true,
-        );
+        expect(page.find('img[alt="Carátula de Hades"]').exists()).toBe(true);
     });
 
     it('sends the filters, sort and page of the URL to the API', async () => {

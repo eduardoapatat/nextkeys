@@ -123,6 +123,5 @@ Decided and built on 2026-11-21. The finish review (Impeccable) and the motion r
 
 ## Open questions
 
-- Real cover art: the generated covers stand in until products get images (panel upload or demo seeder).
 - Ceiling ideas left for later: a stronger light falloff in the display case, a print-in motion for receipts.
 - Name search behind the header box (phase 6), and real offers and featured products behind the example tabs.

@@ -1,20 +1,20 @@
 {
     "data": {
-        "reference": "NK-D0MZ17",
+        "reference": "NK-2K2T91",
         "status": {
             "slug": "completed",
             "name": "Completado"
         },
         "total": 19990,
-        "created_at": "2026-11-21T01:28:00+00:00",
-        "expires_at": "2026-11-21T01:43:00+00:00",
-        "paid_at": "2026-11-21T01:28:00+00:00",
+        "created_at": "2026-11-21T06:04:19+00:00",
+        "expires_at": "2026-11-21T06:19:19+00:00",
+        "paid_at": "2026-11-21T06:04:19+00:00",
         "can_pay": false,
         "has_physical_items": false,
         "items": [
             {
-                "product_slug": "starfall-steam-macos-windows-global",
-                "title_name": "Starfall",
+                "product_slug": "hades-steam-macos-windows-global",
+                "title_name": "Hades",
                 "type": {
                     "slug": "digital_key",
                     "name": "Clave digital"
@@ -35,7 +35,7 @@
             "installments_number": 0,
             "installments_amount": null,
             "card_last_digits": "6623",
-            "transaction_date": "2026-11-21T01:28:00+00:00"
+            "transaction_date": "2026-11-21T06:04:19+00:00"
         }
     }
 }

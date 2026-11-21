@@ -5,7 +5,7 @@ Status: **implemented** (enums, migrations with every database rule, models, fac
 ## Overview
 
 ```
-Title (the work: Starfall, Office Suite Pro)
+Title (the work: Hades, Microsoft Office Home 2024)
  └─ Product (what is sold, has its own page)       ← cart and orders reference it
      ├─ ActivationService + Region                 ← where the code is redeemed / the game's region
      ├─ Platforms (pivot)                          ← the set of platforms the purchase covers
@@ -25,7 +25,7 @@ This is the product/variant pattern used by Shopify, Saleor, Sylius and Medusa, 
 
 Same shape: `id`, `name`, `slug` (unique), timestamps. Tables, not enums, so the admin can add entries without a deploy. Not deletable while in use (`restrictOnDelete`).
 
-- **Activation service**: where a code is redeemed or activated. Named this way (not "store") because NextKeys is itself a store and licenses are activated on accounts. Seeded with the labels buyers recognize from key stores: Steam, PlayStation Store, Nintendo eShop, **Xbox** (console and Play Anywhere games), **Microsoft Store** (PC-only games) and **Microsoft Account** (software such as Office). The demo seeder adds the fictitious **Shield Account** used in the example. All Microsoft codes are redeemed on the same account; the split is a label, not a technical difference.
+- **Activation service**: where a code is redeemed or activated. Named this way (not "store") because NextKeys is itself a store and licenses are activated on accounts. Seeded with the labels buyers recognize from key stores: Steam, PlayStation Store, Nintendo eShop, **Xbox** (console and Play Anywhere games), **Microsoft Store** (PC-only games) and **Microsoft Account** (software such as Office). The demo seeder adds **Norton Account** for the Norton license of the example. All Microsoft codes are redeemed on the same account; the split is a label, not a technical difference.
 - **Platform**: a device or OS. Seeded with Windows, macOS, PS4, PS5, Switch, Switch 2, Xbox One, Xbox Series, Android, iOS. Xbox One and Xbox Series are separate because key stores sell them as separate listings.
 - **Region**: Global, Europe, LATAM, North America…
 
@@ -158,25 +158,25 @@ Decided on 2026-11-20. Read-only, no authentication.
 
 Deterministic suggestion on creation: title name + activation service (or `physical` + activation service if any) + all platforms (sorted by name) + region, skipping the parts that are null. The admin can shorten it; uniqueness is guaranteed by the slug's unique index, not by the rule.
 
-Examples: `starfall-steam-macos-windows-global`, `starfall-playstation-store-ps4-ps5-latam`, `starfall-physical-ps5-north-america`, `neon-heist-physical-playstation-store-ps5-europe`. No SKU for now.
+Examples: `hades-steam-macos-windows-global`, `hades-playstation-store-ps4-ps5-latam`, `hades-physical-ps5-north-america`, `elden-ring-physical-playstation-store-ps5-europe`. No SKU for now.
 
 ## Example
 
 **products** (activation services, platforms and regions by name)
 
-| id  | title            | type        | slug                                                             | activation service | region        | platforms                    | price | stock | status    |
-| --- | ---------------- | ----------- | ---------------------------------------------------------------- | ------------------ | ------------- | ---------------------------- | ----- | ----- | --------- |
-| 1   | Starfall         | digital_key | starfall-steam-macos-windows-global                              | Steam              | Global        | Windows, macOS               | 19990 | —     | published |
-| 2   | Starfall         | digital_key | starfall-playstation-store-ps5-latam                             | PlayStation Store  | LATAM         | PS5                          | 21990 | —     | published |
-| 3   | Starfall         | digital_key | starfall-playstation-store-ps4-ps5-latam                         | PlayStation Store  | LATAM         | PS4, PS5                     | 24990 | —     | published |
-| 4   | Starfall         | digital_key | starfall-xbox-windows-xbox-series-global                         | Xbox               | Global        | Xbox Series, Windows         | 20990 | —     | published |
-| 5   | Starfall         | physical    | starfall-physical-ps5-north-america                              | —                  | North America | PS5                          | 34990 | 5     | published |
-| 6   | Neon Heist       | physical    | neon-heist-physical-playstation-store-ps5-latam                  | PlayStation Store  | LATAM         | PS5                          | 79990 | 12    | published |
-| 7   | Neon Heist       | digital_key | neon-heist-playstation-store-ps5-latam                           | PlayStation Store  | LATAM         | PS5                          | 74990 | —     | published |
-| 8   | Pixel Kart       | digital_key | pixel-kart-nintendo-eshop-switch-latam                           | Nintendo eShop     | LATAM         | Switch                       | 39990 | —     | published |
-| 9   | Pixel Kart       | physical    | pixel-kart-physical-nintendo-eshop-switch-2                      | Nintendo eShop     | —             | Switch 2                     | 44990 | 3     | draft     |
-| 10  | Office Suite Pro | license     | office-suite-pro-microsoft-account-macos-global                  | Microsoft Account  | Global        | macOS                        | 49990 | —     | published |
-| 11  | Shield Antivirus | license     | shield-antivirus-shield-account-android-ios-macos-windows-global | Shield Account     | Global        | Windows, macOS, Android, iOS | 14990 | —     | published |
+| id  | title                                     | type        | slug                                                                      | activation service | region        | platforms                    | price  | stock | status    |
+| --- | ----------------------------------------- | ----------- | ------------------------------------------------------------------------- | ------------------ | ------------- | ---------------------------- | ------ | ----- | --------- |
+| 1   | Hades                                     | digital_key | hades-steam-macos-windows-global                                          | Steam              | Global        | Windows, macOS               | 19990  | —     | published |
+| 2   | Hades                                     | digital_key | hades-playstation-store-ps5-latam                                         | PlayStation Store  | LATAM         | PS5                          | 21990  | —     | published |
+| 3   | Hades                                     | digital_key | hades-playstation-store-ps4-ps5-latam                                     | PlayStation Store  | LATAM         | PS4, PS5                     | 24990  | —     | published |
+| 4   | Hades                                     | digital_key | hades-xbox-windows-xbox-series-global                                     | Xbox               | Global        | Xbox Series, Windows         | 20990  | —     | published |
+| 5   | Hades                                     | physical    | hades-physical-ps5-north-america                                          | —                  | North America | PS5                          | 34990  | 5     | published |
+| 6   | Elden Ring                                | physical    | elden-ring-physical-playstation-store-ps5-latam                           | PlayStation Store  | LATAM         | PS5                          | 44990  | 12    | published |
+| 7   | Elden Ring                                | digital_key | elden-ring-playstation-store-ps5-latam                                    | PlayStation Store  | LATAM         | PS5                          | 39990  | —     | published |
+| 8   | The Legend of Zelda: Tears of the Kingdom | digital_key | the-legend-of-zelda-tears-of-the-kingdom-nintendo-eshop-switch-latam      | Nintendo eShop     | LATAM         | Switch                       | 59990  | —     | published |
+| 9   | The Legend of Zelda: Tears of the Kingdom | physical    | the-legend-of-zelda-tears-of-the-kingdom-physical-nintendo-eshop-switch-2 | Nintendo eShop     | —             | Switch 2                     | 64990  | 3     | draft     |
+| 10  | Microsoft Office Home 2024                | license     | microsoft-office-home-2024-microsoft-account-macos-global                 | Microsoft Account  | Global        | macOS                        | 129990 | —     | published |
+| 11  | Norton 360 Deluxe                         | license     | norton-360-deluxe-norton-account-android-ios-macos-windows-global         | Norton Account     | Global        | Windows, macOS, Android, iOS | 34990  | —     | published |
 
 Products 6 and 7 share title, activation service, region and platforms but differ in type: a code-in-box PS5 copy and the same game as a delivered key. Product 9 is a Switch 2 Game-Key Card (physical with an activation service, no region).
 
@@ -184,7 +184,7 @@ Products 6 and 7 share title, activation service, region and platforms but diffe
 
 | Attempt                                               | Blocked by                              |
 | ----------------------------------------------------- | --------------------------------------- |
-| Another Starfall · PlayStation Store · LATAM · PS5    | constraint trigger (same identity as 2) |
+| Another Hades · PlayStation Store · LATAM · PS5       | constraint trigger (same identity as 2) |
 | Physical with two platforms, or any product with none | constraint trigger                      |
 | Changing a product's type                             | `BEFORE UPDATE` trigger                 |
 | Physical without stock, or with negative stock        | CHECK                                   |
@@ -249,6 +249,15 @@ Decided and implemented on 2026-11-20: `is_published` (boolean) was replaced by 
 
 - Gift cards, wallet top-ups and subscriptions (Steam Wallet, Game Pass): would need new types (face value, duration). Possible phase 6 extra; the enum can grow.
 - Languages per product.
+
+## Demo catalog and cover art (IGDB)
+
+Decided on 2026-11-21 with the user:
+
+- **The demo catalog is real.** `CatalogDemoSeeder` seeds real games (Hades, Elden Ring, The Legend of Zelda: Tears of the Kingdom) and programs (Microsoft Office Home 2024, Norton 360 Deluxe) so the store reads as believable. Prices, stock and keys stay fictitious, as the storefront footer says.
+- **Covers come from IGDB, never from the repository.** Cover art is copyrighted by the publishers (stores show it under their distribution agreements), so the repo does not redistribute it: `php artisan catalog:import-covers` downloads each title's official cover at 1080p (about 810 × 1080) into `covers/` on the `public` disk. One lookup per title, one file per product (deleting a product never breaks another), `cover_band` set to `true` (IGDB art carries no platform band). Options: `--force` replaces existing covers (old files deleted after the save), `--title="Hades"` limits it to one title. IGDB has no programs: the licenses keep the generated cover until one is uploaded in the panel.
+- **Credentials.** A Twitch application's `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET` (`config/services.php` → `igdb`). Without them the command only warns. The app token is cached until shortly before it expires; errors never echo the credentials or the token.
+- **Boundary.** `App\Catalog\CoverArt\CoverArtSource` is the interface; `App\Catalog\CoverArt\Igdb\IgdbCoverArt` the only implementation and, with the Transbank gateway, the only code allowed to use the `Http` facade (`tests/Unit/PaymentsArchTest.php`). `StoreProductCover` writes covers for both the panel upload and the import. Covered by `tests/Feature/Catalog/ImportCoversCommandTest.php`.
 
 ## Implementation notes
 

@@ -46,7 +46,8 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Catalog database rules (CHECKs, composite FK, triggers) live in the migrations and are covered by `tests/Feature/Catalog/*DatabaseRulesTest.php` and `ProductIdentityTriggerTest.php`.
 - Catalog Actions turn every database rule into a validation error before writing (per type, platforms, slug, identity, delete guards): `tests/Feature/Catalog/{Create,Update,Delete}ProductTest.php`, `DeleteTitleTest.php` and `GenerateProductSlugTest.php` (checks the doc's example slugs from the demo seeder).
 - Key import: per-line rules, duplicates (in the file and in the database) and limits in `tests/Feature/Catalog/ImportProductKeysTest.php`; upload validation and "codes never reach a response" in `ProductKeyControllerTest.php`.
-- Product cover (stored before the transaction, cleaned up on failure, replace and remove) and key hint: `tests/Feature/Catalog/ProductCoverTest.php` and `ProductKeyTest.php`.
+- Product cover (stored before the transaction, cleaned up on failure, replace and remove) and key hint: `tests/Feature/Catalog/ProductCoverTest.php` and `ProductKeyTest.php`; the `cover_band` flag in `ProductControllerTest.php`.
+- Demo cover import (`catalog:import-covers`, IGDB): one lookup per title, `--force`, `--title`, unknown titles, no credentials, no credential or token in the output, in `tests/Feature/Catalog/ImportCoversCommandTest.php`. `tests/Unit/PaymentsArchTest.php` also keeps `App\Catalog\CoverArt\Igdb` behind `CoverArtSource` and allows `Http` only there and in the Transbank gateway.
 - Orders: CHECKs, the `orders_status_transition` trigger, the key lifecycle and quantity triggers on `product_keys` in `tests/Feature/Orders/OrderDatabaseRulesTest.php` and `ProductKeyOrderRulesTest.php`; reservation, cancel, expiry and payment in `tests/Feature/Orders/*Test.php`; the admin panel (search, filter, no codes, reference URLs, manual payment flag) in `OrderControllerTest.php`.
 - Payments: `PaymentAttemptDatabaseRulesTest.php` (CHECKs and the `payment_attempts_status_transition` trigger), `WebpayPlusGatewayTest.php` (requests, typed parsing, one exception without credentials, token validation, commit retry), `StartPaymentAttemptTest.php`, `WebpayReturnTest.php` (the four return cases, "never commit an unpayable order") and `ReconcilePaymentAttemptsTest.php` in `tests/Feature/Payments`; `tests/Feature/Orders/LockPayableOrderTest.php`.
 - `tests/Unit/PaymentsArchTest.php`: only the gateway binding and the Webpay return controller use `App\Payments\Transbank`, and only it uses the `Http` facade.
@@ -70,6 +71,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 
 - Tests run against Postgres (`nextkeys_test`), not SQLite. Docker must be running.
 - Product covers live on the `public` disk: run `php artisan storage:link` once after cloning, or covers return 404. Tests use `Storage::fake('public')`.
+- Demo covers are not in the repo (copyrighted art): after seeding, run `php artisan catalog:import-covers` with `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET` (a Twitch application) in `.env`. The two licenses are not on IGDB; upload their covers in the panel.
 - `make:migration` names files with the current time, which can sort before the catalog migrations (`2026_11_20_1000xx`); rename new ones to follow the last number.
 - The `nextkeys_test` database is created by `docker/postgres/init/` only on a fresh volume.
 - PHPStan needs `--memory-limit=1G`, already set in the `types:check` script.

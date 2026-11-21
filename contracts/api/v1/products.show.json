@@ -1,17 +1,17 @@
 {
     "data": {
-        "slug": "starfall-steam-macos-windows-global",
+        "slug": "hades-steam-macos-windows-global",
         "type": {
             "slug": "digital_key",
             "name": "Clave digital"
         },
         "price": 19990,
         "in_stock": true,
-        "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+        "cover_url": "http://localhost:8000/storage/covers/hades.jpg",
         "cover_band": true,
         "title": {
-            "name": "Starfall",
-            "description": "A space exploration RPG across a collapsing star system."
+            "name": "Hades",
+            "description": "A rogue-like dungeon crawler: fight your way out of the Underworld as the immortal prince Zagreus."
         },
         "platforms": [
             {
@@ -33,17 +33,17 @@
         },
         "variants": [
             {
-                "slug": "starfall-steam-macos-windows-global",
+                "slug": "hades-steam-macos-windows-global",
                 "type": {
                     "slug": "digital_key",
                     "name": "Clave digital"
                 },
                 "price": 19990,
                 "in_stock": true,
-                "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+                "cover_url": "http://localhost:8000/storage/covers/hades.jpg",
                 "cover_band": true,
                 "title": {
-                    "name": "Starfall"
+                    "name": "Hades"
                 },
                 "platforms": [
                     {
@@ -65,7 +65,7 @@
                 }
             },
             {
-                "slug": "starfall-xbox-windows-xbox-series-global",
+                "slug": "hades-xbox-windows-xbox-series-global",
                 "type": {
                     "slug": "digital_key",
                     "name": "Clave digital"
@@ -75,7 +75,7 @@
                 "cover_url": null,
                 "cover_band": true,
                 "title": {
-                    "name": "Starfall"
+                    "name": "Hades"
                 },
                 "platforms": [
                     {
@@ -97,7 +97,7 @@
                 }
             },
             {
-                "slug": "starfall-playstation-store-ps5-latam",
+                "slug": "hades-playstation-store-ps5-latam",
                 "type": {
                     "slug": "digital_key",
                     "name": "Clave digital"
@@ -107,7 +107,7 @@
                 "cover_url": null,
                 "cover_band": true,
                 "title": {
-                    "name": "Starfall"
+                    "name": "Hades"
                 },
                 "platforms": [
                     {
@@ -125,7 +125,7 @@
                 }
             },
             {
-                "slug": "starfall-playstation-store-ps4-ps5-latam",
+                "slug": "hades-playstation-store-ps4-ps5-latam",
                 "type": {
                     "slug": "digital_key",
                     "name": "Clave digital"
@@ -135,7 +135,7 @@
                 "cover_url": null,
                 "cover_band": true,
                 "title": {
-                    "name": "Starfall"
+                    "name": "Hades"
                 },
                 "platforms": [
                     {
@@ -157,7 +157,7 @@
                 }
             },
             {
-                "slug": "starfall-physical-ps5-north-america",
+                "slug": "hades-physical-ps5-north-america",
                 "type": {
                     "slug": "physical",
                     "name": "Físico"
@@ -167,7 +167,7 @@
                 "cover_url": null,
                 "cover_band": true,
                 "title": {
-                    "name": "Starfall"
+                    "name": "Hades"
                 },
                 "platforms": [
                     {

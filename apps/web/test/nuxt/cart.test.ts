@@ -33,7 +33,7 @@ describe('cart', () => {
         useCart().add(slug, 2);
 
         const page = await mountSuspended(CartPage, { route: '/carrito' });
-        await vi.waitUntil(() => page.text().includes('Starfall'));
+        await vi.waitUntil(() => page.text().includes('Hades'));
 
         expect(page.text()).toContain(formatClp(product.data.price * 2));
         // With more than one unit the line still shows the unit price.
@@ -42,9 +42,7 @@ describe('cart', () => {
         await page.find(`select[name="quantity-${slug}"]`).setValue('3');
         expect(useCart().lines.value).toEqual([{ slug, quantity: 3 }]);
 
-        await page
-            .find('button[aria-label="Quitar Starfall"]')
-            .trigger('click');
+        await page.find('button[aria-label="Quitar Hades"]').trigger('click');
         expect(useCart().lines.value).toEqual([]);
     });
 

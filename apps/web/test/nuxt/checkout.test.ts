@@ -35,7 +35,7 @@ describe('checkout', () => {
         useCustomer().value = { ...customer, email_verified: false };
 
         const page = await mountSuspended(CheckoutPage, { route: '/checkout' });
-        await vi.waitUntil(() => page.text().includes('Starfall'));
+        await vi.waitUntil(() => page.text().includes('Hades'));
 
         expect(page.text()).toContain('Verifica tu correo');
         expect(page.find('button[type="submit"]').exists()).toBe(false);
@@ -46,7 +46,7 @@ describe('checkout', () => {
         useCustomer().value = { ...customer, email_verified: true };
 
         const page = await mountSuspended(CheckoutPage, { route: '/checkout' });
-        await vi.waitUntil(() => page.text().includes('Starfall'));
+        await vi.waitUntil(() => page.text().includes('Hades'));
 
         const summary = page.find('[aria-labelledby="total-heading"]');
         expect(summary.text()).toContain(formatClp(product.data.price));

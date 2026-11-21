@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Catalog\CoverArt\CoverArtSource;
+use App\Catalog\CoverArt\Igdb\IgdbCoverArt;
 use App\Enums\UserRole;
 use App\Models\Order;
 use App\Models\User;
@@ -38,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
             connectTimeoutSeconds: Config::integer('payments.webpay_plus.connect_timeout'),
             timeoutSeconds: Config::integer('payments.webpay_plus.timeout'),
             commitRetries: Config::integer('payments.webpay_plus.commit_retries'),
+        ));
+
+        $this->app->singleton(CoverArtSource::class, fn (): CoverArtSource => new IgdbCoverArt(
+            clientId: Config::get('services.igdb.client_id') !== null ? Config::string('services.igdb.client_id') : null,
+            clientSecret: Config::get('services.igdb.client_secret') !== null ? Config::string('services.igdb.client_secret') : null,
         ));
     }
 

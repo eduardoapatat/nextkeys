@@ -1,17 +1,17 @@
 {
     "data": [
         {
-            "slug": "shield-antivirus-shield-account-android-ios-macos-windows-global",
+            "slug": "norton-360-deluxe-norton-account-android-ios-macos-windows-global",
             "type": {
                 "slug": "license",
                 "name": "Licencia"
             },
-            "price": 14990,
+            "price": 34990,
             "in_stock": true,
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Shield Antivirus"
+                "name": "Norton 360 Deluxe"
             },
             "platforms": [
                 {
@@ -36,22 +36,22 @@
                 "name": "Global"
             },
             "activation_service": {
-                "slug": "shield-account",
-                "name": "Shield Account"
+                "slug": "norton-account",
+                "name": "Norton Account"
             }
         },
         {
-            "slug": "office-suite-pro-microsoft-account-macos-global",
+            "slug": "microsoft-office-home-2024-microsoft-account-macos-global",
             "type": {
                 "slug": "license",
                 "name": "Licencia"
             },
-            "price": 49990,
+            "price": 129990,
             "in_stock": true,
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Office Suite Pro"
+                "name": "Microsoft Office Home 2024"
             },
             "platforms": [
                 {
@@ -69,17 +69,17 @@
             }
         },
         {
-            "slug": "pixel-kart-nintendo-eshop-switch-latam",
+            "slug": "the-legend-of-zelda-tears-of-the-kingdom-nintendo-eshop-switch-latam",
             "type": {
                 "slug": "digital_key",
                 "name": "Clave digital"
             },
-            "price": 39990,
+            "price": 59990,
             "in_stock": true,
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Pixel Kart"
+                "name": "The Legend of Zelda: Tears of the Kingdom"
             },
             "platforms": [
                 {
@@ -97,17 +97,17 @@
             }
         },
         {
-            "slug": "neon-heist-playstation-store-ps5-latam",
+            "slug": "elden-ring-playstation-store-ps5-latam",
             "type": {
                 "slug": "digital_key",
                 "name": "Clave digital"
             },
-            "price": 74990,
+            "price": 39990,
             "in_stock": true,
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Neon Heist"
+                "name": "Elden Ring"
             },
             "platforms": [
                 {
@@ -125,17 +125,17 @@
             }
         },
         {
-            "slug": "neon-heist-physical-playstation-store-ps5-latam",
+            "slug": "elden-ring-physical-playstation-store-ps5-latam",
             "type": {
                 "slug": "physical",
                 "name": "Físico"
             },
-            "price": 79990,
+            "price": 44990,
             "in_stock": true,
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Neon Heist"
+                "name": "Elden Ring"
             },
             "platforms": [
                 {
@@ -153,7 +153,7 @@
             }
         },
         {
-            "slug": "starfall-physical-ps5-north-america",
+            "slug": "hades-physical-ps5-north-america",
             "type": {
                 "slug": "physical",
                 "name": "Físico"
@@ -163,7 +163,7 @@
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Starfall"
+                "name": "Hades"
             },
             "platforms": [
                 {
@@ -178,7 +178,7 @@
             "activation_service": null
         },
         {
-            "slug": "starfall-xbox-windows-xbox-series-global",
+            "slug": "hades-xbox-windows-xbox-series-global",
             "type": {
                 "slug": "digital_key",
                 "name": "Clave digital"
@@ -188,7 +188,7 @@
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Starfall"
+                "name": "Hades"
             },
             "platforms": [
                 {
@@ -210,7 +210,7 @@
             }
         },
         {
-            "slug": "starfall-playstation-store-ps4-ps5-latam",
+            "slug": "hades-playstation-store-ps4-ps5-latam",
             "type": {
                 "slug": "digital_key",
                 "name": "Clave digital"
@@ -220,7 +220,7 @@
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Starfall"
+                "name": "Hades"
             },
             "platforms": [
                 {
@@ -242,7 +242,7 @@
             }
         },
         {
-            "slug": "starfall-playstation-store-ps5-latam",
+            "slug": "hades-playstation-store-ps5-latam",
             "type": {
                 "slug": "digital_key",
                 "name": "Clave digital"
@@ -252,7 +252,7 @@
             "cover_url": null,
             "cover_band": true,
             "title": {
-                "name": "Starfall"
+                "name": "Hades"
             },
             "platforms": [
                 {
@@ -270,17 +270,17 @@
             }
         },
         {
-            "slug": "starfall-steam-macos-windows-global",
+            "slug": "hades-steam-macos-windows-global",
             "type": {
                 "slug": "digital_key",
                 "name": "Clave digital"
             },
             "price": 19990,
             "in_stock": true,
-            "cover_url": "http://localhost:8000/storage/covers/starfall.jpg",
+            "cover_url": "http://localhost:8000/storage/covers/hades.jpg",
             "cover_band": true,
             "title": {
-                "name": "Starfall"
+                "name": "Hades"
             },
             "platforms": [
                 {

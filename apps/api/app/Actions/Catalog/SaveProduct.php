@@ -34,7 +34,10 @@ final class SaveProduct
 {
     private const int MAX_INTEGER = 2147483647;
 
-    public function __construct(private readonly GenerateProductSlug $slugs) {}
+    public function __construct(
+        private readonly GenerateProductSlug $slugs,
+        private readonly StoreProductCover $covers,
+    ) {}
 
     /**
      * @throws ValidationException
@@ -45,7 +48,7 @@ final class SaveProduct
         $this->ensureIdentityIsFree($product, $type, $data);
 
         $previousCover = $product->cover_image;
-        $newCover = $data->cover instanceof UploadedFile ? $this->storeCover($data->cover) : null;
+        $newCover = $data->cover instanceof UploadedFile ? $this->covers->fromUpload($data->cover) : null;
         $cover = $newCover ?? ($data->removeCover ? null : $previousCover);
 
         try {
@@ -137,17 +140,6 @@ final class SaveProduct
             'slug.regex' => 'Usa minúsculas, números y guiones simples.',
             'cover.max' => 'La carátula no puede pesar más de 2 MB.',
         ])->validate();
-    }
-
-    private function storeCover(UploadedFile $cover): string
-    {
-        $path = Storage::disk('public')->putFile('covers', $cover);
-
-        if ($path === false) {
-            throw new \RuntimeException('The product cover could not be stored.');
-        }
-
-        return $path;
     }
 
     /**
