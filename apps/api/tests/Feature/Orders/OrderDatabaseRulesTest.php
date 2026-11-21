@@ -117,3 +117,8 @@ it('rejects deleting a product that has orders', function () {
     expect(fn () => DB::table('products')->where('id', $productId)->delete())
         ->toThrow(QueryException::class, 'order_items_product_id_foreign');
 });
+
+it('rejects more resends of the payment confirmation than allowed', function (int $resends) {
+    expect(fn () => insertOrderRow(['paid_email_resends' => $resends]))
+        ->toThrow(QueryException::class, 'orders_paid_email_resends_check');
+})->with([4, -1]);

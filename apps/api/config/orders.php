@@ -28,4 +28,11 @@ return [
     */
     'payment_lock_timeout_seconds' => 3,
 
+    /*
+    | Times the panel may resend an order's payment confirmation email (the
+    | one with the keys). The `orders_paid_email_resends_check` CHECK repeats
+    | the limit in the database.
+    */
+    'max_paid_email_resends' => 3,
+
 ];

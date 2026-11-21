@@ -1,6 +1,6 @@
 # Orders domain model
 
-Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action, called by the Webpay return and reconciliation. No storefront endpoints yet (checkout comes with Sanctum in phase 4). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email gets its own section when designed.
+Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action, called by the Webpay return and reconciliation. No storefront endpoints yet (checkout comes with Sanctum in phase 4). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email in *Confirmation email and key delivery* (implemented 2026-11-20).
 
 ## Overview
 
@@ -100,6 +100,21 @@ Decided and implemented on 2026-11-20.
 - **Detail:** header (reference, customer, status, `paid_at` / `completed_at` / `cancelled_at`, `expires_at`) and lines from the snapshot (title name, type, quantity, unit price, line total). Digital lines list their keys by `code_hint` and status; the code is never shown, as everywhere else in the panel.
 - **Actions:** cancel a pending order (`CancelOrder`, with confirmation). Mark as paid (`MarkOrderPaid`) by hand to test without a payment gateway, **only in the local environment**: in production it would deliver keys without charging. Gated by `orders.manual_payments` (`ORDERS_MANUAL_PAYMENTS`, default `false`): when off, the route returns 404 and the button is hidden.
 - **Implementation.** `OrderController` (`routes/orders.php`, bound by `{order:reference}`: URLs never carry the id), `OrdersTable`, pages `orders/Index` and `orders/Show`. `OrderCannotBePaid` is turned into a Spanish validation error only in the panel; the Action keeps the domain exception for the webhook. Confirmations use the generic `ConfirmActionButton` (POST or DELETE); `ConfirmDeleteButton` wraps it.
+
+## Confirmation email and key delivery
+
+Decided and implemented on 2026-11-20.
+
+- **One email per paid order**, the payment confirmation: key-delivered lines carry their codes; physical lines say they will ship (the shipping notice comes with phase 5). Physical-only orders get it too, without keys. Spanish, Markdown (`App\Mail\OrderPaidMail`, `resources/views/mail/orders/paid.blade.php`).
+- **Content:** reference, payment date (America/Santiago), lines from the snapshot, each code with its activation service (or platforms) and region, the total in CLP, the receipt of the `authorized` payment attempt (authorization code, payment type and installments, last 4 digits, date; omitted for a manual local payment) and the withdrawal conditions (below).
+- **Dispatch, from one place.** `MarkOrderPaid` dispatches `App\Jobs\SendOrderPaidEmail` inside its locked callback; the job is `ShouldQueueAfterCommit`, so it is queued only when the **outermost** transaction commits (the `LockPayableOrder` transaction of `ConfirmPaymentAttempt` and the reconciliation) and dropped on rollback. The Webpay return, the reconciliation and the panel's manual payment all go through `MarkOrderPaid`; a repeated confirmation (`AlreadyPaid`) never enters the callback, so it sends nothing. An arch test keeps the job dispatched only from `MarkOrderPaid` and `ResendOrderPaidEmail`.
+- **Record.** `orders.paid_email_sent_at` (last successful send) and `orders.paid_email_resends` (0 to 3, CHECK). Delivery is at least once: if the send succeeds but recording it fails, the retry sends again; harmless, the same keys to the same owner.
+- **Keys never leak.** The job serializes only the order id; `OrderPaidMail` is never queued (arch test) and decrypts the codes while rendering. A send failure is rethrown as `OrderPaidEmailFailed`, without the original exception (a rendering error or a stack trace with arguments could carry the codes into the logs and `failed_jobs`); only SMTP transport messages are kept. The job refuses the `log` transport (it would write the codes to `laravel.log`).
+- **Retries:** `tries` 5, backoff 1, 5, 15 and 60 minutes, `timeout` 30 s; `failed()` logs the reference and the exception class only.
+- **Resend from the panel** (order detail): paid or completed orders, always to the customer's current email (never another address), at most `orders.max_paid_email_resends` (3) times and once a minute per order (`throttle:paid-email-resend`). `ResendOrderPaidEmail` locks the order and counts the resend.
+- **Withdrawal (derecho a retracto).** Delivered digital keys are excluded: "Las claves digitales entregadas no admiten derecho a retracto (exclusión informada antes del pago, art. 3 bis letra b) de la Ley 19.496 y Decreto 52 de 2024)", keeping the legal warranty if a key does not work. Physical products: 10 days from receipt (shown only when the order has them). Same practice as the Chilean key stores reviewed (ReveChl, Soft Store, CJM Digitales, ChileCodes); the storefront must show the exclusion before payment (phase 4, see [`payments.md`](payments.md#chile)).
+- **Local check:** `MAIL_MAILER=smtp` to Mailpit (`127.0.0.1:1025`, UI on http://localhost:8025) and `QUEUE_CONNECTION=database`; `composer dev` runs `queue:listen`.
+- **Phase 4:** "My library" (Sanctum endpoint listing the customer's paid lines, codes revealed on request and never in the listing, with its API contract), a link to it from the email, and the withdrawal notice in the Nuxt checkout.
 
 ## Rejected alternatives
 

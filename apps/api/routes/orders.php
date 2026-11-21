@@ -10,3 +10,6 @@ Route::post('orders/{order:reference}/cancel', [OrderController::class, 'cancel'
 Route::post('orders/{order:reference}/mark-paid', [OrderController::class, 'markPaid'])->name('orders.mark-paid');
 Route::post('orders/{order:reference}/webpay', [OrderController::class, 'payWithWebpay'])->name('orders.pay-with-webpay');
 Route::get('orders/{order:reference}/webpay', [OrderController::class, 'webpayRedirect'])->name('orders.webpay-redirect');
+Route::post('orders/{order:reference}/resend-paid-email', [OrderController::class, 'resendPaidEmail'])
+    ->middleware('throttle:paid-email-resend')
+    ->name('orders.resend-paid-email');

@@ -80,6 +80,30 @@ class PaymentAttempt extends Model
     }
 
     /**
+     * The payment type as the customer's receipt names it (`payment_type_code`
+     * with its installments), or null before a receipt exists.
+     */
+    public function paymentTypeLabel(): ?string
+    {
+        if ($this->payment_type_code === null) {
+            return null;
+        }
+
+        $label = match ($this->payment_type_code) {
+            'VD' => 'Débito',
+            'VP' => 'Prepago',
+            'VN' => 'Crédito',
+            'VC' => 'Crédito en cuotas',
+            'SI' => '3 cuotas sin interés',
+            'S2' => '2 cuotas sin interés',
+            'NC' => 'Cuotas sin interés',
+            default => $this->payment_type_code,
+        };
+
+        return $this->installments_number ? "{$label} ({$this->installments_number} cuotas)" : $label;
+    }
+
+    /**
      * Like finish(), unless the attempt was already closed by a concurrent
      * request: only an `initialized` attempt changes.
      */

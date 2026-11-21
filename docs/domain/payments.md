@@ -27,7 +27,7 @@ Status: **implemented** (2026-11-20) in the integration environment; checkout an
    - The attempt is found by `buy_order` (`TBK_ORDEN_COMPRA`) or by token, never trusted from the request alone: the token must match the stored one and have the documented format (64 hex characters).
 4. On `token_ws`: lock the order. If it can still be paid (`pending`, or `expired` with stock that can be reserved again), **commit**; approved means exactly `response_code` 0 **and** `status` `AUTHORIZED`, and the returned `amount` and `buy_order` must match the attempt; then `MarkOrderPaid`. A rejection (`response_code` -1 to -5, status `FAILED`) leaves the order `pending` for another attempt. Otherwise **do not commit**: the customer is not charged and sees that the order expired. The commit happens **in the same request, within seconds** of the return (the window is under a minute, see *Integration environment experiments*); it is never queued. The order lock waits with a short timeout so a busy lock cannot push the commit past the window.
 5. The return page only shows the result; nothing is delivered from the browser's word alone.
-6. Delivery: keys by email through the queue (to be designed).
+6. Delivery: keys by email through the queue, see [`orders.md` → Confirmation email and key delivery](orders.md#confirmation-email-and-key-delivery).
 
 ## Design (decided 2026-11-20)
 
@@ -111,7 +111,7 @@ From the official docs source (`transbank-developers-docs`) and the SDK code; ev
 
 - Amounts are integer CLP (already the case in `products.price` and `orders.total`).
 - **Boleta electrónica** (SII) is mandatory for real sales. NextKeys is fictitious: at most a simulated receipt, never a real tax document.
-- **Derecho a retracto** (Ley 19.496 art. 3 bis): 10 days for distance purchases, 90 if the store does not send a written confirmation of the conditions. An exclusion (Decreto 52, in force since 2025-02-28) must be shown **before payment**, prominently (font no smaller than the price) and in the terms. Whether delivered digital keys qualify was **not confirmed** in the sources read; the storefront (phase 4) shows the notice before payment and the confirmation email states the conditions.
+- **Derecho a retracto** (Ley 19.496 art. 3 bis): 10 days for distance purchases, 90 if the store does not send a written confirmation of the conditions. An exclusion (Decreto 52, in force since 2025-02-28) must be shown **before payment**, prominently (font no smaller than the price) and in the terms. Decided 2026-11-20: delivered digital keys are excluded and the legal warranty remains, as the Chilean key stores reviewed do ([ReveChl](https://revechl.cl/politicas-de-reembolso/), [Soft Store](https://softstore.cl/reembolso), [CJM Digitales](https://cjmdigitales.cl/policies/refund-policy), [ChileCodes](https://chilecodes.cl/terminos-y-condiciones/)); several cite "Decreto 52 de 2022", but it was published on 2024-08-27. The storefront (phase 4) shows the exclusion before payment, next to the price and with the words "derecho a retracto"; the confirmation email states the conditions (see [`orders.md`](orders.md#confirmation-email-and-key-delivery)).
 
 ## Integration environment experiments (2026-11-20)
 

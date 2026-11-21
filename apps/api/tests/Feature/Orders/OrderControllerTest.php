@@ -1,16 +1,19 @@
 <?php
 
 use App\Actions\Orders\ExpireOrders;
+use App\Actions\Orders\MarkOrderPaid;
 use App\Actions\Orders\OrderLineData;
 use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
+use App\Mail\OrderPaidMail;
 use App\Models\Order;
 use App\Models\PaymentAttempt;
 use App\Models\Product;
 use App\Models\ProductKey;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -225,4 +228,64 @@ it('is forbidden to customers', function () {
     $this->get(route('orders.index'))->assertForbidden();
     $this->get(route('orders.show', $order))->assertForbidden();
     $this->post(route('orders.cancel', $order))->assertForbidden();
+});
+
+describe('resending the payment confirmation', function () {
+    beforeEach(function () {
+        Mail::fake();
+        $this->paidOrder = ($this->placeOrder)();
+        app(MarkOrderPaid::class)->handle($this->paidOrder);
+    });
+
+    it('shows when the email went out and offers to resend it', function () {
+        $this->get(route('orders.show', $this->paidOrder))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('order.paid_email.resends', 0)
+                ->where('order.paid_email.max_resends', 3)
+                ->whereType('order.paid_email.sent_at', 'string')
+                ->where('canResendPaidEmail', true));
+    });
+
+    it('resends it to the customer and counts the resend', function () {
+        $this->post(route('orders.resend-paid-email', $this->paidOrder))
+            ->assertRedirect(route('orders.show', $this->paidOrder))
+            ->assertInertiaFlash('toast.message', 'Email de confirmación reenviado.');
+
+        Mail::assertSent(OrderPaidMail::class, 2);
+        expect($this->paidOrder->fresh()?->paid_email_resends)->toBe(1);
+    });
+
+    it('stops after three resends', function () {
+        $this->paidOrder->forceFill(['paid_email_resends' => 3])->save();
+
+        $this->from(route('orders.show', $this->paidOrder))
+            ->post(route('orders.resend-paid-email', $this->paidOrder))
+            ->assertSessionHasErrors(['order' => 'El email ya se reenvió 3 veces.']);
+
+        Mail::assertSent(OrderPaidMail::class, 1);
+        $this->get(route('orders.show', $this->paidOrder))
+            ->assertInertia(fn (Assert $page) => $page->where('canResendPaidEmail', false));
+    });
+
+    it('allows one resend a minute', function () {
+        $this->post(route('orders.resend-paid-email', $this->paidOrder))->assertRedirect();
+        $this->post(route('orders.resend-paid-email', $this->paidOrder))->assertTooManyRequests();
+
+        $this->travel(61)->seconds();
+        $this->post(route('orders.resend-paid-email', $this->paidOrder))->assertRedirect();
+        expect($this->paidOrder->fresh()?->paid_email_resends)->toBe(2);
+    });
+});
+
+it('does not resend the email of an unpaid order', function () {
+    Mail::fake();
+    $order = ($this->placeOrder)();
+
+    $this->from(route('orders.show', $order))
+        ->post(route('orders.resend-paid-email', $order))
+        ->assertSessionHasErrors(['order' => 'Solo se puede reenviar el email de un pedido pagado.']);
+
+    Mail::assertNothingSent();
+    $this->get(route('orders.show', $order))
+        ->assertInertia(fn (Assert $page) => $page->where('canResendPaidEmail', false));
 });

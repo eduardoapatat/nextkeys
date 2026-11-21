@@ -37,8 +37,7 @@ type PaymentAttempt = {
     };
     amount: number;
     authorization_code: string | null;
-    payment_type_code: string | null;
-    installments_number: number | null;
+    payment_type: string | null;
     card_last_digits: string | null;
     created_at: string | null;
     finished_at: string | null;
@@ -60,6 +59,11 @@ type OrderDetail = {
     paid_at: string | null;
     completed_at: string | null;
     cancelled_at: string | null;
+    paid_email: {
+        sent_at: string | null;
+        resends: number;
+        max_resends: number;
+    };
     items: OrderLine[];
     payments: PaymentAttempt[];
 };
@@ -67,6 +71,7 @@ type OrderDetail = {
 const props = defineProps<{
     order: OrderDetail;
     canCancel: boolean;
+    canResendPaidEmail: boolean;
     canMarkPaid: boolean;
     canPayWithWebpay: boolean;
 }>();
@@ -92,30 +97,6 @@ const dateTime = new Intl.DateTimeFormat('es-CL', {
 
 function formatDateTime(value: string | null): string {
     return value === null ? '—' : dateTime.format(new Date(value));
-}
-
-/** Webpay `payment_type_code`, as the customer's receipt names it. */
-const paymentTypes: Record<string, string> = {
-    VD: 'Débito',
-    VP: 'Prepago',
-    VN: 'Crédito',
-    VC: 'Crédito en cuotas',
-    SI: '3 cuotas sin interés',
-    S2: '2 cuotas sin interés',
-    NC: 'Cuotas sin interés',
-};
-
-function formatPaymentType(payment: PaymentAttempt): string {
-    if (payment.payment_type_code === null) {
-        return '—';
-    }
-
-    const label =
-        paymentTypes[payment.payment_type_code] ?? payment.payment_type_code;
-
-    return payment.installments_number
-        ? `${label} (${payment.installments_number} cuotas)`
-        : label;
 }
 
 /** Dates of the order, only the ones that apply to its status. */
@@ -255,6 +236,53 @@ const timeline = [
             </CardContent>
         </Card>
 
+        <Card v-if="order.paid_at !== null">
+            <CardHeader>
+                <CardTitle>Email de confirmación</CardTitle>
+            </CardHeader>
+            <CardContent
+                class="flex flex-wrap items-center justify-between gap-4"
+            >
+                <dl class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                    <div>
+                        <dt class="text-sm text-muted-foreground">
+                            Destinatario
+                        </dt>
+                        <dd class="text-sm font-medium">
+                            {{ order.customer.email }}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm text-muted-foreground">Enviado</dt>
+                        <dd class="text-sm font-medium">
+                            {{
+                                order.paid_email.sent_at === null
+                                    ? 'Pendiente'
+                                    : formatDateTime(order.paid_email.sent_at)
+                            }}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm text-muted-foreground">Reenvíos</dt>
+                        <dd class="text-sm font-medium">
+                            {{ order.paid_email.resends }}/{{
+                                order.paid_email.max_resends
+                            }}
+                        </dd>
+                    </div>
+                </dl>
+                <ConfirmActionButton
+                    v-if="canResendPaidEmail"
+                    :action="OrderController.resendPaidEmail(order.reference)"
+                    :title="`¿Reenviar el email de ${order.reference}?`"
+                    :description="`Se envía de nuevo, con las claves, a ${order.customer.email}.`"
+                    confirm-label="Reenviar email"
+                >
+                    <Button variant="outline">Reenviar email</Button>
+                </ConfirmActionButton>
+            </CardContent>
+        </Card>
+
         <Card>
             <CardHeader>
                 <CardTitle>Pagos</CardTitle>
@@ -302,7 +330,7 @@ const timeline = [
                                 </div>
                             </TableCell>
                             <TableCell>{{
-                                formatPaymentType(payment)
+                                payment.payment_type ?? '—'
                             }}</TableCell>
                             <TableCell class="font-mono">
                                 {{

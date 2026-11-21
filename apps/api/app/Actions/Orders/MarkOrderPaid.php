@@ -4,6 +4,7 @@ namespace App\Actions\Orders;
 
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
+use App\Jobs\SendOrderPaidEmail;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
@@ -13,8 +14,9 @@ final class MarkOrderPaid
 
     /**
      * Records a confirmed payment: the reserved keys are sold, and an order
-     * with nothing to ship is completed at once. Idempotent: a repeated
-     * confirmation of a paid order changes nothing.
+     * with nothing to ship is completed at once. The confirmation email with
+     * the keys is queued once the outermost transaction commits. Idempotent:
+     * a repeated confirmation of a paid order changes and sends nothing.
      *
      * An expired order is reopened first (its stock reserved again); if that
      * stock is gone, or the order was cancelled, nothing changes.
@@ -35,6 +37,8 @@ final class MarkOrderPaid
                 if (! $locked->hasPhysicalItems()) {
                     $locked->update(['status' => OrderStatus::Completed, 'completed_at' => now()]);
                 }
+
+                SendOrderPaidEmail::dispatch($locked->id);
             });
         } catch (OrderCannotBePaid $exception) {
             if ($exception->reason !== OrderCannotBePaidReason::AlreadyPaid) {

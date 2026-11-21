@@ -7,6 +7,7 @@ use App\Actions\Orders\MarkOrderPaid;
 use App\Actions\Orders\OrderBusy;
 use App\Actions\Orders\OrderCannotBePaid;
 use App\Actions\Orders\OrderCannotBePaidReason;
+use App\Actions\Orders\ResendOrderPaidEmail;
 use App\Actions\Payments\StartPaymentAttempt;
 use App\DataTables\OrdersTable;
 use App\Enums\OrderStatus;
@@ -60,6 +61,11 @@ class OrderController extends Controller
                 'paid_at' => $order->paid_at?->toIso8601String(),
                 'completed_at' => $order->completed_at?->toIso8601String(),
                 'cancelled_at' => $order->cancelled_at?->toIso8601String(),
+                'paid_email' => [
+                    'sent_at' => $order->paid_email_sent_at?->toIso8601String(),
+                    'resends' => $order->paid_email_resends,
+                    'max_resends' => Config::integer('orders.max_paid_email_resends'),
+                ],
                 'items' => $order->items->map(fn (OrderItem $item): array => [
                     'id' => $item->id,
                     'title_name' => $item->title_name,
@@ -83,8 +89,7 @@ class OrderController extends Controller
                     ],
                     'amount' => $attempt->amount,
                     'authorization_code' => $attempt->authorization_code,
-                    'payment_type_code' => $attempt->payment_type_code,
-                    'installments_number' => $attempt->installments_number,
+                    'payment_type' => $attempt->paymentTypeLabel(),
                     'card_last_digits' => $attempt->card_last_digits,
                     'created_at' => $attempt->created_at?->toIso8601String(),
                     'finished_at' => $attempt->finished_at?->toIso8601String(),
@@ -93,6 +98,8 @@ class OrderController extends Controller
                 ])->all(),
             ],
             'canCancel' => $order->status === OrderStatus::Pending,
+            'canResendPaidEmail' => in_array($order->status, [OrderStatus::Paid, OrderStatus::Completed], true)
+                && $order->paid_email_resends < Config::integer('orders.max_paid_email_resends'),
             'canMarkPaid' => $this->manualPaymentsEnabled()
                 && in_array($order->status, [OrderStatus::Pending, OrderStatus::Expired], true),
             'canPayWithWebpay' => $this->manualPaymentsEnabled()
@@ -134,6 +141,21 @@ class OrderController extends Controller
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Pago registrado.']);
+
+        return to_route('orders.show', $order);
+    }
+
+    /**
+     * Resends the payment confirmation (with the keys) to the customer's
+     * current email; never to another address.
+     *
+     * @throws ValidationException
+     */
+    public function resendPaidEmail(Order $order, ResendOrderPaidEmail $resendOrderPaidEmail): RedirectResponse
+    {
+        $resendOrderPaidEmail->handle($order);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Email de confirmación reenviado.']);
 
         return to_route('orders.show', $order);
     }

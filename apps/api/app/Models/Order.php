@@ -25,6 +25,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $paid_at
  * @property Carbon|null $completed_at
  * @property Carbon|null $cancelled_at
+ * @property Carbon|null $paid_email_sent_at Last time the payment confirmation (with the keys) went out.
+ * @property int $paid_email_resends Times the panel resent it, up to `orders.max_paid_email_resends`.
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
@@ -104,6 +106,8 @@ class Order extends Model
             'paid_at' => 'datetime',
             'completed_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'paid_email_sent_at' => 'datetime',
+            'paid_email_resends' => 'integer',
         ];
     }
 }

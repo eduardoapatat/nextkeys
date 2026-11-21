@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
 use App\Models\User;
 use App\Payments\PaymentGateway;
 use App\Payments\Transbank\WebpayPlusGateway;
@@ -56,11 +57,18 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * The public API allows 120 requests per minute per IP (`throttleApi()`
-     * in bootstrap/app.php attaches it to the `api` group).
+     * in bootstrap/app.php attaches it to the `api` group). The panel resends
+     * an order's confirmation email at most once a minute.
      */
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', fn (Request $request): Limit => Limit::perMinute(120)->by((string) $request->ip()));
+
+        RateLimiter::for('paid-email-resend', function (Request $request): Limit {
+            $order = $request->route('order');
+
+            return Limit::perMinute(1)->by('paid-email-resend:'.($order instanceof Order ? $order->reference : $request->path()));
+        });
     }
 
     /**
