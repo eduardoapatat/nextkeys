@@ -88,7 +88,7 @@ const control =
     <section
         aria-roledescription="carrusel"
         aria-label="Destacados de la tienda"
-        class="relative overflow-hidden rounded-card border border-line bg-bg-subtle"
+        class="surface-brand relative overflow-hidden rounded-card"
         @mouseenter="hovered = true"
         @mouseleave="hovered = false"
         @focusin="focused = true"
@@ -112,7 +112,7 @@ const control =
                     <div aria-labelledby="deal-heading" class="max-w-xl">
                         <h2
                             id="deal-heading"
-                            class="flex items-center gap-2 font-display text-lg font-extrabold tracking-wide text-accent uppercase"
+                            class="flex items-center gap-2 font-display text-lg font-extrabold tracking-wide text-fg uppercase"
                         >
                             Oferta del día
                             <span
@@ -127,7 +127,7 @@ const control =
                         >
                             <NuxtLink
                                 :to="`/${deal.slug}`"
-                                class="hover:text-accent"
+                                class="underline-offset-4 hover:underline"
                                 >{{ deal.title.name }}</NuxtLink
                             >
                         </p>

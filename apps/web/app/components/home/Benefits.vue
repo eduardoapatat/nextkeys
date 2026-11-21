@@ -27,11 +27,12 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
 </script>
 
 <template>
-    <section aria-labelledby="benefits-heading">
+    <section
+        aria-labelledby="benefits-heading"
+        class="surface-brand rounded-card px-2 sm:px-4"
+    >
         <h2 id="benefits-heading" class="sr-only">Por qué comprar aquí</h2>
-        <ul
-            class="grid divide-line border-y border-line sm:grid-cols-2 sm:divide-x lg:grid-cols-4"
-        >
+        <ul class="grid divide-line sm:grid-cols-2 sm:divide-x lg:grid-cols-4">
             <li
                 v-for="benefit in benefits"
                 :key="benefit.title"
@@ -40,7 +41,7 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
                 <UiIcon
                     :name="benefit.icon"
                     :size="24"
-                    class="mt-0.5 text-accent"
+                    class="mt-0.5 shrink-0 text-fg"
                 />
                 <p>
                     <strong

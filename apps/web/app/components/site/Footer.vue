@@ -50,11 +50,8 @@ const columns = computed(() => [
 </script>
 
 <template>
-    <footer class="mt-24 border-t border-line bg-bg-subtle">
-        <section
-            aria-labelledby="newsletter-heading"
-            class="border-b border-line"
-        >
+    <footer class="surface-brand mt-24 bg-brand-deep">
+        <section aria-labelledby="newsletter-heading" class="bg-bg">
             <div
                 class="mx-auto grid max-w-7xl gap-6 px-4 py-10 md:grid-cols-[1fr_minmax(0,28rem)] md:items-center"
             >

@@ -36,11 +36,11 @@ const boxed = computed(
 // The band: the platform's color with its mark.
 const band: Record<BoxTone, string> = {
     ps5: 'bg-box-ps5 text-box-ink',
-    ps4: 'bg-box-ps4 text-fg',
-    xbox: 'bg-box-xbox text-fg',
-    nintendo: 'bg-box-nintendo text-fg',
-    pc: 'bg-box-pc text-fg',
-    multi: 'bg-box-multi text-fg',
+    ps4: 'bg-box-ps4 text-on-cover',
+    xbox: 'bg-box-xbox text-on-cover',
+    nintendo: 'bg-box-nintendo text-on-cover',
+    pc: 'bg-box-pc text-on-cover',
+    multi: 'bg-box-multi text-on-cover',
 };
 
 const bandSize = {
@@ -100,7 +100,7 @@ const bandSize = {
                 role="img"
                 :aria-label="label"
                 data-cover="generated"
-                class="flex size-full flex-col text-fg"
+                class="flex size-full flex-col text-on-cover"
                 :class="coverTint(product.slug)"
             >
                 <p
@@ -119,7 +119,7 @@ const bandSize = {
                 <p
                     aria-hidden="true"
                     :class="{ 'max-sm:hidden': size === 'sm' }"
-                    class="flex flex-wrap items-center gap-x-1.5 px-[8%] pt-[5%] pb-[7%] text-[0.65rem] font-medium tracking-wide text-fg/90 uppercase"
+                    class="flex flex-wrap items-center gap-x-1.5 px-[8%] pt-[5%] pb-[7%] text-[0.65rem] font-medium tracking-wide text-on-cover/90 uppercase"
                 >
                     <span>{{ product.type.name }}</span>
                     <span v-if="product.region"

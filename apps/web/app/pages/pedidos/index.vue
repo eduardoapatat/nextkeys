@@ -15,7 +15,7 @@ const { data: orders } = await useAsyncData('orders', () => fetchOrders());
         <p
             v-if="route.query.estado === 'desconocido'"
             role="alert"
-            class="mt-6 rounded-card border border-danger/50 bg-danger-deep px-4 py-3 text-fg"
+            class="mt-6 rounded-card border border-danger/50 bg-danger-soft px-4 py-3 text-fg"
         >
             No pudimos identificar el pago. Si se cobró, el pedido aparece abajo
             como pagado; si no, puedes reintentarlo desde el pedido.

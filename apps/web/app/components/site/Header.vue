@@ -9,7 +9,7 @@ const searchNote = ref(false);
 </script>
 
 <template>
-    <header class="border-b border-line bg-bg md:border-b-0">
+    <header class="surface-brand">
         <div
             class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4 md:flex-nowrap md:py-5"
         >

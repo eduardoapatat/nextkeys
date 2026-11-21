@@ -3,7 +3,7 @@ import type { ProductSummary } from '~/api/schemas';
 
 /**
  * The lit display case: the newest product at billing scale and the next
- * four on the glass shelf, each with its price sticker.
+ * four on the shelf, each with its price sticker.
  */
 const props = defineProps<{ products: ProductSummary[] }>();
 
@@ -16,10 +16,6 @@ const shelf = computed(() => props.products.slice(1, 5));
         aria-labelledby="case-heading"
         class="display-case relative overflow-hidden rounded-card px-5 pt-8 pb-6 md:px-8"
     >
-        <div
-            aria-hidden="true"
-            class="display-case-tube absolute inset-x-[12%] top-0 h-0.5 rounded-full"
-        />
         <h1
             id="case-heading"
             class="max-w-[24ch] text-4xl text-fg uppercase md:text-5xl"
@@ -109,10 +105,6 @@ const shelf = computed(() => props.products.slice(1, 5));
                         </NuxtLink>
                     </li>
                 </ul>
-                <div
-                    aria-hidden="true"
-                    class="glass-shelf absolute -inset-x-2 -bottom-3 h-3 rounded-sm"
-                />
             </div>
             <ul class="mt-6 grid max-w-2xl grid-cols-4 gap-3 px-1 md:gap-6">
                 <li v-for="product in shelf" :key="product.slug">

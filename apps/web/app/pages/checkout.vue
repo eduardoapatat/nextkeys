@@ -72,7 +72,7 @@ async function pay() {
             <p
                 v-if="notice"
                 role="status"
-                class="rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-fg"
+                class="rounded-card border border-ok/50 bg-ok-soft px-4 py-3 text-fg"
             >
                 {{ notice }}
             </p>

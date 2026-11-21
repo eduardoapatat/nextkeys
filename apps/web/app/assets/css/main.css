@@ -2,37 +2,50 @@
 @import './fonts.css';
 
 /*
- * NextKeys design tokens: a neighborhood cibercafé at midnight.
- * The night room is the ground, the lit display case is the only bright zone,
- * receipts print on thermal paper, prices wear yellow stickers.
+ * NextKeys design tokens, named by role. Light theme: white ground, navy
+ * text, turquoise brand sections and a coral accent. A dark theme only has
+ * to redefine these values (e.g. under :root[data-theme='dark']); `.surface-brand`
+ * below already does it for the turquoise sections.
  * Components use these tokens only (test/unit/design-tokens.test.ts).
  */
 @theme {
     --color-*: initial;
 
-    /* Night room and melamine. */
-    --color-bg: #0f1319;
-    --color-bg-subtle: #141922;
-    --color-surface: #1d232c;
-    --color-surface-2: #262e39;
-    --color-line: #313a47;
-    --color-line-strong: #4a5564;
+    /* Ground and surfaces. */
+    --color-bg: #ffffff;
+    --color-bg-subtle: #f3f6f8;
+    --color-surface: #ffffff;
+    --color-surface-2: #e8eef2;
+    --color-line: #dbe3e8;
+    --color-line-strong: #7f909c;
 
-    /* Text on the dark ground: 15:1, 8.4:1 and 6:1 on ink; faint keeps 5:1 on panels. */
-    --color-fg: #ece7dc;
-    --color-fg-muted: #a7afb9;
-    --color-fg-faint: #8a94a1;
+    /* Text: 16:1, 8:1 and 5.4:1 on white. */
+    --color-fg: #0b1f33;
+    --color-fg-muted: #3e5163;
+    --color-fg-faint: #586a79;
+
+    /* Brand turquoise (white text 5.3:1), the menu, the footer, a tint. */
+    --color-brand: #1e758a;
+    --color-brand-strong: #155566;
+    --color-brand-deep: #0d313b;
+    --color-brand-soft: #e3f2f6;
+
+    /* Coral accent: the primary action, the cart, the current menu item. */
+    --color-accent: #ff6b4a;
+    --color-accent-hover: #ff8466;
+    --color-accent-fg: #1a0a05;
+
+    --color-danger: #b42318;
+    --color-danger-soft: #fdecea;
+    --color-ok: #1f7a3d;
+    --color-ok-soft: #e6f4ea;
 
     /* Thermal receipt. */
-    --color-paper: #efe8d8;
+    --color-paper: #f6f1e6;
     --color-paper-ink: #22201b;
     --color-paper-muted: #5d5749;
     --color-paper-line: #cfc6b2;
 
-    /* Price stickers and the primary action. */
-    --color-accent: #f2c230;
-    --color-accent-hover: #f7d35c;
-    --color-accent-fg: #1a1405;
     /*
      * Platform bands: the top band of each platform's retail box, so a
      * cover reads as PS5, Xbox or Switch at a glance.
@@ -45,17 +58,8 @@
     --color-box-pc: #16181c;
     --color-box-multi: #3a3f47;
 
-    /* The black menu bar under the header. */
-    --color-brand-strong: #050608;
-
-    /* CRT glow: active state and focus. */
-    --color-brand: #9cc8d6;
-    --color-brand-soft: #1f3640;
-
-    --color-danger: #e2735f;
-    --color-danger-deep: #3a1f1b;
-    --color-ok: #8fc79a;
-    --color-ok-deep: #1c3324;
+    /* Text on covers and colored bands: always light, in any theme. */
+    --color-on-cover: #ffffff;
 
     /* The whiteboard behind the counter, written in marker. */
     --color-board: #e6e9e4;
@@ -83,13 +87,13 @@
     --radius-card: 6px;
     --radius-control: 4px;
 
-    /* Overhead light of the display case, and a box resting on glass. */
+    /* Soft navy shadows for a light ground. */
     --shadow-case:
-        0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35);
+        0 18px 36px -22px rgb(11 31 51 / 0.45), 0 2px 6px rgb(11 31 51 / 0.12);
     --shadow-lift:
-        0 18px 32px -12px rgb(0 0 0 / 0.65), 0 4px 10px rgb(0 0 0 / 0.4);
-    --shadow-tag: 0 3px 8px -2px rgb(0 0 0 / 0.55);
-    --shadow-receipt: 0 12px 28px -10px rgb(0 0 0 / 0.6);
+        0 18px 32px -14px rgb(11 31 51 / 0.45), 0 4px 10px rgb(11 31 51 / 0.12);
+    --shadow-tag: 0 3px 8px -2px rgb(11 31 51 / 0.35);
+    --shadow-receipt: 0 12px 28px -12px rgb(11 31 51 / 0.35);
 
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -112,14 +116,14 @@
 
 @layer base {
     html {
-        color-scheme: dark;
+        color-scheme: light;
         background-color: var(--color-bg);
         color: var(--color-fg);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
         scrollbar-color: var(--color-line-strong) var(--color-bg);
-        accent-color: var(--color-accent);
-        caret-color: var(--color-accent);
+        accent-color: var(--color-brand);
+        caret-color: var(--color-brand);
     }
 
     body {
@@ -128,8 +132,8 @@
     }
 
     ::selection {
-        background-color: var(--color-accent);
-        color: var(--color-accent-fg);
+        background-color: var(--color-brand-soft);
+        color: var(--color-fg);
     }
 
     :focus-visible {
@@ -207,6 +211,29 @@
 }
 
 @layer components {
+    /*
+     * Turquoise brand sections (header, banner, benefits, footer): the same
+     * role tokens, redefined for a turquoise ground, so `text-fg` or
+     * `border-line` work inside without variants.
+     */
+    .surface-brand {
+        /* The turquoise of --color-brand: brand itself turns white below. */
+        --color-bg: #1e758a;
+        --color-bg-subtle: rgb(255 255 255 / 0.08);
+        --color-surface: rgb(255 255 255 / 0.12);
+        --color-surface-2: rgb(255 255 255 / 0.2);
+        --color-line: rgb(255 255 255 / 0.22);
+        --color-line-strong: rgb(255 255 255 / 0.5);
+        --color-fg: #ffffff;
+        --color-fg-muted: #d9eff5;
+        --color-fg-faint: #bfe2ec;
+        --color-brand-soft: rgb(255 255 255 / 0.14);
+        /* Links, hovers and focus that use `brand` turn white on turquoise. */
+        --color-brand: #ffffff;
+        background-color: var(--color-bg);
+        color: var(--color-fg);
+    }
+
     /* The light that follows the pointer across a tilted cover. */
     .cover-glare {
         background: radial-gradient(
@@ -269,7 +296,7 @@
     }
 
     .account-page [role='status'] {
-        @apply rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-fg;
+        @apply rounded-card border border-ok/50 bg-ok-soft px-4 py-3 text-fg;
     }
 
     /* The small-screen menu slides in from the left edge (Emil's drawer curve). */
@@ -316,47 +343,15 @@
         }
     }
 
-    /* The display case: the only lit zone of the room, light falling from a
-       tube above onto a glass shelf. */
+    /* The display case: the newest games on a soft panel. */
     .display-case {
-        background:
-            linear-gradient(
-                to bottom,
-                rgb(236 241 243 / 0.07),
-                transparent 45%
-            ),
-            linear-gradient(
-                to bottom,
-                var(--color-surface),
-                var(--color-bg-subtle)
-            );
-        box-shadow:
-            inset 0 1px 0 rgb(255 255 255 / 0.08),
-            var(--shadow-case);
-    }
-
-    .display-case-tube {
-        background: linear-gradient(
-            to right,
-            transparent,
-            rgb(236 241 243 / 0.85),
-            transparent
-        );
-        box-shadow: 0 6px 18px 2px rgb(236 241 243 / 0.18);
-    }
-
-    .glass-shelf {
-        background: linear-gradient(
-            to bottom,
-            rgb(236 241 243 / 0.18),
-            rgb(236 241 243 / 0.03)
-        );
-        box-shadow: 0 10px 18px -8px rgb(0 0 0 / 0.6);
+        background-color: var(--color-bg-subtle);
+        border: 1px solid var(--color-line);
     }
 
     /*
-     * The menu bar (Koparion's main menu): a black strip whose hovered or
-     * current item fills its full height in sticker yellow, like a button.
+     * The menu bar (Koparion's main menu): a dark turquoise strip whose
+     * hovered or current item fills its full height in coral, like a button.
      */
     .menu-tab {
         display: flex;
@@ -405,6 +400,6 @@
                 )
                 top / var(--tear) 51% repeat-x;
         padding-block: calc(var(--tear) + 1.25rem);
-        filter: drop-shadow(0 12px 18px rgb(0 0 0 / 0.45));
+        filter: drop-shadow(0 8px 16px rgb(11 31 51 / 0.22));
     }
 }

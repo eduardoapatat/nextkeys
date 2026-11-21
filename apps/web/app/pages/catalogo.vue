@@ -210,7 +210,7 @@ function pageLink(number: number) {
                 <div
                     v-if="apiError"
                     role="alert"
-                    class="rounded-card border border-danger/50 bg-danger-deep p-5 text-fg"
+                    class="rounded-card border border-danger/50 bg-danger-soft p-5 text-fg"
                 >
                     <p class="font-semibold">
                         No pudimos aplicar estos filtros:

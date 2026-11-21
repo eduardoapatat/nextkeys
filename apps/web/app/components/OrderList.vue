@@ -45,7 +45,7 @@ defineProps<{ orders: Order[] }>();
                         class="rounded-control px-2 py-0.5 text-sm"
                         :class="
                             ['paid', 'completed'].includes(order.status.slug)
-                                ? 'bg-ok-deep text-ok'
+                                ? 'bg-ok-soft text-ok'
                                 : order.status.slug === 'pending'
                                   ? 'bg-brand-soft text-brand'
                                   : 'bg-surface-2 text-fg-muted'

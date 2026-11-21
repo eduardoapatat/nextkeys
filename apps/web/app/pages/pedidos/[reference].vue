@@ -96,7 +96,7 @@ async function cancel() {
         <div class="mt-6 flex flex-col gap-6">
             <template v-if="view === 'paid'">
                 <div
-                    class="flex flex-col gap-2 rounded-card border px-5 py-4 border-ok/50 bg-ok-deep text-fg"
+                    class="flex flex-col gap-2 rounded-card border px-5 py-4 border-ok/50 bg-ok-soft text-fg"
                 >
                     <p
                         role="status"
@@ -224,7 +224,7 @@ async function cancel() {
 
             <div
                 v-else-if="view === 'rejected'"
-                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-danger/50 bg-danger-deep text-fg"
+                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-danger/50 bg-danger-soft text-fg"
             >
                 <p
                     role="alert"
