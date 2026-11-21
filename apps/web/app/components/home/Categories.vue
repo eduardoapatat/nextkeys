@@ -84,10 +84,7 @@ const typeNotes: Record<string, string> = {
                                 typeNotes[item.type[0]]
                             }}</span>
                         </span>
-                        <UiIcon
-                            name="arrowRight"
-                            class="text-fg transition-transform duration-200 group-hover:translate-x-1"
-                        />
+                        <UiIcon name="arrowRight" class="text-fg" />
                     </NuxtLink>
                 </li>
             </ul>

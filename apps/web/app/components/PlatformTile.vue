@@ -98,7 +98,7 @@ const patternSize = computed(
         <svg
             aria-hidden="true"
             :viewBox="symbol.viewBox"
-            class="absolute -right-6 -bottom-8 -z-10 size-40 text-on-cover opacity-15 transition-transform duration-300 ease-out group-hover:scale-105 group-hover:-rotate-3 md:size-48"
+            class="absolute -right-6 -bottom-8 -z-10 size-40 text-on-cover opacity-15 origin-bottom-right transition-transform duration-300 ease-out group-hover:scale-110 md:size-48"
             fill="currentColor"
         >
             <path :d="symbol.d" />
@@ -113,10 +113,7 @@ const patternSize = computed(
             >
                 <path :d="symbol.d" />
             </svg>
-            <UiIcon
-                name="arrowRight"
-                class="transition-transform duration-200 group-hover:translate-x-1"
-            />
+            <UiIcon name="arrowRight" />
         </span>
         <span>
             <span
