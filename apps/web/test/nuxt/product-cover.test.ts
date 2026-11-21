@@ -26,23 +26,9 @@ describe('product cover', () => {
             true,
         );
         expect(cover.find('[data-cover="generated"]').exists()).toBe(true);
-        expect(cover.attributes('data-case')).toBeUndefined();
     });
 
-    it('frames only a physical game in its case', async () => {
-        const cover = await mountSuspended(ProductCover, {
-            props: {
-                product: {
-                    ...product,
-                    type: { slug: 'physical', name: 'Físico' },
-                },
-            },
-        });
-
-        expect(cover.attributes('data-case')).toBe('physical');
-    });
-
-    it('frames an uploaded cover the same way', async () => {
+    it('puts the band on an uploaded cover too', async () => {
         const cover = await mountSuspended(ProductCover, {
             props: {
                 product: {

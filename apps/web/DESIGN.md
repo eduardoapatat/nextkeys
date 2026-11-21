@@ -37,7 +37,6 @@ colors:
     cover-5: '#4b3270'
     cover-6: '#1f5a5e'
     box-ps5: '#f3f4f6'
-    box-ps5-case: '#1f5bb5'
     box-ps4: '#003791'
     box-xbox: '#107c10'
     box-nintendo: '#e60012'
@@ -294,7 +293,7 @@ A product as a numbered spot on the counter. Cover (3:4, tilting) with its stick
 
 ### Product Cover
 
-A game case at 3:4 with 6px corners, dressed as its platform's retail box (requested by the user on 2026-11-21): a band on top with the platform mark; a physical game is also framed by its case on the top, right and bottom (the left edge is the art, like a real case front), while keys and licenses carry only the band (requested by the user: only a physical game is a box) with the official mark in one ink. PS5 has a white band with a black mark on a blue case (box-ps5-case); PS4 blue (box-ps4); Xbox green (box-xbox) with the sphere, wordmark and the generation in condensed caps; Nintendo red (box-nintendo) with the horizontal Switch or Switch 2 lockup; PC black (box-pc) with "PC" or "Mac" in condensed caps; several families or phones share the graphite case (box-multi) with one entry per family, split by a hairline. Family and look come from `platformBox()` (`app/utils/platform-box.ts`); the marks live in `app/utils/platform-marks.ts` with their sources (Simple Icons CC0 for PlayStation, public-domain Wikimedia Commons files for Xbox and Nintendo). Inside, an uploaded cover fills the front; otherwise a generated front prints the title in condensed caps at the foot and type and region in small caps, on a cover tint. The band is labeled "Plataformas: …" for screen readers. An uploaded cover with `cover_band` off shows bare, at 3:4 with 6px corners.
+A cover at 3:4 with 6px corners, marked like its platform's retail box (requested by the user on 2026-11-21): a band on top with the platform mark and no frame around the art (a frame was tried and dropped at the user's request); the mark is official and in one ink. PS5 is a white band with a black mark; PS4 blue (box-ps4); Xbox green (box-xbox) with the sphere, wordmark and the generation in condensed caps; Nintendo red (box-nintendo) with the horizontal Switch or Switch 2 lockup; PC black (box-pc) with "PC" or "Mac" in condensed caps; several families or phones share the graphite band (box-multi) with one entry per family, split by a hairline. Family and look come from `platformBox()` (`app/utils/platform-box.ts`); the marks live in `app/utils/platform-marks.ts` with their sources (Simple Icons CC0 for PlayStation, public-domain Wikimedia Commons files for Xbox and Nintendo). Inside, an uploaded cover fills the front; otherwise a generated front prints the title in condensed caps at the foot and type and region in small caps, on a cover tint. The band is labeled "Plataformas: …" for screen readers. An uploaded cover with `cover_band` off shows bare, at 3:4 with 6px corners.
 
 ### Cover Tilt
 
