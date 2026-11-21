@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
     modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/test-utils/module'],
     compatibilityDate: '2026-11-20',
-    devtools: { enabled: import.meta.dev },
+    devtools: { enabled: false },
     runtimeConfig: {
         public: {
             // Overridden with NUXT_PUBLIC_API_BASE.
