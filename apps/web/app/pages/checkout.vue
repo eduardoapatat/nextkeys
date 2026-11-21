@@ -101,15 +101,25 @@ async function pay() {
                         <span
                             v-if="line.product"
                             class="block text-xs text-paper-muted"
-                            >{{ variantLabel(line.product) }}</span
+                            >{{ variantFacts(line.product) }}</span
                         >
                         <strong v-if="!line.available" class="text-board-red">
                             No disponible</strong
                         >
                     </span>
-                    <span v-if="line.product" class="tabular shrink-0">{{
-                        formatClp(line.product.price * line.quantity)
-                    }}</span>
+                    <span
+                        v-if="line.product"
+                        class="tabular flex shrink-0 flex-col items-end"
+                        ><span>{{
+                            formatClp(line.product.price * line.quantity)
+                        }}</span
+                        ><span
+                            v-if="line.quantity > 1"
+                            class="text-xs text-paper-muted"
+                            >{{ line.quantity }} ×
+                            {{ formatClp(line.product.price) }}</span
+                        ></span
+                    >
                 </li>
             </ul>
 

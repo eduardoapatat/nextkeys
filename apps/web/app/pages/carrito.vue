@@ -56,7 +56,7 @@ const {
                                 {{ line.product.title.name }}
                             </NuxtLink>
                             <p class="text-sm text-chalk-muted">
-                                {{ variantLabel(line.product) }}
+                                {{ variantFacts(line.product) }}
                             </p>
                             <p
                                 v-if="!line.available"
@@ -110,13 +110,24 @@ const {
                     </div>
 
                     <p
-                        class="tabular col-start-2 text-right font-display text-2xl font-bold text-chalk sm:col-start-auto"
+                        class="tabular col-start-2 flex flex-col items-end text-right sm:col-start-auto"
                     >
-                        {{
-                            line.product
-                                ? formatClp(line.product.price * line.quantity)
-                                : '—'
-                        }}
+                        <span
+                            class="font-display text-2xl font-bold text-chalk"
+                            >{{
+                                line.product
+                                    ? formatClp(
+                                          line.product.price * line.quantity,
+                                      )
+                                    : '—'
+                            }}</span
+                        >
+                        <span
+                            v-if="line.product && line.quantity > 1"
+                            class="text-sm text-chalk-muted"
+                            >{{ line.quantity }} ×
+                            {{ formatClp(line.product.price) }}</span
+                        >
                     </p>
                 </li>
             </ul>

@@ -36,6 +36,8 @@ describe('cart', () => {
         await vi.waitUntil(() => page.text().includes('Starfall'));
 
         expect(page.text()).toContain(formatClp(product.data.price * 2));
+        // With more than one unit the line still shows the unit price.
+        expect(page.text()).toContain(`2 × ${formatClp(product.data.price)}`);
 
         await page.find(`select[name="quantity-${slug}"]`).setValue('3');
         expect(useCart().lines.value).toEqual([{ slug, quantity: 3 }]);

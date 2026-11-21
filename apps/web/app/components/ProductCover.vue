@@ -65,10 +65,11 @@ const platforms = computed(() =>
             </p>
             <p
                 aria-hidden="true"
-                class="flex items-center justify-between gap-2 px-[8%] pt-[5%] pb-[7%] text-[0.65rem] font-medium tracking-wide text-chalk/75 uppercase"
+                :class="{ 'max-sm:hidden': size === 'sm' }"
+                class="flex flex-wrap items-center gap-x-1.5 px-[8%] pt-[5%] pb-[7%] text-[0.65rem] font-medium tracking-wide text-chalk/90 uppercase"
             >
                 <span>{{ product.type.name }}</span>
-                <span v-if="product.region">{{ product.region.name }}</span>
+                <span v-if="product.region">· {{ product.region.name }}</span>
             </p>
         </div>
     </div>

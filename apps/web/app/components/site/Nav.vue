@@ -31,9 +31,6 @@ const link =
                     {{ item.label }}
                 </NuxtLink>
             </li>
-            <li class="ml-auto">
-                <a href="#" :class="link">Blog</a>
-            </li>
         </ul>
     </nav>
 </template>

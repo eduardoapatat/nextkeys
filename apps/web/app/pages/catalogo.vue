@@ -236,17 +236,14 @@ function pageLink(number: number) {
                     Cargando…
                 </p>
                 <template v-else-if="page">
-                    <div
+                    <EmptyState
                         v-if="page.data.length === 0"
-                        class="rounded-card border border-dashed border-line-strong px-6 py-16 text-center"
+                        message="No hay productos con estos filtros."
                     >
-                        <p class="font-display text-2xl text-chalk uppercase">
-                            No hay productos con estos filtros.
-                        </p>
-                        <UiButton :to="catalogLink()" size="sm" class="mt-4"
+                        <UiButton :to="catalogLink()" size="sm"
                             >Ver todo el catálogo</UiButton
                         >
-                    </div>
+                    </EmptyState>
                     <ul
                         v-else
                         class="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 xl:grid-cols-4"
@@ -256,7 +253,7 @@ function pageLink(number: number) {
                             :key="product.slug"
                             class="animate-rise"
                             :style="{
-                                animationDelay: `${Math.min(index, 8) * 40}ms`,
+                                animationDelay: `${staggerDelay(index)}ms`,
                             }"
                         >
                             <StationCard

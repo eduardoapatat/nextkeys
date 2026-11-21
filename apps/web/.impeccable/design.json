@@ -1,0 +1,761 @@
+{
+    "schemaVersion": 2,
+    "generatedAt": "2026-11-21T04:58:39+00:00",
+    "title": "Design System: NextKeys",
+    "extensions": {
+        "colorMeta": {
+            "ink": {
+                "role": "neutral",
+                "displayName": "Night Room",
+                "canonical": "#0f1319",
+                "tonalRamp": [
+                    "oklch(15% 0.007 258)",
+                    "oklch(26% 0.009 258)",
+                    "oklch(38% 0.011 258)",
+                    "oklch(49% 0.013 258)",
+                    "oklch(61% 0.013 258)",
+                    "oklch(72% 0.011 258)",
+                    "oklch(84% 0.009 258)",
+                    "oklch(95% 0.007 258)"
+                ]
+            },
+            "ink-2": {
+                "role": "neutral",
+                "displayName": "Back Room",
+                "canonical": "#141922",
+                "tonalRamp": [
+                    "oklch(15% 0.010 262)",
+                    "oklch(26% 0.012 262)",
+                    "oklch(38% 0.015 262)",
+                    "oklch(49% 0.018 262)",
+                    "oklch(61% 0.018 262)",
+                    "oklch(72% 0.015 262)",
+                    "oklch(84% 0.012 262)",
+                    "oklch(95% 0.010 262)"
+                ]
+            },
+            "panel": {
+                "role": "neutral",
+                "displayName": "Melamine",
+                "canonical": "#1d232c",
+                "tonalRamp": [
+                    "oklch(15% 0.009 258)",
+                    "oklch(26% 0.012 258)",
+                    "oklch(38% 0.015 258)",
+                    "oklch(49% 0.018 258)",
+                    "oklch(61% 0.018 258)",
+                    "oklch(72% 0.015 258)",
+                    "oklch(84% 0.012 258)",
+                    "oklch(95% 0.009 258)"
+                ]
+            },
+            "panel-2": {
+                "role": "neutral",
+                "displayName": "Melamine Raised",
+                "canonical": "#262e39",
+                "tonalRamp": [
+                    "oklch(15% 0.011 256)",
+                    "oklch(26% 0.015 256)",
+                    "oklch(38% 0.018 256)",
+                    "oklch(49% 0.021 256)",
+                    "oklch(61% 0.021 256)",
+                    "oklch(72% 0.018 256)",
+                    "oklch(84% 0.015 256)",
+                    "oklch(95% 0.011 256)"
+                ]
+            },
+            "line": {
+                "role": "neutral",
+                "displayName": "Seam",
+                "canonical": "#313a47",
+                "tonalRamp": [
+                    "oklch(15% 0.013 258)",
+                    "oklch(26% 0.016 258)",
+                    "oklch(38% 0.020 258)",
+                    "oklch(49% 0.024 258)",
+                    "oklch(61% 0.024 258)",
+                    "oklch(72% 0.020 258)",
+                    "oklch(84% 0.016 258)",
+                    "oklch(95% 0.013 258)"
+                ]
+            },
+            "line-strong": {
+                "role": "neutral",
+                "displayName": "Hard Seam",
+                "canonical": "#4a5564",
+                "tonalRamp": [
+                    "oklch(15% 0.014 256)",
+                    "oklch(26% 0.018 256)",
+                    "oklch(38% 0.022 256)",
+                    "oklch(49% 0.026 256)",
+                    "oklch(61% 0.026 256)",
+                    "oklch(72% 0.022 256)",
+                    "oklch(84% 0.018 256)",
+                    "oklch(95% 0.014 256)"
+                ]
+            },
+            "chalk": {
+                "role": "neutral",
+                "displayName": "Chalk",
+                "canonical": "#ece7dc",
+                "tonalRamp": [
+                    "oklch(15% 0.008 86)",
+                    "oklch(26% 0.010 86)",
+                    "oklch(38% 0.012 86)",
+                    "oklch(49% 0.015 86)",
+                    "oklch(61% 0.015 86)",
+                    "oklch(72% 0.012 86)",
+                    "oklch(84% 0.010 86)",
+                    "oklch(95% 0.008 86)"
+                ]
+            },
+            "chalk-muted": {
+                "role": "neutral",
+                "displayName": "Chalk Muted",
+                "canonical": "#a7afb9",
+                "tonalRamp": [
+                    "oklch(15% 0.008 254)",
+                    "oklch(26% 0.011 254)",
+                    "oklch(38% 0.013 254)",
+                    "oklch(49% 0.016 254)",
+                    "oklch(61% 0.016 254)",
+                    "oklch(72% 0.013 254)",
+                    "oklch(84% 0.011 254)",
+                    "oklch(95% 0.008 254)"
+                ]
+            },
+            "chalk-faint": {
+                "role": "neutral",
+                "displayName": "Chalk Faint",
+                "canonical": "#8a94a1",
+                "tonalRamp": [
+                    "oklch(15% 0.011 255)",
+                    "oklch(26% 0.014 255)",
+                    "oklch(38% 0.018 255)",
+                    "oklch(49% 0.021 255)",
+                    "oklch(61% 0.021 255)",
+                    "oklch(72% 0.018 255)",
+                    "oklch(84% 0.014 255)",
+                    "oklch(95% 0.011 255)"
+                ]
+            },
+            "paper": {
+                "role": "tertiary",
+                "displayName": "Thermal Paper",
+                "canonical": "#efe8d8",
+                "tonalRamp": [
+                    "oklch(15% 0.011 87)",
+                    "oklch(26% 0.014 87)",
+                    "oklch(38% 0.018 87)",
+                    "oklch(49% 0.021 87)",
+                    "oklch(61% 0.021 87)",
+                    "oklch(72% 0.018 87)",
+                    "oklch(84% 0.014 87)",
+                    "oklch(95% 0.011 87)"
+                ]
+            },
+            "paper-ink": {
+                "role": "tertiary",
+                "displayName": "Receipt Ink",
+                "canonical": "#22201b",
+                "tonalRamp": [
+                    "oklch(15% 0.005 89)",
+                    "oklch(26% 0.006 89)",
+                    "oklch(38% 0.008 89)",
+                    "oklch(49% 0.009 89)",
+                    "oklch(61% 0.009 89)",
+                    "oklch(72% 0.008 89)",
+                    "oklch(84% 0.006 89)",
+                    "oklch(95% 0.005 89)"
+                ]
+            },
+            "paper-muted": {
+                "role": "tertiary",
+                "displayName": "Faded Print",
+                "canonical": "#5d5749",
+                "tonalRamp": [
+                    "oklch(15% 0.011 88)",
+                    "oklch(26% 0.015 88)",
+                    "oklch(38% 0.018 88)",
+                    "oklch(49% 0.022 88)",
+                    "oklch(61% 0.022 88)",
+                    "oklch(72% 0.018 88)",
+                    "oklch(84% 0.015 88)",
+                    "oklch(95% 0.011 88)"
+                ]
+            },
+            "paper-line": {
+                "role": "tertiary",
+                "displayName": "Dashed Rule",
+                "canonical": "#cfc6b2",
+                "tonalRamp": [
+                    "oklch(15% 0.014 87)",
+                    "oklch(26% 0.018 87)",
+                    "oklch(38% 0.023 87)",
+                    "oklch(49% 0.027 87)",
+                    "oklch(61% 0.027 87)",
+                    "oklch(72% 0.023 87)",
+                    "oklch(84% 0.018 87)",
+                    "oklch(95% 0.014 87)"
+                ]
+            },
+            "sticker": {
+                "role": "primary",
+                "displayName": "Sticker Yellow",
+                "canonical": "#f2c230",
+                "tonalRamp": [
+                    "oklch(15% 0.078 89)",
+                    "oklch(26% 0.101 89)",
+                    "oklch(38% 0.124 89)",
+                    "oklch(49% 0.147 89)",
+                    "oklch(61% 0.147 89)",
+                    "oklch(72% 0.124 89)",
+                    "oklch(84% 0.101 89)",
+                    "oklch(95% 0.078 89)"
+                ]
+            },
+            "sticker-hover": {
+                "role": "primary",
+                "displayName": "Fresh Sticker",
+                "canonical": "#f7d35c",
+                "tonalRamp": [
+                    "oklch(15% 0.070 92)",
+                    "oklch(26% 0.090 92)",
+                    "oklch(38% 0.111 92)",
+                    "oklch(49% 0.131 92)",
+                    "oklch(61% 0.131 92)",
+                    "oklch(72% 0.111 92)",
+                    "oklch(84% 0.090 92)",
+                    "oklch(95% 0.070 92)"
+                ]
+            },
+            "sticker-ink": {
+                "role": "primary",
+                "displayName": "Sticker Ink",
+                "canonical": "#1a1405",
+                "tonalRamp": [
+                    "oklch(15% 0.014 89)",
+                    "oklch(26% 0.019 89)",
+                    "oklch(38% 0.023 89)",
+                    "oklch(49% 0.027 89)",
+                    "oklch(61% 0.027 89)",
+                    "oklch(72% 0.023 89)",
+                    "oklch(84% 0.019 89)",
+                    "oklch(95% 0.014 89)"
+                ]
+            },
+            "crt": {
+                "role": "secondary",
+                "displayName": "CRT Glow",
+                "canonical": "#9cc8d6",
+                "tonalRamp": [
+                    "oklch(15% 0.025 219)",
+                    "oklch(26% 0.032 219)",
+                    "oklch(38% 0.039 219)",
+                    "oklch(49% 0.047 219)",
+                    "oklch(61% 0.047 219)",
+                    "oklch(72% 0.039 219)",
+                    "oklch(84% 0.032 219)",
+                    "oklch(95% 0.025 219)"
+                ]
+            },
+            "crt-deep": {
+                "role": "secondary",
+                "displayName": "CRT Deep",
+                "canonical": "#1f3640",
+                "tonalRamp": [
+                    "oklch(15% 0.017 227)",
+                    "oklch(26% 0.022 227)",
+                    "oklch(38% 0.027 227)",
+                    "oklch(49% 0.031 227)",
+                    "oklch(61% 0.031 227)",
+                    "oklch(72% 0.027 227)",
+                    "oklch(84% 0.022 227)",
+                    "oklch(95% 0.017 227)"
+                ]
+            },
+            "danger": {
+                "role": "neutral",
+                "displayName": "Warning Coral",
+                "canonical": "#e2735f",
+                "tonalRamp": [
+                    "oklch(15% 0.070 32)",
+                    "oklch(26% 0.091 32)",
+                    "oklch(38% 0.111 32)",
+                    "oklch(49% 0.132 32)",
+                    "oklch(61% 0.132 32)",
+                    "oklch(72% 0.111 32)",
+                    "oklch(84% 0.091 32)",
+                    "oklch(95% 0.070 32)"
+                ]
+            },
+            "danger-deep": {
+                "role": "neutral",
+                "displayName": "Ember",
+                "canonical": "#3a1f1b",
+                "tonalRamp": [
+                    "oklch(15% 0.021 29)",
+                    "oklch(26% 0.027 29)",
+                    "oklch(38% 0.034 29)",
+                    "oklch(49% 0.040 29)",
+                    "oklch(61% 0.040 29)",
+                    "oklch(72% 0.034 29)",
+                    "oklch(84% 0.027 29)",
+                    "oklch(95% 0.021 29)"
+                ]
+            },
+            "ok": {
+                "role": "neutral",
+                "displayName": "Felt Green",
+                "canonical": "#8fc79a",
+                "tonalRamp": [
+                    "oklch(15% 0.042 150)",
+                    "oklch(26% 0.055 150)",
+                    "oklch(38% 0.067 150)",
+                    "oklch(49% 0.080 150)",
+                    "oklch(61% 0.080 150)",
+                    "oklch(72% 0.067 150)",
+                    "oklch(84% 0.055 150)",
+                    "oklch(95% 0.042 150)"
+                ]
+            },
+            "ok-deep": {
+                "role": "neutral",
+                "displayName": "Moss",
+                "canonical": "#1c3324",
+                "tonalRamp": [
+                    "oklch(15% 0.020 155)",
+                    "oklch(26% 0.025 155)",
+                    "oklch(38% 0.031 155)",
+                    "oklch(49% 0.037 155)",
+                    "oklch(61% 0.037 155)",
+                    "oklch(72% 0.031 155)",
+                    "oklch(84% 0.025 155)",
+                    "oklch(95% 0.020 155)"
+                ]
+            },
+            "board": {
+                "role": "tertiary",
+                "displayName": "Whiteboard",
+                "canonical": "#e6e9e4",
+                "tonalRamp": [
+                    "oklch(15% 0.004 132)",
+                    "oklch(26% 0.005 132)",
+                    "oklch(38% 0.006 132)",
+                    "oklch(49% 0.007 132)",
+                    "oklch(61% 0.007 132)",
+                    "oklch(72% 0.006 132)",
+                    "oklch(84% 0.005 132)",
+                    "oklch(95% 0.004 132)"
+                ]
+            },
+            "board-ink": {
+                "role": "tertiary",
+                "displayName": "Marker Navy",
+                "canonical": "#1d2b4a",
+                "tonalRamp": [
+                    "oklch(15% 0.029 265)",
+                    "oklch(26% 0.038 265)",
+                    "oklch(38% 0.047 265)",
+                    "oklch(49% 0.056 265)",
+                    "oklch(61% 0.056 265)",
+                    "oklch(72% 0.047 265)",
+                    "oklch(84% 0.038 265)",
+                    "oklch(95% 0.029 265)"
+                ]
+            },
+            "board-red": {
+                "role": "tertiary",
+                "displayName": "Marker Red",
+                "canonical": "#b3362b",
+                "tonalRamp": [
+                    "oklch(15% 0.080 29)",
+                    "oklch(26% 0.104 29)",
+                    "oklch(38% 0.128 29)",
+                    "oklch(49% 0.151 29)",
+                    "oklch(61% 0.151 29)",
+                    "oklch(72% 0.128 29)",
+                    "oklch(84% 0.104 29)",
+                    "oklch(95% 0.080 29)"
+                ]
+            },
+            "board-muted": {
+                "role": "tertiary",
+                "displayName": "Board Grey",
+                "canonical": "#4d5a6e",
+                "tonalRamp": [
+                    "oklch(15% 0.018 259)",
+                    "oklch(26% 0.023 259)",
+                    "oklch(38% 0.029 259)",
+                    "oklch(49% 0.034 259)",
+                    "oklch(61% 0.034 259)",
+                    "oklch(72% 0.029 259)",
+                    "oklch(84% 0.023 259)",
+                    "oklch(95% 0.018 259)"
+                ]
+            },
+            "board-line": {
+                "role": "tertiary",
+                "displayName": "Board Rule",
+                "canonical": "#c6ccc5",
+                "tonalRamp": [
+                    "oklch(15% 0.006 141)",
+                    "oklch(26% 0.007 141)",
+                    "oklch(38% 0.009 141)",
+                    "oklch(49% 0.011 141)",
+                    "oklch(61% 0.011 141)",
+                    "oklch(72% 0.009 141)",
+                    "oklch(84% 0.007 141)",
+                    "oklch(95% 0.006 141)"
+                ]
+            },
+            "cover-1": {
+                "role": "tertiary",
+                "displayName": "Oxblood Cover",
+                "canonical": "#6b2d3a",
+                "tonalRamp": [
+                    "oklch(15% 0.044 9)",
+                    "oklch(26% 0.057 9)",
+                    "oklch(38% 0.070 9)",
+                    "oklch(49% 0.083 9)",
+                    "oklch(61% 0.083 9)",
+                    "oklch(72% 0.070 9)",
+                    "oklch(84% 0.057 9)",
+                    "oklch(95% 0.044 9)"
+                ]
+            },
+            "cover-2": {
+                "role": "tertiary",
+                "displayName": "Harbor Blue Cover",
+                "canonical": "#234b6b",
+                "tonalRamp": [
+                    "oklch(15% 0.035 245)",
+                    "oklch(26% 0.045 245)",
+                    "oklch(38% 0.055 245)",
+                    "oklch(49% 0.065 245)",
+                    "oklch(61% 0.065 245)",
+                    "oklch(72% 0.055 245)",
+                    "oklch(84% 0.045 245)",
+                    "oklch(95% 0.035 245)"
+                ]
+            },
+            "cover-3": {
+                "role": "tertiary",
+                "displayName": "Felt Green Cover",
+                "canonical": "#2f5a3c",
+                "tonalRamp": [
+                    "oklch(15% 0.034 152)",
+                    "oklch(26% 0.044 152)",
+                    "oklch(38% 0.054 152)",
+                    "oklch(49% 0.064 152)",
+                    "oklch(61% 0.064 152)",
+                    "oklch(72% 0.054 152)",
+                    "oklch(84% 0.044 152)",
+                    "oklch(95% 0.034 152)"
+                ]
+            },
+            "cover-4": {
+                "role": "tertiary",
+                "displayName": "Tobacco Cover",
+                "canonical": "#6a4a1f",
+                "tonalRamp": [
+                    "oklch(15% 0.036 72)",
+                    "oklch(26% 0.046 72)",
+                    "oklch(38% 0.057 72)",
+                    "oklch(49% 0.068 72)",
+                    "oklch(61% 0.068 72)",
+                    "oklch(72% 0.057 72)",
+                    "oklch(84% 0.046 72)",
+                    "oklch(95% 0.036 72)"
+                ]
+            },
+            "cover-5": {
+                "role": "tertiary",
+                "displayName": "Cartridge Violet Cover",
+                "canonical": "#4b3270",
+                "tonalRamp": [
+                    "oklch(15% 0.051 300)",
+                    "oklch(26% 0.066 300)",
+                    "oklch(38% 0.081 300)",
+                    "oklch(49% 0.097 300)",
+                    "oklch(61% 0.097 300)",
+                    "oklch(72% 0.081 300)",
+                    "oklch(84% 0.066 300)",
+                    "oklch(95% 0.051 300)"
+                ]
+            },
+            "cover-6": {
+                "role": "tertiary",
+                "displayName": "Deep Teal Cover",
+                "canonical": "#1f5a5e",
+                "tonalRamp": [
+                    "oklch(15% 0.030 201)",
+                    "oklch(26% 0.038 201)",
+                    "oklch(38% 0.047 201)",
+                    "oklch(49% 0.056 201)",
+                    "oklch(61% 0.056 201)",
+                    "oklch(72% 0.047 201)",
+                    "oklch(84% 0.038 201)",
+                    "oklch(95% 0.030 201)"
+                ]
+            }
+        },
+        "typographyMeta": {
+            "display": {
+                "displayName": "Signage Display",
+                "purpose": "One uppercase page title per view."
+            },
+            "headline": {
+                "displayName": "Signage Headline",
+                "purpose": "Uppercase section headings and category tiles."
+            },
+            "title": {
+                "displayName": "Product Title",
+                "purpose": "Product names on station cards and cart lines."
+            },
+            "body": {
+                "displayName": "Body",
+                "purpose": "Descriptions, notes and product facts."
+            },
+            "label": {
+                "displayName": "Signage Label",
+                "purpose": "Buttons, nav links, tabs and the cart pill, uppercase."
+            },
+            "receipt": {
+                "displayName": "Receipt Print",
+                "purpose": "Everything on thermal paper, order references, key codes and station numbers."
+            },
+            "marker": {
+                "displayName": "Marker",
+                "purpose": "Whiteboard headings only."
+            }
+        },
+        "shadows": [
+            {
+                "name": "case",
+                "value": "0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35)",
+                "purpose": "Display case, covers at rest, whiteboard."
+            },
+            {
+                "name": "lift",
+                "value": "0 18px 32px -12px rgb(0 0 0 / 0.65), 0 4px 10px rgb(0 0 0 / 0.4)",
+                "purpose": "A cover picked up on hover."
+            },
+            {
+                "name": "sticker",
+                "value": "0 3px 8px -2px rgb(0 0 0 / 0.55)",
+                "purpose": "Price stickers and the primary button."
+            },
+            {
+                "name": "receipt",
+                "value": "drop-shadow(0 12px 18px rgb(0 0 0 / 0.45))",
+                "purpose": "Filter shadow that follows the receipt's torn edge."
+            },
+            {
+                "name": "case-tube",
+                "value": "0 6px 18px 2px rgb(236 241 243 / 0.18)",
+                "purpose": "Bloom of the light tube above the display case."
+            }
+        ],
+        "motion": [
+            {
+                "name": "ease-out",
+                "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+                "purpose": "Default curve for press, tilt, rise and menu close."
+            },
+            {
+                "name": "ease-in-out",
+                "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+                "purpose": "On-screen movement between two states."
+            },
+            {
+                "name": "ease-drawer",
+                "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+                "purpose": "Mobile menu opening (280ms)."
+            },
+            {
+                "name": "press",
+                "value": "scale(0.97) over 160ms ease-out",
+                "purpose": "Active state of anything pressable."
+            },
+            {
+                "name": "rise",
+                "value": "rise 260ms ease-out both (opacity 0, translateY 10px)",
+                "purpose": "Entrance of covers and list items; becomes a fade under reduced motion."
+            },
+            {
+                "name": "stagger",
+                "value": "0, 40, 70, 95, 115, 130, 140, 150ms (capped)",
+                "purpose": "Per-item delay of group entrances (app/utils/motion.ts)."
+            },
+            {
+                "name": "tilt",
+                "value": "perspective(900px), max 7deg (lead 9deg), translateY(-4px); follow 120ms, return 260ms",
+                "purpose": "Cover tilt on fine hover pointers without reduced motion."
+            },
+            {
+                "name": "state",
+                "value": "150ms ease",
+                "purpose": "Color, background and border changes on hover."
+            }
+        ],
+        "breakpoints": [
+            {
+                "name": "sm",
+                "value": "640px"
+            },
+            {
+                "name": "md",
+                "value": "768px"
+            },
+            {
+                "name": "lg",
+                "value": "1024px"
+            },
+            {
+                "name": "xl",
+                "value": "1280px"
+            }
+        ]
+    },
+    "components": [
+        {
+            "name": "Primary Button",
+            "kind": "button",
+            "refersTo": "button-primary",
+            "description": "The yellow sticker action: one per view (Agregar al carrito, Ir a pagar).",
+            "html": "<button class=\"ds-btn ds-btn-primary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar al carrito</button>",
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-btn-primary{border:0;background:#f2c230;color:#1a1405;box-shadow:0 3px 8px -2px rgb(0 0 0 / 0.55);}.ds-btn-primary:hover{background:#f7d35c;}"
+        },
+        {
+            "name": "Secondary Button",
+            "kind": "button",
+            "refersTo": "button-secondary",
+            "description": "A melamine key for every other action.",
+            "html": "<button class=\"ds-btn ds-btn-secondary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar</button>",
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-btn-secondary{border:1px solid #4a5564;background:#262e39;color:#ece7dc;}.ds-btn-secondary:hover{border-color:#8a94a1;background:#1d232c;}"
+        },
+        {
+            "name": "Ghost Button",
+            "kind": "button",
+            "refersTo": "button-ghost",
+            "description": "A bare caps label for quiet links that look like actions (Ver ficha, Ver todo).",
+            "html": "<button class=\"ds-btn ds-btn-ghost\">Ver ficha</button>",
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-btn-ghost{border:0;background:transparent;color:#a7afb9;}.ds-btn-ghost:hover{color:#ece7dc;}"
+        },
+        {
+            "name": "Text Field",
+            "kind": "input",
+            "refersTo": "input-text",
+            "description": "The one text field look; the border turns CRT blue on focus.",
+            "html": "<label class=\"ds-field\"><span>Correo</span><input class=\"ds-input\" type=\"email\" placeholder=\"tu@correo.cl\"></label>",
+            "css": ".ds-field{display:flex;flex-direction:column;gap:6px;font-family:'Barlow',sans-serif;font-size:0.875rem;color:#a7afb9;max-width:320px;}.ds-input{height:44px;padding:0 12px;border-radius:4px;border:1px solid #4a5564;background:#1d232c;color:#ece7dc;font:inherit;font-size:1rem;}.ds-input::placeholder{color:#8a94a1;}.ds-input:focus{border-color:#9cc8d6;outline:none;}"
+        },
+        {
+            "name": "Navigation Bar",
+            "kind": "nav",
+            "refersTo": "",
+            "description": "Back-room bar of condensed caps links grouped by thin seams.",
+            "html": "<nav class=\"ds-nav\"><a class=\"is-current\" href=\"#\">Catálogo</a><span class=\"ds-seam\"></span><a href=\"#\">PlayStation</a><a href=\"#\">Xbox</a><a href=\"#\">Nintendo</a><span class=\"ds-seam\"></span><a href=\"#\">Claves digitales</a></nav>",
+            "css": ".ds-nav{display:flex;align-items:center;gap:0;background:#141922;border-top:1px solid #313a47;padding:0 8px;}.ds-nav a{display:flex;align-items:center;height:44px;padding:0 12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;color:#a7afb9;text-decoration:none;transition:color 150ms;}.ds-nav a:hover,.ds-nav a.is-current{color:#ece7dc;}.ds-nav a:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-seam{width:1px;height:16px;margin:0 4px;background:#313a47;}"
+        },
+        {
+            "name": "Price Sticker",
+            "kind": "chip",
+            "refersTo": "price-sticker",
+            "description": "Yellow CLP sticker, rotated and overlapping the cover; grey with 'Sin stock' when out of stock.",
+            "html": "<div style=\"display:flex;gap:24px;align-items:center\"><p class=\"ds-sticker\">$14.990</p><p class=\"ds-sticker ds-sticker-out\">$79.990<span>Sin stock</span></p></div>",
+            "css": ".ds-sticker{display:inline-flex;flex-direction:column;margin:0;padding:4px 8px;border-radius:4px;background:#f2c230;color:#1a1405;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.125rem;line-height:1;font-variant-numeric:tabular-nums;transform:rotate(-3deg);box-shadow:0 3px 8px -2px rgb(0 0 0 / 0.55);}.ds-sticker-out{background:#262e39;color:#a7afb9;}.ds-sticker span{margin-top:2px;font-size:0.75rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;}"
+        },
+        {
+            "name": "Station Card",
+            "kind": "card",
+            "refersTo": "product-cover",
+            "description": "A product as a numbered station: generated cover, sticker, PC number and three fixed fact slots.",
+            "html": "<article class=\"ds-station\"><div class=\"ds-cover\"><p class=\"ds-band\">PS5</p><p class=\"ds-ctitle\">Neon Heist</p><p class=\"ds-cfoot\">Clave digital · LATAM</p><p class=\"ds-sticker\">$74.990</p></div><p class=\"ds-pc\">PC 04</p><h3><a href=\"#\">Neon Heist</a></h3><dl><dd class=\"w\">PS5</dd><dd>Clave digital</dd><dd class=\"r\">LATAM</dd><dd class=\"w f\">Se activa en PlayStation Store</dd></dl></article>",
+            "css": ".ds-station{width:200px;display:flex;flex-direction:column;gap:12px;font-family:'Barlow',sans-serif;color:#ece7dc;}.ds-cover{position:relative;aspect-ratio:3/4;border-radius:6px;background:#6b2d3a;display:flex;flex-direction:column;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.7),0 2px 6px rgb(0 0 0 / 0.35);transition:transform 260ms cubic-bezier(0.23,1,0.32,1),box-shadow 200ms;}.ds-station:hover .ds-cover{transform:perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px);box-shadow:0 18px 32px -12px rgb(0 0 0 / 0.65),0 4px 10px rgb(0 0 0 / 0.4);}.ds-band{margin:0;padding:4% 8%;background:rgb(15 19 25 / 0.55);border-radius:6px 6px 0 0;font:700 0.75rem 'Barlow Condensed',sans-serif;letter-spacing:0.05em;text-transform:uppercase;}.ds-ctitle{margin:auto 0 0;padding:0 8%;font:700 1.75rem/0.92 'Barlow Condensed',sans-serif;text-transform:uppercase;}.ds-cfoot{margin:0;padding:5% 8% 7%;font-size:0.65rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;opacity:0.9;}.ds-cover .ds-sticker{position:absolute;right:-6px;bottom:-8px;display:inline-block;margin:0;padding:4px 8px;border-radius:4px;background:#f2c230;color:#1a1405;font:700 1.125rem/1 'Barlow Condensed',sans-serif;transform:rotate(-3deg);box-shadow:0 3px 8px -2px rgb(0 0 0 / 0.55);}.ds-pc{margin:0 0 -8px;padding-top:4px;font:400 0.75rem 'JetBrains Mono',monospace;color:#8a94a1;}.ds-station h3{margin:0;font-size:1rem;font-weight:600;}.ds-station a{color:#ece7dc;text-decoration:none;}.ds-station a:hover{color:#f2c230;}.ds-station dl{margin:0;display:grid;grid-template-columns:auto 1fr;column-gap:12px;font-size:0.875rem;color:#a7afb9;}.ds-station dd{margin:0;}.ds-station .w{grid-column:span 2;}.ds-station dd.w:first-child{color:#ece7dc;}.ds-station .r{text-align:right;}.ds-station .f{color:#8a94a1;}"
+        },
+        {
+            "name": "Thermal Receipt",
+            "kind": "custom",
+            "refersTo": "thermal-receipt",
+            "description": "Cream paper with torn zig-zag edges and monospace print for every money summary.",
+            "html": "<div class=\"ds-receipt\"><p class=\"ds-rhead\">NextKeys · Detalle</p><p class=\"ds-row\"><span>3 × Starfall</span><span>$65.970</span></p><p class=\"ds-row ds-total\"><span>Total estimado</span><span>$305.940</span></p></div>",
+            "css": ".ds-receipt{--tear:8px;width:300px;padding:calc(var(--tear) + 1.25rem) 24px;background:#efe8d8;color:#22201b;font:400 0.875rem/1.5 'JetBrains Mono',monospace;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 90deg,#0000 91deg) bottom/var(--tear) 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 90deg,#0000 91deg) top/var(--tear) 51% repeat-x;filter:drop-shadow(0 12px 18px rgb(0 0 0 / 0.45));}.ds-rhead{margin:0 0 12px;padding-bottom:12px;border-bottom:1px dashed #cfc6b2;text-align:center;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#5d5749;}.ds-row{display:flex;justify-content:space-between;margin:4px 0;font-variant-numeric:tabular-nums;}.ds-total{margin-top:12px;padding-top:12px;border-top:1px dashed #cfc6b2;font-weight:600;font-size:1rem;}"
+        },
+        {
+            "name": "Whiteboard",
+            "kind": "custom",
+            "refersTo": "whiteboard",
+            "description": "Home-only price board in marker with dotted leaders and the deal of the day.",
+            "html": "<aside class=\"ds-board\"><h2>Precios de hoy</h2><a href=\"#\"><span>Shield Antivirus</span><i></i><b>$14.990</b></a><a href=\"#\"><span>Starfall</span><i></i><b>$19.990</b></a></aside>",
+            "css": ".ds-board{width:300px;padding:20px;border:4px solid #262e39;border-radius:6px;background:#e6e9e4;color:#1d2b4a;font-family:'Barlow',sans-serif;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.7),0 2px 6px rgb(0 0 0 / 0.35);}.ds-board h2{margin:0 0 8px;font:400 1.875rem 'Permanent Marker',cursive;}.ds-board a{display:flex;align-items:baseline;gap:8px;padding:8px 0;border-bottom:1px solid #c6ccc5;color:inherit;text-decoration:none;font-weight:600;}.ds-board a:hover{color:#b3362b;}.ds-board i{flex:1;align-self:flex-end;margin-bottom:4px;border-bottom:2px dotted #c6ccc5;}.ds-board b{font:700 1.25rem 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums;}"
+        }
+    ],
+    "narrative": {
+        "northStar": "The Cibercafé Counter at Midnight",
+        "overview": "The storefront is the counter of a Chilean neighborhood cibercafé after dark. The room is a cool ink ground with dark melamine panels; the only bright zone is the glass display case lit by a tube from above, where game boxes stand on a glass shelf wearing yellow price stickers. Behind the counter hangs a whiteboard written in marker with today's prices, and every purchase prints as a cream thermal receipt with torn edges. Each material has one job, and each job always uses the same material.\n\nDensity is that of a working shop, not a showroom: one strict grid of numbered stations (\"PC 01\", \"PC 02\"), each with the cover on top and platform, type, region and activation in fixed slots below. Covers lead every listing at 3:4 game-case proportion. When a product has no uploaded cover, the system prints one from its own data: a deep per-product tint, a platform band, the title in condensed caps, type and region at the foot. Motion is soft and physical. Covers tilt toward the pointer like a box picked up from the shelf, buttons press to 0.97, lists rise in with a short stagger, and everything falls back to opacity and color under `prefers-reduced-motion`.\n\nThe world refuses the category default for game-key stores: a black page with a single neon accent and a carousel hero. Light comes from objects (the case, the sticker, the CRT glow), never from neon gradients.",
+        "keyCharacteristics": [
+            "Night-room ink ground; the display case is the only lit zone.",
+            "Sticker yellow marks prices and the one primary action per view.",
+            "CRT blue means \"active\" and \"focused\", nothing else.",
+            "Thermal paper and monospace for every money summary: cart, checkout, payment result, order.",
+            "Condensed signage caps for headings and buttons, a plain sans for reading, marker only on the whiteboard.",
+            "Numbered stations on one grid, facts always in the same slot."
+        ],
+        "rules": [
+            {
+                "name": "The One Sticker Rule",
+                "body": "Yellow fills only price stickers and the single primary action of a view. A second yellow button on the same screen means one of them is secondary.",
+                "section": "colors"
+            },
+            {
+                "name": "The Signal Rule",
+                "body": "CRT blue means focus or \"you are here\". Do not use it for decoration or for prices.",
+                "section": "colors"
+            },
+            {
+                "name": "The Material Rule",
+                "body": "Paper belongs to receipts, the board to the whiteboard, cover tints to covers. A material never leaves its object.",
+                "section": "colors"
+            },
+            {
+                "name": "The Tabular Price Rule",
+                "body": "Every price, count, countdown and reference uses tabular figures (`data`, `time` and `.tabular` get them by default) and comes from the API in CLP.",
+                "section": "typography"
+            },
+            {
+                "name": "The Marker Stays on the Board Rule",
+                "body": "Permanent Marker appears only on the whiteboard. Nowhere else is hand-written.",
+                "section": "typography"
+            },
+            {
+                "name": "The One Lit Zone Rule",
+                "body": "Only the display case receives the overhead light treatment. Other sections stay flat on the room's tonal steps.",
+                "section": "elevation"
+            },
+            {
+                "name": "The Shadow Follows the Object Rule",
+                "body": "Shadows belong to things you could pick up. Panels, nav bars and form sections have borders, not shadows.",
+                "section": "elevation"
+            }
+        ],
+        "dos": [
+            "**Do** keep the page on Night Room (#0f1319) and let only the display case carry the overhead light.",
+            "**Do** put every price on a Sticker Yellow sticker or in tabular figures, in CLP from the API.",
+            "**Do** print every money summary (cart, checkout, result, order) on the thermal receipt in JetBrains Mono.",
+            "**Do** keep a product's facts in the same slots everywhere: platforms, then type and region, then activation.",
+            "**Do** use CRT blue (#9cc8d6) for focus rings and focused borders on every interactive element.",
+            "**Do** give pressable elements the 0.97 press and reduce all motion to opacity and color under `prefers-reduced-motion`.",
+            "**Do** stagger list entrances with the motion helper (0, 40, 70, 95… ms, capped at 150ms) and the 260ms rise."
+        ],
+        "donts": [
+            "**Don't** use more than one Sticker Yellow action per view.",
+            "**Don't** add neon gradients, glowing accents or a carousel hero; light comes from the case tube and the objects in it.",
+            "**Don't** use Permanent Marker outside the whiteboard, or paper and board colors outside their objects.",
+            "**Don't** show \"before\" prices, invented discounts, ratings or reviews.",
+            "**Don't** put shadows on panels, nav bars or form sections; use borders and tonal steps.",
+            "**Don't** use white text on Sticker Yellow; text on it is Sticker Ink."
+        ]
+    }
+}

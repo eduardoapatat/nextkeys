@@ -98,7 +98,7 @@ const deliveryNote = computed(() =>
                         :aria-current="
                             variant.slug === product.slug ? 'page' : undefined
                         "
-                        class="pressable tabular flex min-h-12 flex-1 items-center rounded-control border px-4 py-2 text-sm transition-colors duration-150"
+                        class="pressable tabular flex min-h-12 flex-1 items-center rounded-control border px-4 py-2 text-sm"
                         :class="
                             variant.slug === product.slug
                                 ? 'border-crt bg-crt-deep text-chalk'

@@ -192,6 +192,33 @@ async function cancel() {
                             </div>
                         </template>
                     </dl>
+                    <h3
+                        class="border-t border-dashed border-paper-line pt-3 font-mono text-xs tracking-[0.2em] text-paper-muted uppercase"
+                    >
+                        Lo que compraste
+                    </h3>
+                    <ul class="flex flex-col gap-1 py-2">
+                        <li
+                            v-for="item in order.items"
+                            :key="item.product_slug"
+                            class="flex justify-between gap-4"
+                        >
+                            <span class="min-w-0"
+                                >{{ item.quantity }} ×
+                                <NuxtLink
+                                    :to="`/${item.product_slug}`"
+                                    class="underline"
+                                    >{{ item.title_name }}</NuxtLink
+                                >
+                                <span class="text-paper-muted">
+                                    · {{ item.type.name }}</span
+                                ></span
+                            >
+                            <span class="tabular shrink-0">{{
+                                formatClp(item.line_total)
+                            }}</span>
+                        </li>
+                    </ul>
                 </ThermalReceipt>
             </template>
 
@@ -292,6 +319,7 @@ async function cancel() {
             </div>
 
             <section
+                v-if="view !== 'paid'"
                 aria-labelledby="items-heading"
                 class="rounded-card border border-line bg-ink-2 p-5"
             >

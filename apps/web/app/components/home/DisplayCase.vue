@@ -69,7 +69,12 @@ const shelf = computed(() => props.products.slice(1, 5));
                     </template>
                 </dl>
                 <div class="flex flex-wrap items-start gap-3">
-                    <QuickAdd :product="lead" variant="primary" size="lg" />
+                    <QuickAdd
+                        :product="lead"
+                        variant="primary"
+                        size="lg"
+                        data-action="lead-add"
+                    />
                     <UiButton :to="`/${lead.slug}`" variant="ghost" size="lg"
                         >Ver ficha</UiButton
                     >
@@ -77,36 +82,47 @@ const shelf = computed(() => props.products.slice(1, 5));
             </div>
         </div>
 
-        <div v-if="shelf.length" class="relative mt-10">
-            <ul
-                class="relative z-10 grid max-w-2xl grid-cols-4 gap-3 px-1 md:gap-6"
-            >
-                <li
-                    v-for="(product, index) in shelf"
-                    :key="product.slug"
-                    class="relative animate-rise"
-                    :style="{ animationDelay: `${80 + index * 50}ms` }"
-                >
-                    <NuxtLink
-                        :to="`/${product.slug}`"
-                        class="block rounded-card"
-                        :aria-label="`${product.title.name}, ${formatClp(product.price)}`"
+        <template v-if="shelf.length">
+            <div class="relative mt-10 max-w-2xl">
+                <ul class="relative z-10 grid grid-cols-4 gap-3 px-1 md:gap-6">
+                    <li
+                        v-for="(product, index) in shelf"
+                        :key="product.slug"
+                        class="animate-rise"
+                        :style="{
+                            animationDelay: `${80 + staggerDelay(index)}ms`,
+                        }"
                     >
-                        <CoverTilt>
-                            <ProductCover :product="product" size="sm" />
-                        </CoverTilt>
-                        <PriceSticker
-                            :price="product.price"
-                            :in-stock="product.in_stock"
-                            class="absolute -right-1 -bottom-2 hidden scale-90 sm:inline-flex"
-                        />
-                    </NuxtLink>
+                        <NuxtLink
+                            :to="`/${product.slug}`"
+                            class="relative block rounded-card"
+                            :aria-label="`${product.title.name}, ${formatClp(product.price)}`"
+                        >
+                            <CoverTilt>
+                                <ProductCover :product="product" size="sm" />
+                            </CoverTilt>
+                            <PriceSticker
+                                :price="product.price"
+                                :in-stock="product.in_stock"
+                                class="absolute -right-1 -bottom-2 scale-90 max-sm:hidden"
+                            />
+                        </NuxtLink>
+                    </li>
+                </ul>
+                <div
+                    aria-hidden="true"
+                    class="glass-shelf absolute -inset-x-2 -bottom-3 h-3 rounded-sm"
+                />
+            </div>
+            <ul class="mt-6 grid max-w-2xl grid-cols-4 gap-3 px-1 md:gap-6">
+                <li v-for="product in shelf" :key="product.slug">
+                    <QuickAdd
+                        :product="product"
+                        compact
+                        class="[&_button]:w-full"
+                    />
                 </li>
             </ul>
-            <div
-                aria-hidden="true"
-                class="glass-shelf absolute -inset-x-2 -bottom-3 h-3 max-w-[calc(42rem+1rem)] rounded-sm"
-            />
-        </div>
+        </template>
     </section>
 </template>

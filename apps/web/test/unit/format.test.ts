@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ProductDetailSchema } from '../../app/api/schemas';
 import { toApiError } from '../../app/utils/api-error';
 import { formatClp } from '../../app/utils/money';
-import { variantLabel } from '../../app/utils/variant-label';
+import { variantFacts, variantLabel } from '../../app/utils/variant-label';
 import { fixture } from '../fixtures';
 
 describe('formatClp', () => {
@@ -23,6 +23,10 @@ describe('variantLabel', () => {
 
         expect(steam && variantLabel(steam)).toBe(
             'Clave digital · Steam · Windows, macOS · Global · $19.990',
+        );
+        // Lines that print the price in their own column leave it out.
+        expect(steam && variantFacts(steam)).toBe(
+            'Clave digital · Steam · Windows, macOS · Global',
         );
     });
 

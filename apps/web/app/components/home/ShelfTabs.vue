@@ -107,9 +107,9 @@ function onKeydown(event: KeyboardEvent, index: number) {
                         {{ tab.label }}
                         <span
                             aria-hidden="true"
-                            class="absolute inset-x-3 -bottom-px h-0.5 origin-left bg-sticker transition-transform duration-200 ease-out"
+                            class="absolute inset-x-3 -bottom-px h-0.5 bg-sticker"
                             :class="
-                                active === tab.id ? 'scale-x-100' : 'scale-x-0'
+                                active === tab.id ? 'opacity-100' : 'opacity-0'
                             "
                         />
                     </button>

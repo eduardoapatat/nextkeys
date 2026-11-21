@@ -27,16 +27,11 @@ const typeNotes: Record<string, string> = {
             Elige tu plataforma
         </h2>
         <ul class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <li v-for="(family, index) in platformFamilies" :key="family.label">
+            <li v-for="family in platformFamilies" :key="family.label">
                 <NuxtLink
                     :to="catalogLink({ platform: [...family.platform] })"
-                    class="pressable group flex h-full flex-col justify-between gap-6 rounded-card border border-line bg-panel p-4 transition-colors duration-150 hover:border-crt"
+                    class="pressable group flex h-full flex-col justify-end gap-6 pt-8 rounded-card border border-line bg-panel p-4 hover:border-crt"
                 >
-                    <span
-                        aria-hidden="true"
-                        class="tabular font-mono text-xs text-chalk-faint"
-                        >PC {{ String(index + 1).padStart(2, '0') }}</span
-                    >
                     <span>
                         <span
                             class="block font-display text-3xl leading-none font-bold text-chalk uppercase group-hover:text-crt md:text-4xl"
@@ -53,7 +48,7 @@ const typeNotes: Record<string, string> = {
             <li v-for="item in productTypeLinks" :key="item.label">
                 <NuxtLink
                     :to="catalogLink({ type: [...item.type] })"
-                    class="pressable group flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3 transition-colors duration-150 hover:border-sticker"
+                    class="pressable group flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3 hover:border-sticker"
                 >
                     <span>
                         <span

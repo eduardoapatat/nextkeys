@@ -18,10 +18,10 @@
     --color-line: #313a47;
     --color-line-strong: #4a5564;
 
-    /* Text on the dark ground: 15:1 and 8.4:1 on ink. */
+    /* Text on the dark ground: 15:1, 8.4:1 and 6:1 on ink; faint keeps 5:1 on panels. */
     --color-chalk: #ece7dc;
     --color-chalk-muted: #a7afb9;
-    --color-chalk-faint: #7d8794;
+    --color-chalk-faint: #8a94a1;
 
     /* Thermal receipt. */
     --color-paper: #efe8d8;
@@ -80,12 +80,18 @@
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-    --animate-rise: rise 320ms var(--ease-out) both;
+    --animate-rise: rise 260ms var(--ease-out) both;
 
     @keyframes rise {
         from {
             opacity: 0;
             transform: translateY(10px);
+        }
+    }
+
+    @keyframes fade {
+        from {
+            opacity: 0;
         }
     }
 }
@@ -120,6 +126,12 @@
     a {
         text-underline-offset: 0.2em;
         text-decoration-thickness: 1px;
+    }
+
+    p,
+    li,
+    dd {
+        text-wrap: pretty;
     }
 
     h1,
@@ -166,10 +178,13 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+        .animate-rise {
+            animation-name: fade !important;
+        }
+
         *,
         *::before,
         *::after {
-            animation-duration: 1ms !important;
             animation-delay: 0ms !important;
             transition-property:
                 opacity, color, background-color, border-color !important;
@@ -189,20 +204,15 @@
 
     /* Press feedback for anything pressable (Emil: 0.97, 160ms ease-out). */
     .pressable {
-        transition: transform 160ms var(--ease-out);
+        transition:
+            transform 160ms var(--ease-out),
+            background-color 150ms ease,
+            border-color 150ms ease,
+            color 150ms ease;
     }
 
     .pressable:active:not(:disabled) {
         transform: scale(0.97);
-    }
-
-    /* The light that follows the pointer across a tilted cover. */
-    .cover-glare {
-        background: radial-gradient(
-            circle at center,
-            rgb(255 255 255 / 0.16),
-            transparent 45%
-        );
     }
 
     /* Account pages: one narrow column, the form on a panel. */
@@ -252,13 +262,15 @@
     .mobile-menu {
         transform: translateX(-100%);
         transition:
-            transform 280ms cubic-bezier(0.32, 0.72, 0, 1),
-            overlay 280ms allow-discrete,
-            display 280ms allow-discrete;
+            transform 200ms var(--ease-out),
+            overlay 200ms allow-discrete,
+            display 200ms allow-discrete;
     }
 
     .mobile-menu[open] {
         transform: translateX(0);
+        transition-duration: 280ms;
+        transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 
         @starting-style {
             transform: translateX(-100%);
@@ -294,10 +306,10 @@
        tube above onto a glass shelf. */
     .display-case {
         background:
-            radial-gradient(
-                120% 70% at 50% -10%,
-                rgb(156 200 214 / 0.16),
-                transparent 60%
+            linear-gradient(
+                to bottom,
+                rgb(236 241 243 / 0.07),
+                transparent 45%
             ),
             linear-gradient(to bottom, var(--color-panel), var(--color-ink-2));
         box-shadow:
@@ -312,14 +324,14 @@
             rgb(236 241 243 / 0.85),
             transparent
         );
-        box-shadow: 0 0 24px 4px rgb(156 200 214 / 0.35);
+        box-shadow: 0 6px 18px 2px rgb(236 241 243 / 0.18);
     }
 
     .glass-shelf {
         background: linear-gradient(
             to bottom,
-            rgb(156 200 214 / 0.22),
-            rgb(156 200 214 / 0.04)
+            rgb(236 241 243 / 0.18),
+            rgb(236 241 243 / 0.03)
         );
         box-shadow: 0 10px 18px -8px rgb(0 0 0 / 0.6);
     }

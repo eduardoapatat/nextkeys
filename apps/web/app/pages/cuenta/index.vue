@@ -53,7 +53,7 @@ async function signOut() {
             <dt class="text-chalk-faint">Nombre</dt>
             <dd class="text-chalk">{{ customer.name }}</dd>
             <dt class="text-chalk-faint">Correo electrónico</dt>
-            <dd class="truncate text-chalk">{{ customer.email }}</dd>
+            <dd class="break-all text-chalk">{{ customer.email }}</dd>
         </dl>
 
         <section

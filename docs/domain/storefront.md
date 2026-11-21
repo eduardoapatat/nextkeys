@@ -1,6 +1,6 @@
 # Storefront (`apps/web`)
 
-Status: **prototype implemented** (catalog listing and product page). The first step is a functional prototype that consumes `/api/v1` to validate the data. **The visual design is pending**: the prototype is plain semantic HTML, with only the minimal styles needed to read it, and will be redesigned.
+Status: **implemented with its visual design** (2026-11-21): home, catalog, product page, cart, checkout, payment result, orders, library and account, in the "Cibercafé de barrio" world described under [Visual design](#visual-design). The design system is recorded in `apps/web/DESIGN.md`.
 
 ## Prototype scope
 
@@ -104,7 +104,7 @@ Decided on 2026-11-20.
 
 ### Visual design
 
-Decided on 2026-11-21; in progress.
+Decided and built on 2026-11-21. The finish review (Impeccable) and the motion review (`review-animations`) ran on the built pages.
 
 - **Tailwind CSS v4** (the panel's major version, `^4.1`) through `@tailwindcss/vite`. The design tokens (colors, type, spacing, radii, shadows, easing) live in the Tailwind CSS file (`@theme`), not in a JS config.
 - **World: "Cibercafé de barrio"** (chosen in Impeccable's direction round; the contract lives in `apps/web/.impeccable/surfaces/app-pages-index-vue.md`, the product record in `apps/web/PRODUCT.md`). The counter of a neighborhood cibercafé at midnight: a lit display case of games, a whiteboard of prices, numbered stations and thermal receipts.
@@ -123,4 +123,6 @@ Decided on 2026-11-21; in progress.
 
 ## Open questions
 
-- None open on the visual design yet; the design system is recorded here as it is built.
+- Real cover art: the generated covers stand in until products get images (panel upload or demo seeder).
+- Ceiling ideas left for later: a stronger light falloff in the display case, hand-drawn whiteboard marks, a print-in motion for receipts.
+- Name search behind the header box (phase 6), and real offers and featured products behind the example tabs.

@@ -42,7 +42,7 @@ function onMove(event: PointerEvent) {
 function onLeave() {
     cancelAnimationFrame(frame);
     if (!card.value) return;
-    card.value.style.transition = 'transform 420ms var(--ease-out)';
+    card.value.style.transition = 'transform 260ms var(--ease-out)';
     card.value.style.transform = '';
     if (glare.value) glare.value.style.transform = '';
 }
@@ -51,7 +51,7 @@ function onLeave() {
 <template>
     <div
         ref="card"
-        class="group/tilt relative rounded-card shadow-case transition-shadow duration-300 will-change-transform hover:shadow-lift"
+        class="group/tilt relative rounded-card shadow-case transition-shadow duration-200 will-change-transform hover:shadow-lift"
         @pointermove="onMove"
         @pointerleave="onLeave"
     >

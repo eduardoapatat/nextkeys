@@ -7,8 +7,10 @@ const props = withDefaults(
         product: ProductSummary;
         variant?: 'primary' | 'secondary';
         size?: 'sm' | 'md' | 'lg';
+        /** Icon-only button with a short label from sm up; no status line. */
+        compact?: boolean;
     }>(),
-    { variant: 'secondary', size: 'sm' },
+    { variant: 'secondary', size: 'sm', compact: false },
 );
 
 const cart = useCart();
@@ -31,9 +33,18 @@ function add() {
         >
             <UiIcon v-if="added" name="check" :size="18" />
             <UiIcon v-else name="cart" :size="18" />
-            {{ product.in_stock ? 'Agregar al carrito' : 'Sin stock' }}
+            <span v-if="compact" class="hidden sm:inline">{{
+                product.in_stock ? 'Agregar' : 'Sin stock'
+            }}</span>
+            <template v-else>{{
+                product.in_stock ? 'Agregar al carrito' : 'Sin stock'
+            }}</template>
         </UiButton>
-        <p v-if="added" role="status" class="text-sm text-chalk-muted">
+        <p
+            v-if="added && !compact"
+            role="status"
+            class="text-sm text-chalk-muted"
+        >
             Agregado.
             <NuxtLink to="/carrito" class="text-crt underline"
                 >Ver carrito</NuxtLink
