@@ -162,7 +162,7 @@ Examples: `hades-steam-macos-windows-global`, `hades-playstation-store-ps4-ps5-l
 
 ## Example
 
-**products** (activation services, platforms and regions by name)
+**products** (activation services, platforms and regions by name). The demo seeder seeds these 11 and, for fuller shelves, 24 more real games (Cyberpunk 2077, God of War Ragnarök, Marvel's Spider-Man 2, Super Mario Bros. Wonder, Mario Kart World, Halo Infinite, Forza Horizon 5, Baldur's Gate 3, Hollow Knight, Stardew Valley, Red Dead Redemption 2, The Witcher 3: Wild Hunt, Animal Crossing: New Horizons) across every platform; `GenerateProductSlugTest` checks all 35 slugs.
 
 | id  | title                                     | type        | slug                                                                      | activation service | region        | platforms                    | price  | stock | status    |
 | --- | ----------------------------------------- | ----------- | ------------------------------------------------------------------------- | ------------------ | ------------- | ---------------------------- | ------ | ----- | --------- |

@@ -6,13 +6,13 @@ use App\Models\Product;
 use App\Models\Title;
 use Database\Seeders\DatabaseSeeder;
 
-it('suggests the slug of every example product in the catalog doc', function () {
+it('suggests the slug of every product of the demo seeder', function () {
     $this->seed(DatabaseSeeder::class);
     $generator = new GenerateProductSlug;
 
     $products = Product::query()->with(['title', 'activationService', 'platforms', 'region'])->get();
 
-    expect($products)->toHaveCount(11);
+    expect($products)->toHaveCount(35);
 
     foreach ($products as $product) {
         $suggestion = $generator->suggest($product->title, $product->type, $product->activationService, $product->platforms, $product->region);
