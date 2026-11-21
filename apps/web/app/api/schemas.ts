@@ -85,8 +85,20 @@ export const ValidationErrorSchema = v.strictObject({
     errors: v.record(v.string(), v.array(v.string())),
 });
 
-export const NotFoundSchema = v.strictObject({
+/** An error body with only a message: a 404, or a 401 without a session. */
+export const MessageSchema = v.strictObject({
     message: v.string(),
+});
+
+export const NotFoundSchema = MessageSchema;
+
+/** The signed in storefront customer (`/auth/me`, login and registration). */
+export const CustomerSchema = v.strictObject({
+    data: v.strictObject({
+        name: v.string(),
+        email: v.string(),
+        email_verified: v.boolean(),
+    }),
 });
 
 export type Reference = v.InferOutput<typeof Reference>;
@@ -95,4 +107,5 @@ export type ProductSummary = v.InferOutput<typeof ProductSummarySchema>;
 export type ProductDetail = v.InferOutput<typeof ProductDetailSchema>['data'];
 export type ProductPage = v.InferOutput<typeof ProductPageSchema>;
 export type CatalogFilters = v.InferOutput<typeof CatalogFiltersSchema>['data'];
+export type Customer = v.InferOutput<typeof CustomerSchema>['data'];
 export type ValidationErrorBody = v.InferOutput<typeof ValidationErrorSchema>;

@@ -31,10 +31,11 @@ it('limits each IP to 120 requests per minute', function () {
         ->assertHeader('X-RateLimit-Limit', '120');
 });
 
-it('allows cross-origin reads only from the storefront', function () {
+it('allows cross-origin requests with credentials only from the storefront', function () {
     $this->getJson(route('api.v1.catalog.filters'), ['Origin' => 'http://storefront.test'])
         ->assertOk()
-        ->assertHeader('Access-Control-Allow-Origin', 'http://storefront.test');
+        ->assertHeader('Access-Control-Allow-Origin', 'http://storefront.test')
+        ->assertHeader('Access-Control-Allow-Credentials', 'true');
 
     $otherOrigin = $this->getJson(route('api.v1.catalog.filters'), ['Origin' => 'https://evil.test'])->assertOk();
 
@@ -43,5 +44,5 @@ it('allows cross-origin reads only from the storefront', function () {
     $this->call('OPTIONS', route('api.v1.catalog.filters'), server: [
         'HTTP_ORIGIN' => 'http://storefront.test',
         'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
-    ])->assertHeader('Access-Control-Allow-Methods', 'GET');
+    ])->assertHeader('Access-Control-Allow-Methods', 'GET, POST');
 });

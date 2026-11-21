@@ -37,3 +37,24 @@ export function toApiError(error: unknown): ApiError {
         messages: typeof data.message === 'string' ? [data.message] : [],
     };
 }
+
+const genericFormError =
+    'No pudimos completar la solicitud. Vuelve a intentarlo.';
+
+/**
+ * The messages a form shows for a failed API call: the validation messages
+ * of a 422, a Spanish rate limit notice for a 429, or a generic message.
+ */
+export function formErrorMessages(error: unknown): string[] {
+    const { statusCode, messages } = toApiError(error);
+
+    if (statusCode === 429) {
+        return ['Demasiados intentos. Espera un minuto y vuelve a intentarlo.'];
+    }
+
+    if (statusCode === 422 && messages.length > 0) {
+        return messages;
+    }
+
+    return [genericFormError];
+}

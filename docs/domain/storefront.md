@@ -9,7 +9,7 @@ Decided on 2026-11-20.
 - `/`: the product listing. The filters (`platform`, `type`, `activation_service`, `region`), the sort (`newest`, `price`, `-price`, `name`) and the page all live in the URL query.
 - `/{slug}`: the product page with the variant selector. Choosing a variant navigates to its slug.
 - The UI is in Spanish. Prices are in CLP, formatted with `es-CL`. "Sin carátula" is shown when `cover_url` is `null`. 404, 422 and an empty listing get simple messages.
-- No business logic: stock, visibility and ordering come from the API as they are. No cart, checkout or auth (phases 3 and 4).
+- No business logic: stock, visibility and ordering come from the API as they are. No cart or checkout yet (phase 4); customer auth is described below.
 
 ## Decisions
 
@@ -65,6 +65,17 @@ Decided on 2026-11-20. These survive the visual redesign.
 - `ProductResource` returns `type` as `{slug, name}` (`name` = `ProductType::label()`), like `platforms`, `region` and `activation_service`.
 - The API had no consumers yet, so changing the contract was cheap. It avoids an extra request and join logic in Nuxt.
 - Rejected: joining with `/catalog/filters` in Nuxt.
+
+### Customer session (phase 4)
+
+Decided and implemented on 2026-11-20; the API side is in [`users.md`](users.md#customer-authentication-phase-4).
+
+- **`$api` carries the Sanctum session.** In the browser it uses `credentials: 'include'` and copies the `XSRF-TOKEN` cookie into `X-XSRF-TOKEN` on requests that change state (`app/utils/xsrf.ts`); `app/api/auth.ts` fetches `/auth/csrf-cookie` first when the cookie is missing. During SSR it forwards the browser's `cookie` header and sends `Referer: <storefront origin>`, so Sanctum treats the call as stateful. SSR never forwards `Set-Cookie`: it only reads.
+- **State.** `useCustomer()` is a `useState<Customer | null>`. `plugins/session.server.ts` loads it once per request (`/auth/me`, 401 → `null`; an API failure renders the page signed out) and the browser hydrates it. Sign in, registration and sign out update it from the response.
+- **Route middleware.** `auth` sends a visitor to `/cuenta/ingresar?redirect=<path>`; `guest` sends a signed in customer to `/cuenta`. `safeRedirect` only accepts paths of this site (no other origin, `//` or `/\`).
+- **Pages** under `/cuenta/*` (two segments, so they never clash with `/{slug}`): `ingresar` (remember-me), `registro`, `index` (account, verification notice with resend, sign out), `recuperar`, `restablecer` and `verificar-email` (posts the signed link from the browser, never during SSR). Errors: `formErrorMessages` (422 messages, a Spanish 429 notice, or a generic message).
+- **Contracts:** `auth.me.json`, `auth.me.401.json` and `auth.login.422.json`, parsed by `CustomerSchema`, `MessageSchema` and `ValidationErrorSchema`.
+- **Tests:** `test/unit/auth-utils.test.ts` and `test/nuxt/account.test.ts` (redirect to sign in, sign in and return, 422 messages, header link). `servePost` and `serveCsrfCookie` in `test/nuxt/api.ts` mock the POST endpoints.
 
 ## Open questions
 

@@ -8,6 +8,7 @@ useHead({
 <template>
     <div>
         <NuxtRouteAnnouncer />
+        <AccountNav />
         <NuxtPage />
     </div>
 </template>

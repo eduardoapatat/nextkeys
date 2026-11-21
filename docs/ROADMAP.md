@@ -6,7 +6,7 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 4. Nuxt storefront
-- **Next task:** to be chosen from phase 4 (Sanctum auth, cart and checkout, "My library").
+- **Next task:** to be chosen from phase 4: cart, checkout with Webpay (requires a verified email, shows the withdrawal exclusion), the payment result page, or "My library".
 
 ## Phases
 
@@ -14,7 +14,7 @@ Finished phases collapse to one line; details live in the git history.
 - [x] **1. Catalog:** domain model ([`docs/domain/catalog.md`](domain/catalog.md)), users with roles ([`docs/domain/users.md`](domain/users.md)), admin CRUD for titles and products, bulk key import from CSV ([`catalog.md` → Admin panel (key import)](domain/catalog.md#admin-panel-key-import)), per-variant cover and key hint ([`catalog.md` → Variant cover and key hint](domain/catalog.md#variant-cover-and-key-hint)), and product status ([`catalog.md` → Product status](domain/catalog.md#product-status)).
 - [x] **2. Public catalog API:** read-only `/api/v1` (filtered listing, product detail with its variants, filter options) with API Resources ([`catalog.md` → Public catalog API (phase 2)](domain/catalog.md#public-catalog-api-phase-2)). Price range, name search and in-stock filter deferred.
 - [x] **3. Orders and payments:** orders with stock reservation and expiry ([`orders.md`](domain/orders.md)), Transbank Webpay Plus behind `PaymentGateway` with reconciliation ([`payments.md`](domain/payments.md)), and the payment confirmation email with the keys through the queue ([`orders.md` → Confirmation email and key delivery](domain/orders.md#confirmation-email-and-key-delivery)).
-- [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library". Prototype of the catalog and product page pulled ahead and implemented (visual design pending): [`docs/domain/storefront.md`](domain/storefront.md).
+- [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library". Prototype of the catalog and product page pulled ahead and implemented (visual design pending): [`docs/domain/storefront.md`](domain/storefront.md). Customer auth with Sanctum implemented (registration, sign in with remember-me, sign out, email verification and password reset): [`users.md` → Customer authentication](domain/users.md#customer-authentication-phase-4).
 - [ ] **5. Physical products:** addresses, shipments and shipping status.
 - [ ] **6. Extras:** Meilisearch search, wishlist, reviews, coupons and sales dashboard.
 - [ ] **7. Launch:** deployment, public demo and portfolio README (screenshots, GIF, diagram).
@@ -34,4 +34,4 @@ Domain model decisions live in `docs/domain/*.md`; this list keeps project-wide 
 - Payments: Transbank Webpay Plus is the first gateway (replaces Stripe, not available to Chilean businesses); its commit model lets the store refuse an expired order without charging. See [`docs/domain/payments.md`](domain/payments.md).
 - Catalog domain: see [`docs/domain/catalog.md`](domain/catalog.md).
 - Withdrawal: delivered digital keys are excluded from the derecho a retracto (shown before payment, warranty kept); physical products keep 10 days. See [`docs/domain/payments.md`](domain/payments.md#chile).
-- Users: one `users` table with a `role` enum (admin, customer); admins use the panel session, customers use Sanctum (phase 4). See [`docs/domain/users.md`](domain/users.md).
+- Users: one `users` table with a `role` enum (admin, customer); admins use the panel session, customers use Sanctum in SPA mode on a `customer` guard that cannot see admins; the storefront and the API must share the registrable domain in production. See [`docs/domain/users.md`](domain/users.md).

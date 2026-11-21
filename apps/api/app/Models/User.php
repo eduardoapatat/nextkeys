@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\UserRole;
+use App\Notifications\CustomerResetPassword;
+use App\Notifications\CustomerVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -60,6 +62,37 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function isAdmin(): bool
     {
         return $this->role === UserRole::Admin;
+    }
+
+    /**
+     * Customers verify their email from the storefront; admins keep Fortify's
+     * link to the panel.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        if ($this->isAdmin()) {
+            parent::sendEmailVerificationNotification();
+
+            return;
+        }
+
+        $this->notify(new CustomerVerifyEmail);
+    }
+
+    /**
+     * Customers reset their password from the storefront; admins from the panel.
+     *
+     * @param  string  $token
+     */
+    public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
+    {
+        if ($this->isAdmin()) {
+            parent::sendPasswordResetNotification($token);
+
+            return;
+        }
+
+        $this->notify(new CustomerResetPassword($token));
     }
 
     /**

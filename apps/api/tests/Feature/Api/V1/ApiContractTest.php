@@ -1,9 +1,11 @@
 <?php
 
 use App\Models\Product;
+use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Testing\TestResponse;
 
 /*
  * The storefront (apps/web) is tested against the fixtures in
@@ -68,8 +70,12 @@ beforeEach(function () {
     Product::query()->where('slug', 'starfall-steam-macos-windows-global')->update(['cover_image' => 'covers/starfall.jpg']);
 });
 
-it('answers with the shape of its contract fixture', function (string $fixture, string $uri, int $status) {
-    $response = $this->getJson($uri)->assertStatus($status);
+/**
+ * Asserts that the response has the shape of contracts/api/v1/{$fixture}.json,
+ * or rewrites the fixture when CONTRACTS_UPDATE is set.
+ */
+function expectContract(string $fixture, TestResponse $response): void
+{
     $path = base_path("../../contracts/api/v1/{$fixture}.json");
 
     if (env('CONTRACTS_UPDATE')) {
@@ -84,6 +90,10 @@ it('answers with the shape of its contract fixture', function (string $fixture, 
         contractShape($expected),
         "The /api/v1 response no longer matches contracts/api/v1/{$fixture}.json. If the change is intended, regenerate the fixtures with CONTRACTS_UPDATE=1 php artisan test --filter=ApiContract and update the valibot schemas in apps/web/app/api/schemas.ts.",
     );
+}
+
+it('answers with the shape of its contract fixture', function (string $fixture, string $uri, int $status) {
+    expectContract($fixture, $this->getJson($uri)->assertStatus($status));
 })->with([
     'products.index' => ['products.index', '/api/v1/products', 200],
     'products.index.422' => ['products.index.422', '/api/v1/products?platform=does-not-exist', 422],
@@ -91,3 +101,12 @@ it('answers with the shape of its contract fixture', function (string $fixture, 
     'products.show.404' => ['products.show.404', '/api/v1/products/does-not-exist', 404],
     'catalog.filters' => ['catalog.filters', '/api/v1/catalog/filters', 200],
 ]);
+
+it('answers the auth endpoints with the shape of their contract fixtures', function () {
+    $this->withHeaders(fromStorefront());
+    $customer = User::factory()->unverified()->create(['name' => 'Ana Pérez', 'email' => 'ana@example.com']);
+
+    expectContract('auth.me.401', $this->getJson('/api/v1/auth/me')->assertUnauthorized());
+    expectContract('auth.login.422', $this->postJson('/api/v1/auth/login', ['email' => 'ana@example.com', 'password' => 'wrong'])->assertUnprocessable());
+    expectContract('auth.me', $this->actingAs($customer, 'customer')->getJson('/api/v1/auth/me')->assertOk());
+});

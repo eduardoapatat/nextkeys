@@ -37,7 +37,11 @@ return [
     |
     */
 
-    'guard' => ['web'],
+    // Only storefront customers: the panel session (`web`) is never seen here.
+    'guard' => ['customer'],
+
+    // The CSRF cookie route lives under the API: /api/v1/auth/csrf-cookie.
+    'prefix' => 'api/v1/auth',
 
     /*
     |--------------------------------------------------------------------------

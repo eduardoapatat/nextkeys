@@ -150,6 +150,17 @@ function insertOrderItemRow(int $orderId, int $productId, array $overrides = [])
 }
 
 /**
+ * Headers of a request made by the storefront (`STOREFRONT_URL` and
+ * `SANCTUM_STATEFUL_DOMAINS` in phpunit.xml), so Sanctum starts the session.
+ *
+ * @return array<string, string>
+ */
+function fromStorefront(): array
+{
+    return ['Origin' => 'http://storefront.test', 'Referer' => 'http://storefront.test/'];
+}
+
+/**
  * Runs the deferred constraint triggers now. RefreshDatabase never commits,
  * so without this an `INITIALLY DEFERRED` trigger would never fire in tests.
  * Constraints go back to deferred afterwards, as they are in production.

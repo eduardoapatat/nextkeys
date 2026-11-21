@@ -2,6 +2,8 @@ import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 import {
     CatalogFiltersSchema,
+    CustomerSchema,
+    MessageSchema,
     NotFoundSchema,
     ProductDetailSchema,
     ProductPageSchema,
@@ -16,6 +18,9 @@ describe('API contract fixtures', () => {
         ['products.show', ProductDetailSchema],
         ['products.show.404', NotFoundSchema],
         ['catalog.filters', CatalogFiltersSchema],
+        ['auth.me', CustomerSchema],
+        ['auth.me.401', MessageSchema],
+        ['auth.login.422', ValidationErrorSchema],
     ] as const)('%s matches its schema', (name, schema) => {
         expect(() => fixture(name, schema)).not.toThrow();
     });

@@ -17,7 +17,7 @@ return [
 
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['GET'],
+    'allowed_methods' => ['GET', 'POST'],
 
     'allowed_origins' => array_filter([env('STOREFRONT_URL')]),
 
@@ -29,6 +29,7 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    // The storefront session cookie (Sanctum SPA authentication).
+    'supports_credentials' => true,
 
 ];

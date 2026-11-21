@@ -1,0 +1,8 @@
+{
+    "message": "Estas credenciales no son válidas.",
+    "errors": {
+        "email": [
+            "Estas credenciales no son válidas."
+        ]
+    }
+}
