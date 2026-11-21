@@ -11,7 +11,11 @@ Scope: `/` (home), mode Persuade. The other storefront pages (catalog, product, 
 
 Audience: a recruiter or tech lead walking the demo for a few minutes; it must read as a real Chilean game-key store. Action: open a product and add it to the cart. Proof: real catalog, CLP prices, platforms, region and activation from the API. Constraints: Koparion section structure (no promo strip above the hero), dark, covers lead, card hover tilt, reduced motion, Spanish UI, no invented discounts or reviews.
 
-## Direction contract
+## Redesign (2026-11-21)
+
+The user replaced the world below after building it: the page is now light. White ground with navy text, turquoise brand sections (#1e758a) for the header, banner slider, benefits and footer, a coral accent (#ff6b4a) for primary actions and the current menu item, Rubik and Sofia Sans Condensed, key-store product cards (price and "Agregar" at the foot) and covers with their platform's official band. DESIGN.md holds the current system; the contract below is the original direction, kept as history.
+
+## Direction contract (original, superseded)
 
 THESIS: The store is the counter of a neighborhood cibercafé at midnight: a lit glass display case of games, a banner slider over the counter and a thermal receipt. It refuses the category default of a black page and one neon accent. (The original contract also refused a carousel hero; on 2026-11-21 the user asked for a banner slider in place of the "Precios de hoy" whiteboard, so the slider is an unlit band above the case and the case keeps the light.)
 

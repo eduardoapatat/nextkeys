@@ -1,157 +1,322 @@
 {
     "schemaVersion": 2,
-    "generatedAt": "2026-11-21T04:58:39+00:00",
+    "generatedAt": "2026-11-21T21:02:17+00:00",
     "title": "Design System: NextKeys",
     "extensions": {
         "colorMeta": {
-            "ink": {
+            "bg": {
                 "role": "neutral",
-                "displayName": "Night Room",
-                "canonical": "#0f1319",
+                "displayName": "White Floor",
+                "canonical": "#ffffff",
                 "tonalRamp": [
-                    "oklch(15% 0.007 258)",
-                    "oklch(26% 0.009 258)",
-                    "oklch(38% 0.011 258)",
-                    "oklch(49% 0.013 258)",
-                    "oklch(61% 0.013 258)",
-                    "oklch(72% 0.011 258)",
-                    "oklch(84% 0.009 258)",
-                    "oklch(95% 0.007 258)"
+                    "oklch(15% 0.000 90)",
+                    "oklch(26% 0.000 90)",
+                    "oklch(38% 0.000 90)",
+                    "oklch(49% 0.000 90)",
+                    "oklch(61% 0.000 90)",
+                    "oklch(72% 0.000 90)",
+                    "oklch(84% 0.000 90)",
+                    "oklch(95% 0.000 90)"
                 ]
             },
-            "ink-2": {
+            "bg-subtle": {
                 "role": "neutral",
-                "displayName": "Back Room",
-                "canonical": "#141922",
+                "displayName": "Mist",
+                "canonical": "#f3f6f8",
                 "tonalRamp": [
-                    "oklch(15% 0.010 262)",
-                    "oklch(26% 0.012 262)",
-                    "oklch(38% 0.015 262)",
-                    "oklch(49% 0.018 262)",
-                    "oklch(61% 0.018 262)",
-                    "oklch(72% 0.015 262)",
-                    "oklch(84% 0.012 262)",
-                    "oklch(95% 0.010 262)"
+                    "oklch(15% 0.002 236)",
+                    "oklch(26% 0.003 236)",
+                    "oklch(38% 0.003 236)",
+                    "oklch(49% 0.004 236)",
+                    "oklch(61% 0.004 236)",
+                    "oklch(72% 0.003 236)",
+                    "oklch(84% 0.003 236)",
+                    "oklch(95% 0.002 236)"
                 ]
             },
-            "panel": {
+            "surface": {
                 "role": "neutral",
-                "displayName": "Melamine",
-                "canonical": "#1d232c",
+                "displayName": "White Surface",
+                "canonical": "#ffffff",
                 "tonalRamp": [
-                    "oklch(15% 0.009 258)",
-                    "oklch(26% 0.012 258)",
-                    "oklch(38% 0.015 258)",
-                    "oklch(49% 0.018 258)",
-                    "oklch(61% 0.018 258)",
-                    "oklch(72% 0.015 258)",
-                    "oklch(84% 0.012 258)",
-                    "oklch(95% 0.009 258)"
+                    "oklch(15% 0.000 90)",
+                    "oklch(26% 0.000 90)",
+                    "oklch(38% 0.000 90)",
+                    "oklch(49% 0.000 90)",
+                    "oklch(61% 0.000 90)",
+                    "oklch(72% 0.000 90)",
+                    "oklch(84% 0.000 90)",
+                    "oklch(95% 0.000 90)"
                 ]
             },
-            "panel-2": {
+            "surface-2": {
                 "role": "neutral",
-                "displayName": "Melamine Raised",
-                "canonical": "#262e39",
+                "displayName": "Mist Raised",
+                "canonical": "#e8eef2",
                 "tonalRamp": [
-                    "oklch(15% 0.011 256)",
-                    "oklch(26% 0.015 256)",
-                    "oklch(38% 0.018 256)",
-                    "oklch(49% 0.021 256)",
-                    "oklch(61% 0.021 256)",
-                    "oklch(72% 0.018 256)",
-                    "oklch(84% 0.015 256)",
-                    "oklch(95% 0.011 256)"
+                    "oklch(15% 0.004 237)",
+                    "oklch(26% 0.005 237)",
+                    "oklch(38% 0.007 237)",
+                    "oklch(49% 0.008 237)",
+                    "oklch(61% 0.008 237)",
+                    "oklch(72% 0.007 237)",
+                    "oklch(84% 0.005 237)",
+                    "oklch(95% 0.004 237)"
                 ]
             },
             "line": {
                 "role": "neutral",
-                "displayName": "Seam",
-                "canonical": "#313a47",
+                "displayName": "Hairline",
+                "canonical": "#dbe3e8",
                 "tonalRamp": [
-                    "oklch(15% 0.013 258)",
-                    "oklch(26% 0.016 258)",
-                    "oklch(38% 0.020 258)",
-                    "oklch(49% 0.024 258)",
-                    "oklch(61% 0.024 258)",
-                    "oklch(72% 0.020 258)",
-                    "oklch(84% 0.016 258)",
-                    "oklch(95% 0.013 258)"
+                    "oklch(15% 0.005 235)",
+                    "oklch(26% 0.007 235)",
+                    "oklch(38% 0.009 235)",
+                    "oklch(49% 0.010 235)",
+                    "oklch(61% 0.010 235)",
+                    "oklch(72% 0.009 235)",
+                    "oklch(84% 0.007 235)",
+                    "oklch(95% 0.005 235)"
                 ]
             },
             "line-strong": {
                 "role": "neutral",
-                "displayName": "Hard Seam",
-                "canonical": "#4a5564",
+                "displayName": "Steel Line",
+                "canonical": "#7f909c",
                 "tonalRamp": [
-                    "oklch(15% 0.014 256)",
-                    "oklch(26% 0.018 256)",
-                    "oklch(38% 0.022 256)",
-                    "oklch(49% 0.026 256)",
-                    "oklch(61% 0.026 256)",
-                    "oklch(72% 0.022 256)",
-                    "oklch(84% 0.018 256)",
-                    "oklch(95% 0.014 256)"
+                    "oklch(15% 0.013 239)",
+                    "oklch(26% 0.017 239)",
+                    "oklch(38% 0.021 239)",
+                    "oklch(49% 0.025 239)",
+                    "oklch(61% 0.025 239)",
+                    "oklch(72% 0.021 239)",
+                    "oklch(84% 0.017 239)",
+                    "oklch(95% 0.013 239)"
                 ]
             },
-            "chalk": {
+            "fg": {
                 "role": "neutral",
-                "displayName": "Chalk",
-                "canonical": "#ece7dc",
+                "displayName": "Navy Ink",
+                "canonical": "#0b1f33",
                 "tonalRamp": [
-                    "oklch(15% 0.008 86)",
-                    "oklch(26% 0.010 86)",
-                    "oklch(38% 0.012 86)",
-                    "oklch(49% 0.015 86)",
-                    "oklch(61% 0.015 86)",
-                    "oklch(72% 0.012 86)",
-                    "oklch(84% 0.010 86)",
-                    "oklch(95% 0.008 86)"
+                    "oklch(15% 0.023 250)",
+                    "oklch(26% 0.030 250)",
+                    "oklch(38% 0.037 250)",
+                    "oklch(49% 0.043 250)",
+                    "oklch(61% 0.043 250)",
+                    "oklch(72% 0.037 250)",
+                    "oklch(84% 0.030 250)",
+                    "oklch(95% 0.023 250)"
                 ]
             },
-            "chalk-muted": {
+            "fg-muted": {
                 "role": "neutral",
-                "displayName": "Chalk Muted",
-                "canonical": "#a7afb9",
+                "displayName": "Slate",
+                "canonical": "#3e5163",
                 "tonalRamp": [
-                    "oklch(15% 0.008 254)",
-                    "oklch(26% 0.011 254)",
-                    "oklch(38% 0.013 254)",
-                    "oklch(49% 0.016 254)",
-                    "oklch(61% 0.016 254)",
-                    "oklch(72% 0.013 254)",
-                    "oklch(84% 0.011 254)",
-                    "oklch(95% 0.008 254)"
+                    "oklch(15% 0.019 247)",
+                    "oklch(26% 0.024 247)",
+                    "oklch(38% 0.030 247)",
+                    "oklch(49% 0.035 247)",
+                    "oklch(61% 0.035 247)",
+                    "oklch(72% 0.030 247)",
+                    "oklch(84% 0.024 247)",
+                    "oklch(95% 0.019 247)"
                 ]
             },
-            "chalk-faint": {
+            "fg-faint": {
                 "role": "neutral",
-                "displayName": "Chalk Faint",
-                "canonical": "#8a94a1",
+                "displayName": "Faint Slate",
+                "canonical": "#586a79",
                 "tonalRamp": [
-                    "oklch(15% 0.011 255)",
-                    "oklch(26% 0.014 255)",
-                    "oklch(38% 0.018 255)",
-                    "oklch(49% 0.021 255)",
-                    "oklch(61% 0.021 255)",
-                    "oklch(72% 0.018 255)",
-                    "oklch(84% 0.014 255)",
-                    "oklch(95% 0.011 255)"
+                    "oklch(15% 0.016 244)",
+                    "oklch(26% 0.021 244)",
+                    "oklch(38% 0.025 244)",
+                    "oklch(49% 0.030 244)",
+                    "oklch(61% 0.030 244)",
+                    "oklch(72% 0.025 244)",
+                    "oklch(84% 0.021 244)",
+                    "oklch(95% 0.016 244)"
+                ]
+            },
+            "brand": {
+                "role": "primary",
+                "displayName": "Harbor Turquoise",
+                "canonical": "#1e758a",
+                "tonalRamp": [
+                    "oklch(15% 0.042 218)",
+                    "oklch(26% 0.054 218)",
+                    "oklch(38% 0.066 218)",
+                    "oklch(49% 0.078 218)",
+                    "oklch(61% 0.078 218)",
+                    "oklch(72% 0.066 218)",
+                    "oklch(84% 0.054 218)",
+                    "oklch(95% 0.042 218)"
+                ]
+            },
+            "brand-strong": {
+                "role": "primary",
+                "displayName": "Deep Turquoise",
+                "canonical": "#155566",
+                "tonalRamp": [
+                    "oklch(15% 0.033 220)",
+                    "oklch(26% 0.043 220)",
+                    "oklch(38% 0.053 220)",
+                    "oklch(49% 0.063 220)",
+                    "oklch(61% 0.063 220)",
+                    "oklch(72% 0.053 220)",
+                    "oklch(84% 0.043 220)",
+                    "oklch(95% 0.033 220)"
+                ]
+            },
+            "brand-deep": {
+                "role": "primary",
+                "displayName": "Night Turquoise",
+                "canonical": "#0d313b",
+                "tonalRamp": [
+                    "oklch(15% 0.022 220)",
+                    "oklch(26% 0.028 220)",
+                    "oklch(38% 0.034 220)",
+                    "oklch(49% 0.041 220)",
+                    "oklch(61% 0.041 220)",
+                    "oklch(72% 0.034 220)",
+                    "oklch(84% 0.028 220)",
+                    "oklch(95% 0.022 220)"
+                ]
+            },
+            "brand-soft": {
+                "role": "primary",
+                "displayName": "Turquoise Mist",
+                "canonical": "#e3f2f6",
+                "tonalRamp": [
+                    "oklch(15% 0.008 215)",
+                    "oklch(26% 0.011 215)",
+                    "oklch(38% 0.013 215)",
+                    "oklch(49% 0.016 215)",
+                    "oklch(61% 0.016 215)",
+                    "oklch(72% 0.013 215)",
+                    "oklch(84% 0.011 215)",
+                    "oklch(95% 0.008 215)"
+                ]
+            },
+            "accent": {
+                "role": "secondary",
+                "displayName": "Coral",
+                "canonical": "#ff6b4a",
+                "tonalRamp": [
+                    "oklch(15% 0.092 34)",
+                    "oklch(26% 0.119 34)",
+                    "oklch(38% 0.147 34)",
+                    "oklch(49% 0.174 34)",
+                    "oklch(61% 0.174 34)",
+                    "oklch(72% 0.147 34)",
+                    "oklch(84% 0.119 34)",
+                    "oklch(95% 0.092 34)"
+                ]
+            },
+            "accent-hover": {
+                "role": "secondary",
+                "displayName": "Light Coral",
+                "canonical": "#ff8466",
+                "tonalRamp": [
+                    "oklch(15% 0.077 35)",
+                    "oklch(26% 0.099 35)",
+                    "oklch(38% 0.122 35)",
+                    "oklch(49% 0.145 35)",
+                    "oklch(61% 0.145 35)",
+                    "oklch(72% 0.122 35)",
+                    "oklch(84% 0.099 35)",
+                    "oklch(95% 0.077 35)"
+                ]
+            },
+            "accent-fg": {
+                "role": "secondary",
+                "displayName": "Coral Ink",
+                "canonical": "#1a0a05",
+                "tonalRamp": [
+                    "oklch(15% 0.015 41)",
+                    "oklch(26% 0.020 41)",
+                    "oklch(38% 0.024 41)",
+                    "oklch(49% 0.028 41)",
+                    "oklch(61% 0.028 41)",
+                    "oklch(72% 0.024 41)",
+                    "oklch(84% 0.020 41)",
+                    "oklch(95% 0.015 41)"
+                ]
+            },
+            "danger": {
+                "role": "neutral",
+                "displayName": "Error Red",
+                "canonical": "#b42318",
+                "tonalRamp": [
+                    "oklch(15% 0.089 30)",
+                    "oklch(26% 0.116 30)",
+                    "oklch(38% 0.142 30)",
+                    "oklch(49% 0.169 30)",
+                    "oklch(61% 0.169 30)",
+                    "oklch(72% 0.142 30)",
+                    "oklch(84% 0.116 30)",
+                    "oklch(95% 0.089 30)"
+                ]
+            },
+            "danger-soft": {
+                "role": "neutral",
+                "displayName": "Blush",
+                "canonical": "#fdecea",
+                "tonalRamp": [
+                    "oklch(15% 0.009 26)",
+                    "oklch(26% 0.012 26)",
+                    "oklch(38% 0.015 26)",
+                    "oklch(49% 0.017 26)",
+                    "oklch(61% 0.017 26)",
+                    "oklch(72% 0.015 26)",
+                    "oklch(84% 0.012 26)",
+                    "oklch(95% 0.009 26)"
+                ]
+            },
+            "ok": {
+                "role": "neutral",
+                "displayName": "Success Green",
+                "canonical": "#1f7a3d",
+                "tonalRamp": [
+                    "oklch(15% 0.062 150)",
+                    "oklch(26% 0.080 150)",
+                    "oklch(38% 0.099 150)",
+                    "oklch(49% 0.117 150)",
+                    "oklch(61% 0.117 150)",
+                    "oklch(72% 0.099 150)",
+                    "oklch(84% 0.080 150)",
+                    "oklch(95% 0.062 150)"
+                ]
+            },
+            "ok-soft": {
+                "role": "neutral",
+                "displayName": "Mint",
+                "canonical": "#e6f4ea",
+                "tonalRamp": [
+                    "oklch(15% 0.010 155)",
+                    "oklch(26% 0.013 155)",
+                    "oklch(38% 0.016 155)",
+                    "oklch(49% 0.018 155)",
+                    "oklch(61% 0.018 155)",
+                    "oklch(72% 0.016 155)",
+                    "oklch(84% 0.013 155)",
+                    "oklch(95% 0.010 155)"
                 ]
             },
             "paper": {
                 "role": "tertiary",
                 "displayName": "Thermal Paper",
-                "canonical": "#efe8d8",
+                "canonical": "#f6f1e6",
                 "tonalRamp": [
-                    "oklch(15% 0.011 87)",
-                    "oklch(26% 0.014 87)",
-                    "oklch(38% 0.018 87)",
-                    "oklch(49% 0.021 87)",
-                    "oklch(61% 0.021 87)",
-                    "oklch(72% 0.018 87)",
-                    "oklch(84% 0.014 87)",
-                    "oklch(95% 0.011 87)"
+                    "oklch(15% 0.008 86)",
+                    "oklch(26% 0.010 86)",
+                    "oklch(38% 0.012 86)",
+                    "oklch(49% 0.014 86)",
+                    "oklch(61% 0.014 86)",
+                    "oklch(72% 0.012 86)",
+                    "oklch(84% 0.010 86)",
+                    "oklch(95% 0.008 86)"
                 ]
             },
             "paper-ink": {
@@ -199,139 +364,124 @@
                     "oklch(95% 0.014 87)"
                 ]
             },
-            "sticker": {
-                "role": "primary",
-                "displayName": "Sticker Yellow",
-                "canonical": "#f2c230",
+            "box-ps5": {
+                "role": "tertiary",
+                "displayName": "PS5 Band",
+                "canonical": "#f3f4f6",
                 "tonalRamp": [
-                    "oklch(15% 0.078 89)",
-                    "oklch(26% 0.101 89)",
-                    "oklch(38% 0.124 89)",
-                    "oklch(49% 0.147 89)",
-                    "oklch(61% 0.147 89)",
-                    "oklch(72% 0.124 89)",
-                    "oklch(84% 0.101 89)",
-                    "oklch(95% 0.078 89)"
+                    "oklch(15% 0.001 265)",
+                    "oklch(26% 0.002 265)",
+                    "oklch(38% 0.002 265)",
+                    "oklch(49% 0.003 265)",
+                    "oklch(61% 0.003 265)",
+                    "oklch(72% 0.002 265)",
+                    "oklch(84% 0.002 265)",
+                    "oklch(95% 0.001 265)"
                 ]
             },
-            "sticker-hover": {
-                "role": "primary",
-                "displayName": "Fresh Sticker",
-                "canonical": "#f7d35c",
+            "box-ink": {
+                "role": "tertiary",
+                "displayName": "PS5 Mark Ink",
+                "canonical": "#000000",
                 "tonalRamp": [
-                    "oklch(15% 0.070 92)",
-                    "oklch(26% 0.090 92)",
-                    "oklch(38% 0.111 92)",
-                    "oklch(49% 0.131 92)",
-                    "oklch(61% 0.131 92)",
-                    "oklch(72% 0.111 92)",
-                    "oklch(84% 0.090 92)",
-                    "oklch(95% 0.070 92)"
+                    "oklch(15% 0.000 0)",
+                    "oklch(26% 0.000 0)",
+                    "oklch(38% 0.000 0)",
+                    "oklch(49% 0.000 0)",
+                    "oklch(61% 0.000 0)",
+                    "oklch(72% 0.000 0)",
+                    "oklch(84% 0.000 0)",
+                    "oklch(95% 0.000 0)"
                 ]
             },
-            "sticker-ink": {
-                "role": "primary",
-                "displayName": "Sticker Ink",
-                "canonical": "#1a1405",
+            "box-ps4": {
+                "role": "tertiary",
+                "displayName": "PS4 Blue",
+                "canonical": "#003791",
                 "tonalRamp": [
-                    "oklch(15% 0.014 89)",
-                    "oklch(26% 0.019 89)",
-                    "oklch(38% 0.023 89)",
-                    "oklch(49% 0.027 89)",
-                    "oklch(61% 0.027 89)",
-                    "oklch(72% 0.023 89)",
-                    "oklch(84% 0.019 89)",
-                    "oklch(95% 0.014 89)"
+                    "oklch(15% 0.077 261)",
+                    "oklch(26% 0.100 261)",
+                    "oklch(38% 0.123 261)",
+                    "oklch(49% 0.146 261)",
+                    "oklch(61% 0.146 261)",
+                    "oklch(72% 0.123 261)",
+                    "oklch(84% 0.100 261)",
+                    "oklch(95% 0.077 261)"
                 ]
             },
-            "crt": {
-                "role": "secondary",
-                "displayName": "CRT Glow",
-                "canonical": "#9cc8d6",
+            "box-xbox": {
+                "role": "tertiary",
+                "displayName": "Xbox Green",
+                "canonical": "#107c10",
                 "tonalRamp": [
-                    "oklch(15% 0.025 219)",
-                    "oklch(26% 0.032 219)",
-                    "oklch(38% 0.039 219)",
-                    "oklch(49% 0.047 219)",
-                    "oklch(61% 0.047 219)",
-                    "oklch(72% 0.039 219)",
-                    "oklch(84% 0.032 219)",
-                    "oklch(95% 0.025 219)"
+                    "oklch(15% 0.081 143)",
+                    "oklch(26% 0.105 143)",
+                    "oklch(38% 0.129 143)",
+                    "oklch(49% 0.153 143)",
+                    "oklch(61% 0.153 143)",
+                    "oklch(72% 0.129 143)",
+                    "oklch(84% 0.105 143)",
+                    "oklch(95% 0.081 143)"
                 ]
             },
-            "crt-deep": {
-                "role": "secondary",
-                "displayName": "CRT Deep",
-                "canonical": "#1f3640",
+            "box-nintendo": {
+                "role": "tertiary",
+                "displayName": "Nintendo Red",
+                "canonical": "#e60012",
                 "tonalRamp": [
-                    "oklch(15% 0.017 227)",
-                    "oklch(26% 0.022 227)",
-                    "oklch(38% 0.027 227)",
-                    "oklch(49% 0.031 227)",
-                    "oklch(61% 0.031 227)",
-                    "oklch(72% 0.027 227)",
-                    "oklch(84% 0.022 227)",
-                    "oklch(95% 0.017 227)"
+                    "oklch(15% 0.117 28)",
+                    "oklch(26% 0.151 28)",
+                    "oklch(38% 0.186 28)",
+                    "oklch(49% 0.220 28)",
+                    "oklch(61% 0.220 28)",
+                    "oklch(72% 0.186 28)",
+                    "oklch(84% 0.151 28)",
+                    "oklch(95% 0.117 28)"
                 ]
             },
-            "danger": {
-                "role": "neutral",
-                "displayName": "Warning Coral",
-                "canonical": "#e2735f",
+            "box-pc": {
+                "role": "tertiary",
+                "displayName": "Store Band",
+                "canonical": "#16181c",
                 "tonalRamp": [
-                    "oklch(15% 0.070 32)",
-                    "oklch(26% 0.091 32)",
-                    "oklch(38% 0.111 32)",
-                    "oklch(49% 0.132 32)",
-                    "oklch(61% 0.132 32)",
-                    "oklch(72% 0.111 32)",
-                    "oklch(84% 0.091 32)",
-                    "oklch(95% 0.070 32)"
+                    "oklch(15% 0.004 264)",
+                    "oklch(26% 0.005 264)",
+                    "oklch(38% 0.007 264)",
+                    "oklch(49% 0.008 264)",
+                    "oklch(61% 0.008 264)",
+                    "oklch(72% 0.007 264)",
+                    "oklch(84% 0.005 264)",
+                    "oklch(95% 0.004 264)"
                 ]
             },
-            "danger-deep": {
-                "role": "neutral",
-                "displayName": "Ember",
-                "canonical": "#3a1f1b",
+            "box-multi": {
+                "role": "tertiary",
+                "displayName": "Graphite Band",
+                "canonical": "#3a3f47",
                 "tonalRamp": [
-                    "oklch(15% 0.021 29)",
-                    "oklch(26% 0.027 29)",
-                    "oklch(38% 0.034 29)",
-                    "oklch(49% 0.040 29)",
-                    "oklch(61% 0.040 29)",
-                    "oklch(72% 0.034 29)",
-                    "oklch(84% 0.027 29)",
-                    "oklch(95% 0.021 29)"
+                    "oklch(15% 0.008 260)",
+                    "oklch(26% 0.010 260)",
+                    "oklch(38% 0.012 260)",
+                    "oklch(49% 0.014 260)",
+                    "oklch(61% 0.014 260)",
+                    "oklch(72% 0.012 260)",
+                    "oklch(84% 0.010 260)",
+                    "oklch(95% 0.008 260)"
                 ]
             },
-            "ok": {
-                "role": "neutral",
-                "displayName": "Felt Green",
-                "canonical": "#8fc79a",
+            "on-cover": {
+                "role": "tertiary",
+                "displayName": "On Cover",
+                "canonical": "#ffffff",
                 "tonalRamp": [
-                    "oklch(15% 0.042 150)",
-                    "oklch(26% 0.055 150)",
-                    "oklch(38% 0.067 150)",
-                    "oklch(49% 0.080 150)",
-                    "oklch(61% 0.080 150)",
-                    "oklch(72% 0.067 150)",
-                    "oklch(84% 0.055 150)",
-                    "oklch(95% 0.042 150)"
-                ]
-            },
-            "ok-deep": {
-                "role": "neutral",
-                "displayName": "Moss",
-                "canonical": "#1c3324",
-                "tonalRamp": [
-                    "oklch(15% 0.020 155)",
-                    "oklch(26% 0.025 155)",
-                    "oklch(38% 0.031 155)",
-                    "oklch(49% 0.037 155)",
-                    "oklch(61% 0.037 155)",
-                    "oklch(72% 0.031 155)",
-                    "oklch(84% 0.025 155)",
-                    "oklch(95% 0.020 155)"
+                    "oklch(15% 0.000 90)",
+                    "oklch(26% 0.000 90)",
+                    "oklch(38% 0.000 90)",
+                    "oklch(49% 0.000 90)",
+                    "oklch(61% 0.000 90)",
+                    "oklch(72% 0.000 90)",
+                    "oklch(84% 0.000 90)",
+                    "oklch(95% 0.000 90)"
                 ]
             },
             "board": {
@@ -507,11 +657,11 @@
             },
             "headline": {
                 "displayName": "Signage Headline",
-                "purpose": "Uppercase section headings and category tiles."
+                "purpose": "Uppercase section headings, the display case and banner slides."
             },
             "title": {
                 "displayName": "Product Title",
-                "purpose": "Product names on station cards and cart lines."
+                "purpose": "Product names on cards and cart lines."
             },
             "body": {
                 "displayName": "Body",
@@ -519,11 +669,19 @@
             },
             "label": {
                 "displayName": "Signage Label",
-                "purpose": "Buttons, nav links, tabs and the cart pill, uppercase."
+                "purpose": "Buttons, shelf tabs, the cart key and footer heads, uppercase."
+            },
+            "price": {
+                "displayName": "Price",
+                "purpose": "Every CLP figure outside the receipt, tabular."
+            },
+            "menu": {
+                "displayName": "Menu",
+                "purpose": "Menu bar items, bold uppercase Rubik."
             },
             "receipt": {
                 "displayName": "Receipt Print",
-                "purpose": "Everything on thermal paper, order references, key codes and station numbers."
+                "purpose": "Everything on thermal paper, order references and key codes."
             },
             "marker": {
                 "displayName": "Marker",
@@ -533,35 +691,35 @@
         "shadows": [
             {
                 "name": "case",
-                "value": "0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35)",
-                "purpose": "Display case, covers at rest, the fanned banner covers."
+                "value": "0 18px 36px -22px rgb(11 31 51 / 0.45), 0 2px 6px rgb(11 31 51 / 0.12)",
+                "purpose": "Covers at rest, the fanned banner covers."
             },
             {
                 "name": "lift",
-                "value": "0 18px 32px -12px rgb(0 0 0 / 0.65), 0 4px 10px rgb(0 0 0 / 0.4)",
-                "purpose": "A cover picked up on hover."
+                "value": "0 18px 32px -14px rgb(11 31 51 / 0.45), 0 4px 10px rgb(11 31 51 / 0.12)",
+                "purpose": "A cover tilted on hover."
             },
             {
-                "name": "sticker",
-                "value": "0 3px 8px -2px rgb(0 0 0 / 0.55)",
-                "purpose": "Price stickers and the primary button."
+                "name": "tag",
+                "value": "0 3px 8px -2px rgb(11 31 51 / 0.35)",
+                "purpose": "Price stickers, the primary button and the error sign."
             },
             {
                 "name": "receipt",
-                "value": "drop-shadow(0 12px 18px rgb(0 0 0 / 0.45))",
-                "purpose": "Filter shadow that follows the receipt's torn edge."
+                "value": "0 12px 28px -12px rgb(11 31 51 / 0.35)",
+                "purpose": "The receipt slip in the banner."
             },
             {
-                "name": "case-tube",
-                "value": "0 6px 18px 2px rgb(236 241 243 / 0.18)",
-                "purpose": "Bloom of the light tube above the display case."
+                "name": "receipt-filter",
+                "value": "drop-shadow(0 8px 16px rgb(11 31 51 / 0.22))",
+                "purpose": "Filter shadow of `.receipt` that follows the torn edge."
             }
         ],
         "motion": [
             {
                 "name": "ease-out",
                 "value": "cubic-bezier(0.23, 1, 0.32, 1)",
-                "purpose": "Default curve for press, tilt, rise and menu close."
+                "purpose": "Default curve for press, tilt, rise, menu fill and drawer close."
             },
             {
                 "name": "ease-in-out",
@@ -596,7 +754,12 @@
             {
                 "name": "state",
                 "value": "150ms ease",
-                "purpose": "Color, background and border changes on hover."
+                "purpose": "Color, background and border changes on hover, including the menu item fill."
+            },
+            {
+                "name": "banner",
+                "value": "advance every 7s",
+                "purpose": "Banner slider autoplay; pauses on hover, focus and its button, off under reduced motion."
             }
         ],
         "breakpoints": [
@@ -623,57 +786,65 @@
             "name": "Primary Button",
             "kind": "button",
             "refersTo": "button-primary",
-            "description": "The yellow sticker action: one per view (Agregar al carrito, Ir a pagar).",
+            "description": "The coral action, one per view (Agregar al carrito, Ir a pagar).",
             "html": "<button class=\"ds-btn ds-btn-primary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar al carrito</button>",
-            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-btn-primary{border:0;background:#f2c230;color:#1a1405;box-shadow:0 3px 8px -2px rgb(0 0 0 / 0.55);}.ds-btn-primary:hover{background:#f7d35c;}"
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid var(--color-brand,#1e758a);outline-offset:2px;}.ds-btn-primary{border:0;background:var(--color-accent,#ff6b4a);color:var(--color-accent-fg,#1a0a05);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);}.ds-btn-primary:hover{background:var(--color-accent-hover,#ff8466);}"
         },
         {
             "name": "Secondary Button",
             "kind": "button",
             "refersTo": "button-secondary",
-            "description": "A melamine key for every other action.",
-            "html": "<button class=\"ds-btn ds-btn-secondary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar</button>",
-            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-btn-secondary{border:1px solid #4a5564;background:#262e39;color:#ece7dc;}.ds-btn-secondary:hover{border-color:#8a94a1;background:#1d232c;}"
+            "description": "A light key for every other action.",
+            "html": "<button class=\"ds-btn ds-btn-secondary\">Ver carrito</button>",
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid var(--color-brand,#1e758a);outline-offset:2px;}.ds-btn-secondary{border:1px solid var(--color-line-strong,#7f909c);background:var(--color-surface-2,#e8eef2);color:var(--color-fg,#0b1f33);}.ds-btn-secondary:hover{border-color:var(--color-fg-faint,#586a79);background:var(--color-surface,#ffffff);}"
         },
         {
             "name": "Ghost Button",
             "kind": "button",
             "refersTo": "button-ghost",
-            "description": "A bare caps label for quiet links that look like actions (Ver ficha, Ver todo).",
-            "html": "<button class=\"ds-btn ds-btn-ghost\">Ver ficha</button>",
-            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-btn-ghost{border:0;background:transparent;color:#a7afb9;}.ds-btn-ghost:hover{color:#ece7dc;}"
+            "description": "A bare caps label for quiet actions (Ver todo).",
+            "html": "<button class=\"ds-btn ds-btn-ghost\">Ver todo</button>",
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid var(--color-brand,#1e758a);outline-offset:2px;}.ds-btn-ghost{border:0;background:transparent;color:var(--color-fg-muted,#3e5163);}.ds-btn-ghost:hover{color:var(--color-fg,#0b1f33);}"
         },
         {
             "name": "Text Field",
             "kind": "input",
             "refersTo": "input-text",
-            "description": "The one text field look; the border turns CRT blue on focus.",
+            "description": "The one text field look; the border turns turquoise on focus.",
             "html": "<label class=\"ds-field\"><span>Correo</span><input class=\"ds-input\" type=\"email\" placeholder=\"tu@correo.cl\"></label>",
-            "css": ".ds-field{display:flex;flex-direction:column;gap:6px;font-family:'Rubik',sans-serif;font-size:0.875rem;color:#a7afb9;max-width:320px;}.ds-input{height:44px;padding:0 12px;border-radius:4px;border:1px solid #4a5564;background:#1d232c;color:#ece7dc;font:inherit;font-size:1rem;}.ds-input::placeholder{color:#8a94a1;}.ds-input:focus{border-color:#9cc8d6;outline:none;}"
+            "css": ".ds-field{display:flex;flex-direction:column;gap:6px;font-family:'Rubik',sans-serif;font-size:0.875rem;color:#3e5163;max-width:320px;}.ds-input{height:44px;padding:0 12px;border-radius:4px;border:1px solid #7f909c;background:#ffffff;color:#0b1f33;font:inherit;font-size:1rem;}.ds-input::placeholder{color:#586a79;}.ds-input:focus{border-color:#1e758a;outline:none;}"
         },
         {
-            "name": "Navigation Bar",
+            "name": "Menu Bar",
             "kind": "nav",
-            "refersTo": "",
-            "description": "Back-room bar of condensed caps links grouped by thin seams.",
-            "html": "<nav class=\"ds-nav\"><a class=\"is-current\" href=\"#\">Catálogo</a><span class=\"ds-seam\"></span><a href=\"#\">PlayStation</a><a href=\"#\">Xbox</a><a href=\"#\">Nintendo</a><span class=\"ds-seam\"></span><a href=\"#\">Claves digitales</a></nav>",
-            "css": ".ds-nav{display:flex;align-items:center;gap:0;background:#141922;border-top:1px solid #313a47;padding:0 8px;}.ds-nav a{display:flex;align-items:center;height:44px;padding:0 12px;font-family:'Sofia Sans Condensed',sans-serif;font-weight:700;letter-spacing:0.025em;text-transform:uppercase;color:#a7afb9;text-decoration:none;transition:color 150ms;}.ds-nav a:hover,.ds-nav a.is-current{color:#ece7dc;}.ds-nav a:focus-visible{outline:2px solid #9cc8d6;outline-offset:2px;}.ds-seam{width:1px;height:16px;margin:0 4px;background:#313a47;}"
+            "refersTo": "menu-bar",
+            "description": "Koparion-style menu: a deep turquoise strip whose current or hovered item fills its height in coral.",
+            "html": "<nav class=\"ds-menu\"><a href=\"#\">Inicio</a><a class=\"is-current\" href=\"#\">Catálogo</a><a href=\"#\">PlayStation</a><a href=\"#\">Xbox</a><a href=\"#\">Nintendo</a><a href=\"#\">PC</a></nav>",
+            "css": ".ds-menu{display:flex;gap:2px;background:#155566;padding:0 16px;font-family:'Rubik',sans-serif;}.ds-menu a{display:flex;align-items:center;height:52px;padding:0 20px;font-weight:700;text-transform:uppercase;white-space:nowrap;color:#ffffff;text-decoration:none;transition:color 150ms cubic-bezier(0.23,1,0.32,1),background-color 150ms cubic-bezier(0.23,1,0.32,1);}.ds-menu a:hover,.ds-menu a.is-current{background:#ff6b4a;color:#1a0a05;}.ds-menu a:focus-visible{outline:2px solid #ffffff;outline-offset:2px;}"
+        },
+        {
+            "name": "Product Card",
+            "kind": "card",
+            "refersTo": "product-card-price",
+            "description": "Key-store card: cover with platform band, title, type and region, activation service, price and Agregar at the foot.",
+            "html": "<article class=\"ds-card\"><div class=\"ds-cover\"><p class=\"ds-band ds-band-ps5\">PS5</p><div class=\"ds-art\"><p class=\"ds-ctitle\">Neon Heist</p><p class=\"ds-cfoot\">Clave digital · LATAM</p></div></div><h3><a href=\"#\">Neon Heist</a></h3><p class=\"ds-meta\">Clave digital · LATAM</p><p class=\"ds-faint\">Se activa en PlayStation Store</p><div class=\"ds-foot\"><data>$74.990</data><button class=\"ds-add\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar</button></div></article>",
+            "css": ".ds-card{width:210px;display:flex;flex-direction:column;gap:4px;font-family:'Rubik',sans-serif;color:#0b1f33;}.ds-cover{aspect-ratio:3/4;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;background:#e8eef2;margin-bottom:8px;box-shadow:0 18px 36px -22px rgb(11 31 51 / 0.45),0 2px 6px rgb(11 31 51 / 0.12);transition:transform 260ms cubic-bezier(0.23,1,0.32,1),box-shadow 200ms;}.ds-card:hover .ds-cover{transform:perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px);box-shadow:0 18px 32px -14px rgb(11 31 51 / 0.45),0 4px 10px rgb(11 31 51 / 0.12);}.ds-band{margin:0;padding:5px 8px;font:800 0.7rem/1 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;}.ds-band-ps5{background:#f3f4f6;color:#000000;}.ds-art{flex:1;display:flex;flex-direction:column;background:#234b6b;color:#ffffff;}.ds-ctitle{margin:auto 0 0;padding:0 8%;font:800 1.7rem/0.92 'Sofia Sans Condensed',sans-serif;text-transform:uppercase;}.ds-cfoot{margin:0;padding:5% 8% 7%;font-size:0.65rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;opacity:0.9;}.ds-card h3{margin:0;font-size:1rem;font-weight:600;line-height:1.375;}.ds-card a{color:#0b1f33;text-decoration:none;}.ds-card a:hover{color:#1e758a;}.ds-meta{margin:0;font-size:0.875rem;color:#3e5163;}.ds-faint{margin:0;font-size:0.875rem;color:#586a79;}.ds-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;}.ds-foot data{font:800 1.5rem/1 'Sofia Sans Condensed',sans-serif;font-variant-numeric:tabular-nums;}.ds-add{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:0;border-radius:4px;background:#ff6b4a;color:#1a0a05;font:800 0.875rem 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms;}.ds-add:hover{background:#ff8466;}.ds-add:active{transform:scale(0.97);}"
         },
         {
             "name": "Price Sticker",
             "kind": "chip",
             "refersTo": "price-sticker",
-            "description": "Yellow CLP sticker, rotated and overlapping the cover; grey with 'Sin stock' when out of stock.",
+            "description": "Coral CLP sticker, rotated and overlapping a cover (display case, deal, product page); Mist Raised with Sin stock when out of stock.",
             "html": "<div style=\"display:flex;gap:24px;align-items:center\"><p class=\"ds-sticker\">$14.990</p><p class=\"ds-sticker ds-sticker-out\">$79.990<span>Sin stock</span></p></div>",
-            "css": ".ds-sticker{display:inline-flex;flex-direction:column;margin:0;padding:4px 8px;border-radius:4px;background:#f2c230;color:#1a1405;font-family:'Sofia Sans Condensed',sans-serif;font-weight:700;font-size:1.125rem;line-height:1;font-variant-numeric:tabular-nums;transform:rotate(-3deg);box-shadow:0 3px 8px -2px rgb(0 0 0 / 0.55);}.ds-sticker-out{background:#262e39;color:#a7afb9;}.ds-sticker span{margin-top:2px;font-size:0.75rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;}"
+            "css": ".ds-sticker{display:inline-flex;flex-direction:column;margin:0;padding:4px 8px;border-radius:4px;background:#ff6b4a;color:#1a0a05;font-family:'Sofia Sans Condensed',sans-serif;font-weight:800;font-size:1.125rem;line-height:1;font-variant-numeric:tabular-nums;transform:rotate(-3deg);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);}.ds-sticker-out{background:#e8eef2;color:#3e5163;}.ds-sticker span{margin-top:2px;font-size:0.75rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;}"
         },
         {
-            "name": "Station Card",
-            "kind": "card",
+            "name": "Platform Bands",
+            "kind": "custom",
             "refersTo": "product-cover",
-            "description": "A product as a numbered station: generated cover, sticker, PC number and three fixed fact slots.",
-            "html": "<article class=\"ds-station\"><div class=\"ds-cover\"><p class=\"ds-band\">PS5</p><p class=\"ds-ctitle\">Neon Heist</p><p class=\"ds-cfoot\">Clave digital · LATAM</p><p class=\"ds-sticker\">$74.990</p></div><p class=\"ds-pc\">PC 04</p><h3><a href=\"#\">Neon Heist</a></h3><dl><dd class=\"w\">PS5</dd><dd>Clave digital</dd><dd class=\"r\">LATAM</dd><dd class=\"w f\">Se activa en PlayStation Store</dd></dl></article>",
-            "css": ".ds-station{width:200px;display:flex;flex-direction:column;gap:12px;font-family:'Rubik',sans-serif;color:#ece7dc;}.ds-cover{position:relative;aspect-ratio:3/4;border-radius:6px;background:#6b2d3a;display:flex;flex-direction:column;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.7),0 2px 6px rgb(0 0 0 / 0.35);transition:transform 260ms cubic-bezier(0.23,1,0.32,1),box-shadow 200ms;}.ds-station:hover .ds-cover{transform:perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px);box-shadow:0 18px 32px -12px rgb(0 0 0 / 0.65),0 4px 10px rgb(0 0 0 / 0.4);}.ds-band{margin:0;padding:4% 8%;background:rgb(15 19 25 / 0.55);border-radius:6px 6px 0 0;font:700 0.75rem 'Sofia Sans Condensed',sans-serif;letter-spacing:0.05em;text-transform:uppercase;}.ds-ctitle{margin:auto 0 0;padding:0 8%;font:700 1.75rem/0.92 'Sofia Sans Condensed',sans-serif;text-transform:uppercase;}.ds-cfoot{margin:0;padding:5% 8% 7%;font-size:0.65rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;opacity:0.9;}.ds-cover .ds-sticker{position:absolute;right:-6px;bottom:-8px;display:inline-block;margin:0;padding:4px 8px;border-radius:4px;background:#f2c230;color:#1a1405;font:700 1.125rem/1 'Sofia Sans Condensed',sans-serif;transform:rotate(-3deg);box-shadow:0 3px 8px -2px rgb(0 0 0 / 0.55);}.ds-pc{margin:0 0 -8px;padding-top:4px;font:400 0.75rem 'JetBrains Mono',monospace;color:#8a94a1;}.ds-station h3{margin:0;font-size:1rem;font-weight:600;}.ds-station a{color:#ece7dc;text-decoration:none;}.ds-station a:hover{color:#f2c230;}.ds-station dl{margin:0;display:grid;grid-template-columns:auto 1fr;column-gap:12px;font-size:0.875rem;color:#a7afb9;}.ds-station dd{margin:0;}.ds-station .w{grid-column:span 2;}.ds-station dd.w:first-child{color:#ece7dc;}.ds-station .r{text-align:right;}.ds-station .f{color:#8a94a1;}"
+            "description": "The retail-box band on top of every cover, one tone per platform family; PC games show their store.",
+            "html": "<div class=\"ds-bands\"><p style=\"background:#f3f4f6;color:#000000\">PS5</p><p style=\"background:#003791;color:#ffffff\">PS4</p><p style=\"background:#107c10;color:#ffffff\">Xbox Series X|S</p><p style=\"background:#e60012;color:#ffffff\">Nintendo Switch 2</p><p style=\"background:#16181c;color:#ffffff\">Steam</p><p style=\"background:#3a3f47;color:#ffffff\">Windows · macOS</p></div>",
+            "css": ".ds-bands{display:flex;flex-direction:column;gap:6px;width:220px;}.ds-bands p{margin:0;padding:6px 8px;border-radius:6px 6px 0 0;font:800 0.75rem/1 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;}"
         },
         {
             "name": "Thermal Receipt",
@@ -681,42 +852,47 @@
             "refersTo": "thermal-receipt",
             "description": "Cream paper with torn zig-zag edges and monospace print for every money summary.",
             "html": "<div class=\"ds-receipt\"><p class=\"ds-rhead\">NextKeys · Detalle</p><p class=\"ds-row\"><span>3 × Starfall</span><span>$65.970</span></p><p class=\"ds-row ds-total\"><span>Total estimado</span><span>$305.940</span></p></div>",
-            "css": ".ds-receipt{--tear:8px;width:300px;padding:calc(var(--tear) + 1.25rem) 24px;background:#efe8d8;color:#22201b;font:400 0.875rem/1.5 'JetBrains Mono',monospace;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 90deg,#0000 91deg) bottom/var(--tear) 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 90deg,#0000 91deg) top/var(--tear) 51% repeat-x;filter:drop-shadow(0 12px 18px rgb(0 0 0 / 0.45));}.ds-rhead{margin:0 0 12px;padding-bottom:12px;border-bottom:1px dashed #cfc6b2;text-align:center;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#5d5749;}.ds-row{display:flex;justify-content:space-between;margin:4px 0;font-variant-numeric:tabular-nums;}.ds-total{margin-top:12px;padding-top:12px;border-top:1px dashed #cfc6b2;font-weight:600;font-size:1rem;}"
+            "css": ".ds-receipt{--tear:8px;width:300px;padding:calc(var(--tear) + 1.25rem) 24px;background:#f6f1e6;color:#22201b;font:400 0.875rem/1.5 'JetBrains Mono',monospace;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 90deg,#0000 91deg) bottom/var(--tear) 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 90deg,#0000 91deg) top/var(--tear) 51% repeat-x;filter:drop-shadow(0 8px 16px rgb(11 31 51 / 0.22));}.ds-rhead{margin:0 0 12px;padding-bottom:12px;border-bottom:1px dashed #cfc6b2;text-align:center;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#5d5749;}.ds-row{display:flex;justify-content:space-between;margin:4px 0;font-variant-numeric:tabular-nums;}.ds-total{margin-top:12px;padding-top:12px;border-top:1px dashed #cfc6b2;font-weight:600;font-size:1rem;}"
         },
         {
             "name": "Banner slider",
             "kind": "custom",
-            "refersTo": "banner-slider",
-            "description": "Home banner: scroll-snap slides (deal of the day, Webpay, library) with dots, pause and arrows on the bottom edge.",
+            "refersTo": "brand-section",
+            "description": "Home banner on a turquoise brand section: scroll-snap slides (deal of the day, Webpay, library) with dots, pause and arrows.",
             "html": "<section class=\"ds-banner\"><h2>Oferta del día</h2><p>Starfall</p><span>$21.990</span><nav><i class=\"on\"></i><i></i><i></i></nav></section>",
-            "css": ".ds-banner{width:420px;padding:28px;border:1px solid #313a47;border-radius:6px;background:#141922;color:#ece7dc;font-family:'Rubik',sans-serif}.ds-banner h2{margin:0;font:700 16px 'Sofia Sans Condensed',sans-serif;text-transform:uppercase;color:#f2c230}.ds-banner p{margin:6px 0 16px;font:700 44px/1 'Sofia Sans Condensed',sans-serif;text-transform:uppercase}.ds-banner span{display:inline-block;padding:6px 10px;border-radius:4px;background:#f2c230;color:#1a1405;font:700 26px 'Sofia Sans Condensed',sans-serif;transform:rotate(-2deg)}.ds-banner nav{display:flex;gap:8px;margin-top:24px}.ds-banner i{width:24px;height:4px;border-radius:9px;background:#4a5564}.ds-banner i.on{background:#f2c230}"
+            "css": ".ds-banner{width:420px;padding:28px;border-radius:6px;background:#1e758a;color:#ffffff;font-family:'Rubik',sans-serif}.ds-banner h2{margin:0;font:800 18px 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase}.ds-banner p{margin:6px 0 16px;font:800 44px/1 'Sofia Sans Condensed',sans-serif;text-transform:uppercase}.ds-banner span{display:inline-block;padding:8px 12px;border-radius:4px;background:#ff6b4a;color:#1a0a05;font:800 30px/1 'Sofia Sans Condensed',sans-serif;transform:rotate(-2deg);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35)}.ds-banner nav{display:flex;gap:8px;margin-top:24px}.ds-banner i{width:24px;height:4px;border-radius:9px;background:rgb(255 255 255 / 0.5)}.ds-banner i.on{background:#ff6b4a}"
         }
     ],
     "narrative": {
-        "northStar": "The Cibercafé Counter at Midnight",
-        "overview": "The storefront is the counter of a Chilean neighborhood cibercafé after dark. The room is a cool ink ground with dark melamine panels; the only bright zone is the glass display case lit by a tube from above, where game boxes stand on a glass shelf wearing yellow price stickers. Behind the counter hangs a whiteboard written in marker with today's prices, and every purchase prints as a cream thermal receipt with torn edges. Each material has one job, and each job always uses the same material.\n\nDensity is that of a working shop, not a showroom: one strict grid of numbered stations (\"PC 01\", \"PC 02\"), each with the cover on top and platform, type, region and activation in fixed slots below. Covers lead every listing at 3:4 game-case proportion. When a product has no uploaded cover, the system prints one from its own data: a deep per-product tint, a platform band, the title in condensed caps, type and region at the foot. Motion is soft and physical. Covers tilt toward the pointer like a box picked up from the shelf, buttons press to 0.97, lists rise in with a short stagger, and everything falls back to opacity and color under `prefers-reduced-motion`.\n\nThe world refuses the category default for game-key stores: a black page with a single neon accent and a carousel hero. Light comes from objects (the case, the sticker, the CRT glow), never from neon gradients.",
+        "northStar": "The Key Store in Daylight",
+        "overview": "**Creative North Star: \"The Key Store in Daylight\"**\n\nThe storefront is a bright, well-signed key store: a white floor with navy print, turquoise signage that frames the shop (the header with its menu bar, the banner slider, the benefits band and the footer), and one warm coral that says \"do this\" (the primary action, the cart count, the current menu item, prices on stickers). Everything else is quiet: soft blue-grey panels, hairline borders, and the game covers carrying the color.\n\nDensity is that of a working key store: one strict grid of product cards, each with its cover on top, the title, type and region, where it is activated, and the price with \"Agregar\" at the foot. Every cover wears its platform's retail band, so a listing reads as PS5, Xbox, Switch or Steam at a glance. Real cover art comes from IGDB; when a product has none, the system prints a typographic cover on a deep tint. Motion is soft and physical: covers tilt toward the pointer, buttons press to 0.97, lists rise in with a short stagger, and everything falls back to opacity and color under `prefers-reduced-motion`.\n\nTokens are named by role (`bg`, `surface`, `fg`, `brand`, `accent`…), not by value. A future dark theme only redefines their values under `:root[data-theme='dark']`; the turquoise sections already use this mechanism through `.surface-brand`. Two old materials survive where they still do a job: the thermal receipt for money summaries and the whiteboard sign on the error page.",
         "keyCharacteristics": [
-            "Night-room ink ground; the display case is the only lit zone.",
-            "Sticker yellow marks prices and the one primary action per view.",
-            "CRT blue means \"active\" and \"focused\", nothing else.",
-            "Thermal paper and monospace for every money summary: cart, checkout, payment result, order.",
-            "Condensed signage caps for headings and buttons, a plain sans for reading, marker only on the whiteboard sign.",
-            "Numbered stations on one grid, facts always in the same slot."
+            "White ground, navy text; turquoise brand sections at the top and bottom of the page.",
+            "Coral marks the one primary action, the cart and the current menu item; text on it is dark.",
+            "Every cover carries an official platform band; PC games show the store where they are activated.",
+            "Condensed extra-bold caps for headings, buttons, prices and covers; Rubik for reading.",
+            "Thermal paper and monospace for every money summary.",
+            "Colors only through role tokens; a test rejects raw colors."
         ],
         "rules": [
             {
-                "name": "The One Sticker Rule",
-                "body": "Yellow fills only price stickers and the single primary action of a view. A second yellow button on the same screen means one of them is secondary.",
+                "name": "The Role Token Rule",
+                "body": "Components use role tokens only; `test/unit/design-tokens.test.ts` fails on hex, `rgb()`, arbitrary color classes and color utilities without a token in `@theme`. A new color is a new role in `main.css`, never a value in a `.vue` file.",
                 "section": "colors"
             },
             {
-                "name": "The Signal Rule",
-                "body": "CRT blue means focus or \"you are here\". Do not use it for decoration or for prices.",
+                "name": "The Brand Surface Rule",
+                "body": "Inside a turquoise section, wrap it in `.surface-brand` and keep using `bg`, `fg`, `line`, `brand`: the class redefines them (white text, translucent white surfaces and lines, `brand` turns white). Never hand-pick white-on-turquoise utilities.",
+                "section": "colors"
+            },
+            {
+                "name": "The One Coral Rule",
+                "body": "Coral fills the single primary action of a view, prices on stickers, the cart count and the current menu item. A second coral button on the same screen means one of them is secondary.",
                 "section": "colors"
             },
             {
                 "name": "The Material Rule",
-                "body": "Paper belongs to receipts, the board to the whiteboard, cover tints to covers. A material never leaves its object.",
+                "body": "Paper belongs to receipts, the board to the error sign, cover tints and platform bands to covers.",
                 "section": "colors"
             },
             {
@@ -725,37 +901,33 @@
                 "section": "typography"
             },
             {
-                "name": "The Marker Stays on the Board Rule",
-                "body": "Permanent Marker appears only on the whiteboard sign of the error page. Nowhere else is hand-written.",
+                "name": "The Marker Stays on the Sign Rule",
+                "body": "Permanent Marker appears only on the error page's whiteboard sign.",
                 "section": "typography"
             },
             {
-                "name": "The One Lit Zone Rule",
-                "body": "Only the display case receives the overhead light treatment. Other sections stay flat on the room's tonal steps.",
-                "section": "elevation"
-            },
-            {
                 "name": "The Shadow Follows the Object Rule",
-                "body": "Shadows belong to things you could pick up. Panels, nav bars and form sections have borders, not shadows.",
+                "body": "Shadows belong to covers, stickers, buttons and receipts. Panels, bands, nav bars and form sections have borders or tonal steps, not shadows.",
                 "section": "elevation"
             }
         ],
         "dos": [
-            "**Do** keep the page on Night Room (#0f1319) and let only the display case carry the overhead light.",
-            "**Do** put every price on a Sticker Yellow sticker or in tabular figures, in CLP from the API.",
+            "**Do** keep the page on White Floor (#ffffff) with Navy Ink text, and put turquoise only on the brand sections (header, menu bar, banner, benefits, footer).",
+            "**Do** wrap every turquoise section in `.surface-brand` and keep using role tokens inside it.",
+            "**Do** add new colors as role tokens in `app/assets/css/main.css`; a future dark theme redefines values under `:root[data-theme='dark']`.",
+            "**Do** put every price in display 800 with tabular figures, in CLP from the API.",
+            "**Do** give every cover its platform band, and show the activation store (not \"PC\") for PC and Mac games.",
             "**Do** print every money summary (cart, checkout, result, order) on the thermal receipt in JetBrains Mono.",
-            "**Do** keep a product's facts in the same slots everywhere: platforms, then type and region, then activation.",
-            "**Do** use CRT blue (#9cc8d6) for focus rings and focused borders on every interactive element.",
-            "**Do** give pressable elements the 0.97 press and reduce all motion to opacity and color under `prefers-reduced-motion`.",
-            "**Do** stagger list entrances with the motion helper (0, 40, 70, 95… ms, capped at 150ms) and the 260ms rise."
+            "**Do** give pressable elements the 0.97 press and reduce all motion to opacity and color under `prefers-reduced-motion`."
         ],
         "donts": [
-            "**Don't** use more than one Sticker Yellow action per view.",
-            "**Don't** add neon gradients, glowing accents or a carousel hero; light comes from the case tube and the objects in it.",
-            "**Don't** use Permanent Marker outside the whiteboard, or paper and board colors outside their objects.",
+            "**Don't** write raw colors (hex, `rgb()`, `bg-[#…]`) in `.vue` files, or color utilities without a token; the design-tokens test fails.",
+            "**Don't** use more than one coral action per view, or white text on coral.",
+            "**Don't** add a frame around cover art; the band is the only mark.",
+            "**Don't** put station numbers or price stickers on listing cards.",
+            "**Don't** use Permanent Marker outside the error sign, or paper and board colors outside their objects.",
             "**Don't** show \"before\" prices, invented discounts, ratings or reviews.",
-            "**Don't** put shadows on panels, nav bars or form sections; use borders and tonal steps.",
-            "**Don't** use white text on Sticker Yellow; text on it is Sticker Ink."
+            "**Don't** put shadows on panels, bands, nav bars or form sections; use borders and tonal steps."
         ]
     }
 }
