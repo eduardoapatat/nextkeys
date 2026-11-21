@@ -47,9 +47,10 @@ const notColors = new Set([
     ...['offset', 'inset', 'auto', 'from-font', 'cover', 'contain', 'center'],
     ...['no-repeat', 'repeat', 'fixed', 'local', 'scroll', 'origin-border'],
 ]);
-// Sides (`border-b`, `border-t-0`), offsets, widths and SVG stroke attributes.
+// Sides (`border-b`, `border-t-0`), offsets, widths, SVG stroke attributes
+// and gradient directions (`bg-linear-to-br`).
 const notColorPattern =
-    /^(?:[trblxy](?:-\d+)?|offset-\d+|\d.*|width|linecap|linejoin|color)$/;
+    /^(?:[trblxy](?:-\d+)?|offset-\d+|\d.*|width|linecap|linejoin|color|linear-.+)$/;
 
 // Hex colors (not `href="#..."` fragments), color functions and Tailwind
 // arbitrary color values such as `bg-[#123456]`.

@@ -112,6 +112,12 @@ describe('home', () => {
         const categories = page.find('[aria-labelledby="categories-heading"]');
 
         expect(categories.classes()).toContain('surface-brand');
+        // PC games are activated on Steam: the tile filters by that store.
+        expect(
+            categories
+                .find('a[href="/catalogo?activation_service=steam"]')
+                .text(),
+        ).toContain('Steam');
         expect(
             categories.find('a[href="/catalogo?platform=ps5,ps4"]').text(),
         ).toContain('PlayStation');

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { CatalogFilters } from '~/api/schemas';
+import type { TileFamily } from '~/components/PlatformTile.vue';
 
 /**
- * The full-width turquoise band: the platform families and the product types,
+ * The full-width turquoise band: the console families as drawn tiles
+ * (PlatformTile) and Steam, where PC games are activated (the cover band
+ * says the same), and and the product types,
  * each a real catalog filter (the home has no side menu). The platform names under each family come from the API.
  */
 const props = defineProps<{ filters: CatalogFilters }>();
@@ -13,6 +16,25 @@ function platformNames(slugs: readonly string[]): string {
         .map((platform) => platform.name)
         .join(' · ');
 }
+
+// Steam is a store, not a platform: its tile filters by activation service.
+// PC programs (licenses) are reached through the "Licencias" link.
+const tiles = computed(() => [
+    ...platformFamilies
+        .filter((family) => family.id !== 'pc')
+        .map((family) => ({
+            family: family.id as TileFamily,
+            label: family.label,
+            platforms: platformNames(family.platform),
+            to: catalogLink({ platform: [...family.platform] }),
+        })),
+    {
+        family: 'steam' as const,
+        label: 'Steam',
+        platforms: 'Juegos para Windows y macOS',
+        to: catalogLink({ activation_service: ['steam'] }),
+    },
+]);
 
 const typeNotes: Record<string, string> = {
     digital_key: 'Llega a tu correo y a tu biblioteca',
@@ -34,25 +56,16 @@ const typeNotes: Record<string, string> = {
                 Elige tu plataforma
             </h2>
             <ul class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-4">
-                <li v-for="family in platformFamilies" :key="family.label">
+                <li v-for="tile in tiles" :key="tile.family">
                     <NuxtLink
-                        :to="catalogLink({ platform: [...family.platform] })"
-                        class="pressable group flex h-full min-h-36 flex-col justify-between gap-6 rounded-card border border-line bg-surface p-4 hover:border-accent hover:bg-accent md:p-5"
+                        :to="tile.to"
+                        class="pressable group block h-full rounded-card shadow-case hover:shadow-lift"
                     >
-                        <UiIcon
-                            name="arrowRight"
-                            class="self-end text-fg-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent-fg"
+                        <PlatformTile
+                            :family="tile.family"
+                            :label="tile.label"
+                            :platforms="tile.platforms"
                         />
-                        <span>
-                            <span
-                                class="block font-display text-3xl leading-none font-extrabold text-fg uppercase group-hover:text-accent-fg md:text-4xl"
-                                >{{ family.label }}</span
-                            >
-                            <span
-                                class="mt-1 block text-sm text-fg-muted group-hover:text-accent-fg"
-                                >{{ platformNames(family.platform) }}</span
-                            >
-                        </span>
                     </NuxtLink>
                 </li>
             </ul>
