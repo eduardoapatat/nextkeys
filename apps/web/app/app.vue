@@ -22,9 +22,8 @@ useHead({
 </script>
 
 <template>
-    <div>
-        <NuxtRouteAnnouncer />
-        <AccountNav />
+    <NuxtRouteAnnouncer />
+    <NuxtLayout>
         <NuxtPage />
-    </div>
+    </NuxtLayout>
 </template>

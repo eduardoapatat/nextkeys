@@ -91,3 +91,22 @@ export function serializeListingQuery(
 export function withPage(query: ListingQuery, page: number): ListingQuery {
     return { ...query, page: String(page) };
 }
+
+/** Where the product listing lives. Every link to the catalog goes through `catalogLink`. */
+export const catalogPath = '/';
+
+/** A link to the catalog with some facets (and optionally a sort) already applied. */
+export function catalogLink(
+    filters: Partial<Record<ListingFacet, string[]>> & { sort?: string } = {},
+): { path: string; query: Record<string, string> } {
+    return {
+        path: catalogPath,
+        query: serializeListingQuery({
+            platform: filters.platform ?? [],
+            type: filters.type ?? [],
+            activation_service: filters.activation_service ?? [],
+            region: filters.region ?? [],
+            sort: filters.sort,
+        }),
+    };
+}
