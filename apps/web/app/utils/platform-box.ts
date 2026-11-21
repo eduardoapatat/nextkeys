@@ -1,10 +1,15 @@
 import type { PlatformMarkName } from './platform-marks';
 
 /**
- * The game case a cover sits in: the band and frame colors of its platform
- * family and what the band shows (official marks, or text where a platform
- * has no box of its own). One family takes the look of its newest platform;
- * several families share the neutral case and list one entry per family.
+ * The platform band on top of a cover: the color of its platform family and
+ * what it shows (official marks, or text where there is no mark). One family
+ * takes the look of its newest platform; several families share the neutral
+ * band and list one entry per family.
+ *
+ * A PC or Mac game is not "PC": it is played where it is activated, so the
+ * band shows that store (Steam, Epic Games…), and the PC side of an Xbox
+ * Play Anywhere key is just Xbox. Programs (licenses) install natively, so
+ * they show the operating systems.
  */
 export type BoxTone = 'ps5' | 'ps4' | 'xbox' | 'nintendo' | 'pc' | 'multi';
 
@@ -20,6 +25,11 @@ export interface PlatformBox {
 interface PlatformRef {
     slug: string;
     name: string;
+}
+
+export interface BandContext {
+    type?: { slug: string } | null;
+    activation_service?: { slug: string; name: string } | null;
 }
 
 type Family = 'playstation' | 'xbox' | 'nintendo' | 'pc' | 'mobile' | 'other';
@@ -40,6 +50,44 @@ const FAMILY: Record<string, Family> = {
 // Newest first: the order the band lists them in.
 const ORDER = Object.keys(FAMILY);
 
+// Activation services that are PC stores with an official mark.
+const STORE_MARKS = [
+    'steam',
+    'epic-games',
+    'ea',
+    'gog',
+    'ubisoft',
+    'battle-net',
+] as const satisfies readonly PlatformMarkName[];
+
+const OS_NAMES: Record<string, string> = {
+    windows: 'Windows',
+    macos: 'macOS',
+};
+
+function names(platforms: PlatformRef[]): string {
+    return platforms.map((p) => OS_NAMES[p.slug] ?? p.name).join(' · ');
+}
+
+/** What the PC family shows, or nothing when Xbox already covers it. */
+function pcItems(
+    platforms: PlatformRef[],
+    context: BandContext,
+    withXbox: boolean,
+): BandItem[] {
+    const service = context.activation_service;
+
+    if (context.type?.slug === 'license' || !service) {
+        return [{ kind: 'text', text: names(platforms) }];
+    }
+    if (service.slug === 'xbox' && withXbox) return [];
+
+    const mark = STORE_MARKS.find((slug) => slug === service.slug);
+    return mark
+        ? [{ kind: 'mark', mark, suffix: service.name }]
+        : [{ kind: 'text', text: service.name }];
+}
+
 function familyItems(family: Family, platforms: PlatformRef[]): BandItem[] {
     const has = (slug: string) => platforms.some((p) => p.slug === slug);
 
@@ -59,29 +107,15 @@ function familyItems(family: Family, platforms: PlatformRef[]): BandItem[] {
                 .join(' · ');
             return [{ kind: 'mark', mark: 'xbox', suffix }];
         }
-        case 'pc':
-            return [
-                {
-                    kind: 'text',
-                    text: [
-                        has('windows') ? 'PC' : null,
-                        has('macos') ? 'Mac' : null,
-                    ]
-                        .filter(Boolean)
-                        .join(' · '),
-                },
-            ];
         default:
-            return [
-                {
-                    kind: 'text',
-                    text: platforms.map((p) => p.name).join(' · '),
-                },
-            ];
+            return [{ kind: 'text', text: names(platforms) }];
     }
 }
 
-export function platformBox(platforms: PlatformRef[]): PlatformBox {
+export function platformBox(
+    platforms: PlatformRef[],
+    context: BandContext = {},
+): PlatformBox {
     const sorted = [...platforms].sort(
         (a, b) =>
             (ORDER.indexOf(a.slug) + 1 || 99) -
@@ -93,20 +127,29 @@ export function platformBox(platforms: PlatformRef[]): PlatformBox {
         families.set(family, [...(families.get(family) ?? []), platform]);
     }
 
-    const items = [...families].flatMap(([family, members]) =>
-        familyItems(family, members),
-    );
+    // Each family that shows something, with what it shows.
+    const shown = [...families]
+        .map(([family, members]) => ({
+            family,
+            items:
+                family === 'pc'
+                    ? pcItems(members, context, families.has('xbox'))
+                    : familyItems(family, members),
+        }))
+        .filter((entry) => entry.items.length > 0);
 
-    if (families.size !== 1) return { tone: 'multi', items };
+    const items = shown.flatMap((entry) => entry.items);
+    if (shown.length !== 1) return { tone: 'multi', items };
 
-    const [family] = families.keys();
     const tone: Record<Family, BoxTone> = {
-        playstation: sorted.some((p) => p.slug === 'ps5') ? 'ps5' : 'ps4',
+        playstation: families.get('playstation')?.some((p) => p.slug === 'ps5')
+            ? 'ps5'
+            : 'ps4',
         xbox: 'xbox',
         nintendo: 'nintendo',
         pc: 'pc',
         mobile: 'multi',
         other: 'multi',
     };
-    return { tone: tone[family!], items };
+    return { tone: tone[shown[0]!.family], items };
 }

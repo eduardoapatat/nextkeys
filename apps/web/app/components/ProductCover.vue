@@ -13,7 +13,11 @@ const props = withDefaults(
         product: Pick<
             ProductSummary,
             'slug' | 'cover_url' | 'platforms' | 'type' | 'region'
-        > & { title: { name: string }; cover_band?: boolean };
+        > & {
+            title: { name: string };
+            cover_band?: boolean;
+            activation_service?: ProductSummary['activation_service'];
+        };
         size?: 'sm' | 'md' | 'lg';
         eager?: boolean;
     }>(),
@@ -24,7 +28,7 @@ const label = computed(() => `Carátula de ${props.product.title.name}`);
 const platformNames = computed(() =>
     props.product.platforms.map((platform) => platform.name).join(', '),
 );
-const box = computed(() => platformBox(props.product.platforms));
+const box = computed(() => platformBox(props.product.platforms, props.product));
 const boxed = computed(
     () => !props.product.cover_url || props.product.cover_band !== false,
 );

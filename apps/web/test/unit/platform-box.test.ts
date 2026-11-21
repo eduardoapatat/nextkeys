@@ -10,10 +10,6 @@ describe('platform box', () => {
             items: [{ kind: 'mark', mark: 'ps5' }],
         });
         expect(platformBox([p('switch')]).tone).toBe('nintendo');
-        expect(platformBox([p('windows')])).toEqual({
-            tone: 'pc',
-            items: [{ kind: 'text', text: 'PC' }],
-        });
     });
 
     it('takes the newest console of a family and lists both, newest first', () => {
@@ -29,12 +25,61 @@ describe('platform box', () => {
         ]);
     });
 
-    it('uses the neutral case for several families or phones', () => {
-        expect(platformBox([p('windows'), p('xbox-series')])).toEqual({
+    it('shows where a PC game is activated, not "PC"', () => {
+        const steam = { slug: 'steam', name: 'Steam' };
+
+        expect(
+            platformBox([p('windows'), p('macos')], {
+                type: { slug: 'digital_key' },
+                activation_service: steam,
+            }),
+        ).toEqual({
+            tone: 'pc',
+            items: [{ kind: 'mark', mark: 'steam', suffix: 'Steam' }],
+        });
+        expect(
+            platformBox([p('windows')], {
+                activation_service: { slug: 'some-launcher', name: 'Launcher' },
+            }).items,
+        ).toEqual([{ kind: 'text', text: 'Launcher' }]);
+    });
+
+    it('treats the PC side of an Xbox key as Xbox', () => {
+        expect(
+            platformBox([p('windows'), p('xbox-series')], {
+                activation_service: { slug: 'xbox', name: 'Xbox' },
+            }),
+        ).toEqual({
+            tone: 'xbox',
+            items: [{ kind: 'mark', mark: 'xbox', suffix: 'Series X|S' }],
+        });
+    });
+
+    it('names the operating systems of a program', () => {
+        expect(
+            platformBox([p('windows'), p('macos')], {
+                type: { slug: 'license' },
+                activation_service: {
+                    slug: 'microsoft-account',
+                    name: 'Microsoft Account',
+                },
+            }),
+        ).toEqual({
+            tone: 'pc',
+            items: [{ kind: 'text', text: 'Windows · macOS' }],
+        });
+    });
+
+    it('uses the neutral band for several families or phones', () => {
+        expect(
+            platformBox([p('ps5'), p('windows')], {
+                activation_service: { slug: 'steam', name: 'Steam' },
+            }),
+        ).toEqual({
             tone: 'multi',
             items: [
-                { kind: 'mark', mark: 'xbox', suffix: 'Series X|S' },
-                { kind: 'text', text: 'PC' },
+                { kind: 'mark', mark: 'ps5' },
+                { kind: 'mark', mark: 'steam', suffix: 'Steam' },
             ],
         });
         expect(platformBox([p('android', 'Android'), p('ios', 'iOS')])).toEqual(
