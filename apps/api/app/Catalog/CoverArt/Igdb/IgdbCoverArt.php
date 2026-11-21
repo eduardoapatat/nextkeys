@@ -55,11 +55,12 @@ final class IgdbCoverArt implements CoverArtSource
 
     /**
      * The cover image id of the game named exactly $title (ignoring case),
-     * or of the best search match when no name is exact.
+     * or of the best search match when no name is exact. Several games can
+     * share a name ("Hades"): the most rated one wins.
      */
     private function coverImageId(string $title): ?string
     {
-        $query = sprintf('search "%s"; fields name,cover.image_id; where cover != null; limit 10;', addcslashes($title, '"\\'));
+        $query = sprintf('search "%s"; fields name,cover.image_id,total_rating_count; where cover != null; limit 50;', addcslashes($title, '"\\'));
 
         $response = $this->send(fn () => Http::timeout($this->timeoutSeconds)
             ->withHeaders(['Client-ID' => (string) $this->clientId])
@@ -67,10 +68,11 @@ final class IgdbCoverArt implements CoverArtSource
             ->withBody($query, 'text/plain')
             ->post(self::GAMES_URL));
 
-        /** @var list<array{name?: string, cover?: array{image_id?: string}}> $games */
+        /** @var list<array{name?: string, cover?: array{image_id?: string}, total_rating_count?: int}> $games */
         $games = array_values(array_filter((array) $response->json(), is_array(...)));
 
         $exact = array_values(array_filter($games, fn (array $game): bool => mb_strtolower($game['name'] ?? '') === mb_strtolower($title)));
+        usort($exact, fn (array $a, array $b): int => ($b['total_rating_count'] ?? 0) <=> ($a['total_rating_count'] ?? 0));
         $game = $exact[0] ?? $games[0] ?? null;
         $imageId = $game['cover']['image_id'] ?? null;
 

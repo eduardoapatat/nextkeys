@@ -26,8 +26,9 @@ function fakeIgdb(array $unknown = []): void
             $name = $match[1] ?? '';
 
             return Http::response(in_array($name, $unknown, true) ? [] : [
-                ['id' => 1, 'name' => "{$name}: Deluxe", 'cover' => ['image_id' => 'cowrong']],
-                ['id' => 2, 'name' => $name, 'cover' => ['image_id' => 'co'.strtolower(substr(md5($name), 0, 6))]],
+                ['id' => 1, 'name' => "{$name}: Deluxe", 'cover' => ['image_id' => 'cowrong'], 'total_rating_count' => 900],
+                ['id' => 2, 'name' => $name, 'cover' => ['image_id' => 'cowrong'], 'total_rating_count' => 3],
+                ['id' => 3, 'name' => $name, 'cover' => ['image_id' => 'co'.strtolower(substr(md5($name), 0, 6))], 'total_rating_count' => 400],
             ]);
         },
         'images.igdb.com/*' => Http::response('jpeg-bytes'),
@@ -41,7 +42,7 @@ function productOf(string $title, array $attributes = []): Product
         ->create($attributes);
 }
 
-it('gives every product without a cover the cover of its title, one search per title', function () {
+it('gives every product without a cover the cover of its title (exact name, most rated), one search per title', function () {
     fakeIgdb();
     $hades = productOf('Hades', ['cover_band' => false]);
     $other = Product::factory()->for($hades->title)->create(['slug' => 'hades-other']);
