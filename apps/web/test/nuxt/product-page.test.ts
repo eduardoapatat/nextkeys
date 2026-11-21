@@ -19,6 +19,8 @@ describe('product page', () => {
 
         expect(page.find('h1').text()).toBe('Starfall');
         expect(page.text()).toContain(product.data.title.description);
+        // A digital key says where it is delivered.
+        expect(page.text()).toContain('Entrega inmediata');
 
         const links = page.findAll('nav[aria-labelledby="variants-heading"] a');
         expect(links.map((link) => link.attributes('href'))).toEqual(

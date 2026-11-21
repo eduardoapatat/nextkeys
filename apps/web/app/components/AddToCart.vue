@@ -14,19 +14,47 @@ function add() {
 </script>
 
 <template>
-    <form aria-label="Agregar al carrito" @submit.prevent="add">
-        <p v-if="!product.in_stock">Sin stock.</p>
+    <form
+        aria-label="Agregar al carrito"
+        class="flex flex-col gap-3"
+        @submit.prevent="add"
+    >
+        <p
+            v-if="!product.in_stock"
+            class="rounded-control border border-line-strong px-4 py-3 text-chalk-muted"
+        >
+            Sin stock.
+        </p>
         <template v-else>
-            <label for="quantity">Cantidad</label>
-            <select id="quantity" v-model.number="quantity">
-                <option v-for="n in maxQuantityPerLine" :key="n" :value="n">
-                    {{ n }}
-                </option>
-            </select>
-            <button type="submit">Agregar al carrito</button>
-            <p v-if="added" role="status">
+            <div class="flex flex-wrap items-end gap-3">
+                <div class="flex flex-col gap-1">
+                    <label for="quantity" class="text-sm text-chalk-faint"
+                        >Cantidad</label
+                    >
+                    <select
+                        id="quantity"
+                        v-model.number="quantity"
+                        class="tabular h-13 w-20 rounded-control border border-line-strong bg-panel px-3 text-lg text-chalk focus:border-crt focus:outline-none"
+                    >
+                        <option
+                            v-for="n in maxQuantityPerLine"
+                            :key="n"
+                            :value="n"
+                        >
+                            {{ n }}
+                        </option>
+                    </select>
+                </div>
+                <UiButton type="submit" variant="primary" size="lg">
+                    <UiIcon name="cart" />Agregar al carrito
+                </UiButton>
+            </div>
+            <p v-if="added" role="status" class="text-chalk-muted">
+                <UiIcon name="check" :size="16" class="inline text-ok" />
                 Agregado al carrito.
-                <NuxtLink to="/carrito">Ver el carrito</NuxtLink>
+                <NuxtLink to="/carrito" class="text-crt underline"
+                    >Ver el carrito</NuxtLink
+                >
             </p>
         </template>
     </form>
