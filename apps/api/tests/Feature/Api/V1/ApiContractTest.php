@@ -148,4 +148,6 @@ it('answers the order endpoints with the shape of their contract fixtures', func
 
     expectContract('orders.show', $this->getJson("/api/v1/orders/{$reference}")->assertOk());
     expectContract('orders.index', $this->getJson('/api/v1/orders')->assertOk());
+    expectContract('library.index', $this->getJson('/api/v1/library')->assertOk());
+    expectContract('library.keys', $this->postJson("/api/v1/library/{$reference}/starfall-steam-macos-windows-global/keys")->assertOk());
 });

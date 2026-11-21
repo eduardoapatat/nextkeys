@@ -180,6 +180,39 @@ export const PaymentRedirectSchema = v.strictObject({
     data: v.strictObject({ url: v.string(), token: v.string() }),
 });
 
+const LibraryItemData = v.strictObject({
+    order_reference: v.string(),
+    paid_at: v.nullable(v.string()),
+    title_name: v.string(),
+    type: ProductTypeReference,
+    quantity: v.number(),
+    product: v.strictObject({
+        slug: v.string(),
+        platforms: v.array(Reference),
+        region: v.nullable(Reference),
+        activation_service: v.nullable(Reference),
+    }),
+    keys: v.array(v.strictObject({ hint: v.string(), revealed: v.boolean() })),
+});
+
+/** "My library": key lines of paid orders, with hints only. */
+export const LibraryPageSchema = v.strictObject({
+    data: v.array(LibraryItemData),
+    ...paginationFields,
+});
+
+/** The codes of one library line, revealed on request. */
+export const LibraryKeysSchema = v.strictObject({
+    data: v.strictObject({
+        keys: v.array(v.strictObject({ hint: v.string(), code: v.string() })),
+    }),
+});
+
+export type LibraryItem = v.InferOutput<typeof LibraryItemData>;
+export type LibraryPage = v.InferOutput<typeof LibraryPageSchema>;
+export type RevealedKey = v.InferOutput<
+    typeof LibraryKeysSchema
+>['data']['keys'][number];
 export type Order = v.InferOutput<typeof OrderSchemaData>;
 export type OrderPage = v.InferOutput<typeof OrderPageSchema>;
 export type PaymentRedirect = v.InferOutput<

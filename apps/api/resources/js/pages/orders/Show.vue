@@ -24,7 +24,12 @@ type OrderLine = {
     quantity: number;
     unit_price: number;
     line_total: number;
-    keys: { id: number; code_hint: string; status: string }[];
+    keys: {
+        id: number;
+        code_hint: string;
+        status: string;
+        revealed_at: string | null;
+    }[];
 };
 
 type PaymentAttempt = {
@@ -210,6 +215,15 @@ const timeline = [
                                         <Badge variant="outline">{{
                                             key.status
                                         }}</Badge>
+                                        <span
+                                            v-if="key.revealed_at"
+                                            class="text-muted-foreground"
+                                        >
+                                            Revelada el
+                                            {{
+                                                formatDateTime(key.revealed_at)
+                                            }}
+                                        </span>
                                     </li>
                                 </ul>
                             </TableCell>

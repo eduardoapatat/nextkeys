@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Auth\SessionController;
 use App\Http\Controllers\Api\V1\CatalogFilterController;
+use App\Http\Controllers\Api\V1\Library\LibraryController;
 use App\Http\Controllers\Api\V1\Orders\CustomerOrderController;
 use App\Http\Controllers\Api\V1\Orders\CustomerPaymentController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -48,5 +49,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('{reference}', [CustomerOrderController::class, 'show'])->name('show');
         Route::post('{reference}/payments', CustomerPaymentController::class)->middleware('throttle:10,1')->name('payments.store');
         Route::post('{reference}/cancel', [CustomerOrderController::class, 'cancel'])->name('cancel');
+    });
+
+    Route::middleware('auth:sanctum')->prefix('library')->name('library.')->group(function () {
+        Route::get('/', [LibraryController::class, 'index'])->name('index');
+        Route::post('{reference}/{slug}/keys', [LibraryController::class, 'reveal'])->middleware('throttle:30,1')->name('keys');
     });
 });

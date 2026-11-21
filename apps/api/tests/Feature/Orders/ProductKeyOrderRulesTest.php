@@ -85,3 +85,18 @@ it('rejects moving a key to another order without releasing it', function () {
     expect(fn () => updateProductKeyRow($keyId, ['order_item_id' => $otherItemId]))
         ->toThrow(QueryException::class, 'product_keys_status_transition');
 });
+
+it('rejects a reveal on a key that is not sold', function () {
+    $available = insertProductKeyRow($this->productId);
+
+    expect(fn () => updateProductKeyRow($available, ['revealed_at' => now()]))
+        ->toThrow(QueryException::class, 'product_keys_revealed_only_when_sold');
+});
+
+it('records a reveal on a sold key', function () {
+    $sold = insertProductKeyRow($this->productId, ['status' => 'sold', 'order_item_id' => $this->orderItemId]);
+
+    updateProductKeyRow($sold, ['revealed_at' => now()]);
+
+    expect(DB::table('product_keys')->where('id', $sold)->value('revealed_at'))->not->toBeNull();
+});

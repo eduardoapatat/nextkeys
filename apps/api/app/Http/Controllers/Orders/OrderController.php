@@ -43,7 +43,7 @@ class OrderController extends Controller
         $order->load([
             'user:id,name,email',
             'items' => fn ($query) => $query->orderBy('id'),
-            'items.keys' => fn ($query) => $query->select(['id', 'order_item_id', 'code_hint', 'status'])->orderBy('id'),
+            'items.keys' => fn ($query) => $query->select(['id', 'order_item_id', 'code_hint', 'status', 'revealed_at'])->orderBy('id'),
             'paymentAttempts' => fn ($query) => $query->orderBy('number'),
         ]);
 
@@ -78,6 +78,7 @@ class OrderController extends Controller
                         'id' => $key->id,
                         'code_hint' => $key->code_hint,
                         'status' => $key->status->label(),
+                        'revealed_at' => $key->revealed_at?->toIso8601String(),
                     ])->all(),
                 ])->all(),
                 'payments' => $order->paymentAttempts->map(fn (PaymentAttempt $attempt): array => [

@@ -13,6 +13,7 @@ use Carbon\CarbonInterface;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Support\Facades\Config;
 
 /**
  * The payment confirmation, with the keys of every key-delivered line
@@ -69,6 +70,7 @@ final class OrderPaidMail extends Mailable
                 ])->all(),
                 'hasPhysicalItems' => $this->order->items->contains('product_type', ProductType::Physical),
                 'receipt' => $attempt === null ? null : $this->receiptOf($attempt),
+                'libraryUrl' => Config::string('storefront.url').'/biblioteca',
             ],
         );
     }

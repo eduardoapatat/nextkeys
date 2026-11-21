@@ -23,6 +23,10 @@ Actívala en: {{ $line['activation'] }}
 @endforeach
 **Total: {{ $total }} (CLP)**
 
+<x-mail::button :url="$libraryUrl">
+Ver en Mi biblioteca
+</x-mail::button>
+
 @if ($receipt)
 <x-mail::panel>
 **Comprobante de pago (Webpay)**<br>

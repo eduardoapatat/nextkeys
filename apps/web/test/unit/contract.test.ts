@@ -4,6 +4,8 @@ import {
     CatalogFiltersSchema,
     CustomerSchema,
     MessageSchema,
+    LibraryKeysSchema,
+    LibraryPageSchema,
     NotFoundSchema,
     OrderPageSchema,
     OrderSchema,
@@ -29,6 +31,8 @@ describe('API contract fixtures', () => {
         ['orders.show', OrderSchema],
         ['orders.index', OrderPageSchema],
         ['payments.store', PaymentRedirectSchema],
+        ['library.index', LibraryPageSchema],
+        ['library.keys', LibraryKeysSchema],
     ] as const)('%s matches its schema', (name, schema) => {
         expect(() => fixture(name, schema)).not.toThrow();
     });

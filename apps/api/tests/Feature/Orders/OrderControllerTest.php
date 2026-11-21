@@ -80,6 +80,7 @@ it('shows an order by its reference with lines and key hints, never codes', func
             ->has('order.items.0.keys.0', fn (Assert $key) => $key
                 ->where('code_hint', $this->key->code_hint)
                 ->where('status', 'Reservada')
+                ->where('revealed_at', null)
                 ->missingAll(['code', 'code_hash'])
                 ->etc())
             ->where('canCancel', true)

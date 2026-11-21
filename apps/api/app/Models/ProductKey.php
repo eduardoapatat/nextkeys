@@ -27,6 +27,7 @@ use RuntimeException;
  * @property string $code_hint
  * @property ProductKeyStatus $status
  * @property int|null $order_item_id Set exactly while the key is reserved or sold.
+ * @property Carbon|null $revealed_at First time the customer revealed it in "My library" (sold keys only).
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Product $product
@@ -123,6 +124,7 @@ class ProductKey extends Model
             'product_type' => ProductType::class,
             'code' => ProductKeyCode::class,
             'status' => ProductKeyStatus::class,
+            'revealed_at' => 'datetime',
         ];
     }
 }

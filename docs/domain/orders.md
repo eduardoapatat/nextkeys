@@ -128,6 +128,15 @@ Decided on 2026-11-20.
   - `OrderResource`: reference, status, total, `expires_at`, `paid_at`, `created_at`, `can_pay`, `has_physical_items`, the snapshot lines (with the product slug) and `last_payment` (the receipt fields Transbank asks the result page to show). Never keys, ids or the `buy_order`.
 - **Nuxt `/checkout`** shows the cart summary, the withdrawal notice next to the total (same font size as the price, with the words "derecho a retracto"; the 10-day term too when the cart has physical products), blocks payment until the email is verified, links an existing pending order instead of paying, and posts `token_ws` to Webpay with a plain form (never an iframe). Placing the order empties the cart.
 
+## My library (phase 4)
+
+Decided on 2026-11-20.
+
+- **Listing:** `GET /api/v1/library` (`auth:sanctum`) pages the customer's key-delivered lines (`digital_key`, `license`) of paid or completed orders, newest payment first: order reference, `paid_at`, the line snapshot (title, type, quantity), the product as it is now (slug, activation service, platforms, region) and its keys as `{hint, revealed}`. **Never a code.**
+- **Reveal on request:** `POST /api/v1/library/{reference}/{slug}/keys` (`RevealOrderLineKeys`) returns the codes of one line, identified by the product slug (unique per order, so no ids are exposed). Only the owner (404 otherwise) and only paid or completed orders; `Cache-Control: no-store`, 30 requests a minute, and nothing logged.
+- **`product_keys.revealed_at`** records the first reveal (later reveals keep it), for support and warranty questions; a CHECK allows it only on `sold` keys. The panel's order detail shows it next to each key.
+- The payment confirmation email links to `/biblioteca` (`storefront.url`).
+
 ## Rejected alternatives
 
 - **One `order_items` row per unit**: simpler 1:1 link to a key, but every list and total has to group rows.

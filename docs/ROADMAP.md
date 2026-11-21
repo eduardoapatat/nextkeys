@@ -5,8 +5,8 @@ Finished phases collapse to one line; details live in the git history.
 
 ## Current status
 
-- **Current phase:** 4. Nuxt storefront
-- **Next task:** to be chosen from phase 4: cart, checkout with Webpay (requires a verified email, shows the withdrawal exclusion), the payment result page, or "My library".
+- **Current phase:** 5. Physical products (phase 4 closed; the storefront's visual design is still pending).
+- **Next task:** to be chosen: the storefront's visual design, or phase 5 (addresses, shipments and shipping status).
 
 ## Phases
 
@@ -14,7 +14,7 @@ Finished phases collapse to one line; details live in the git history.
 - [x] **1. Catalog:** domain model ([`docs/domain/catalog.md`](domain/catalog.md)), users with roles ([`docs/domain/users.md`](domain/users.md)), admin CRUD for titles and products, bulk key import from CSV ([`catalog.md` → Admin panel (key import)](domain/catalog.md#admin-panel-key-import)), per-variant cover and key hint ([`catalog.md` → Variant cover and key hint](domain/catalog.md#variant-cover-and-key-hint)), and product status ([`catalog.md` → Product status](domain/catalog.md#product-status)).
 - [x] **2. Public catalog API:** read-only `/api/v1` (filtered listing, product detail with its variants, filter options) with API Resources ([`catalog.md` → Public catalog API (phase 2)](domain/catalog.md#public-catalog-api-phase-2)). Price range, name search and in-stock filter deferred.
 - [x] **3. Orders and payments:** orders with stock reservation and expiry ([`orders.md`](domain/orders.md)), Transbank Webpay Plus behind `PaymentGateway` with reconciliation ([`payments.md`](domain/payments.md)), and the payment confirmation email with the keys through the queue ([`orders.md` → Confirmation email and key delivery](domain/orders.md#confirmation-email-and-key-delivery)).
-- [ ] **4. Nuxt storefront (`apps/web`):** catalog, product page, cart, Sanctum auth, checkout and "My library". Prototype of the catalog and product page pulled ahead and implemented (visual design pending): [`docs/domain/storefront.md`](domain/storefront.md). Customer auth with Sanctum implemented (registration, sign in with remember-me, sign out, email verification and password reset): [`users.md` → Customer authentication](domain/users.md#customer-authentication-phase-4).
+- [x] **4. Nuxt storefront (`apps/web`):** functional, visual design pending ([`storefront.md`](domain/storefront.md)): catalog and product page, cart in a cookie, customer auth with Sanctum ([`users.md`](domain/users.md#customer-authentication-phase-4)), checkout with Webpay and one pending order per customer ([`orders.md` → Storefront checkout](domain/orders.md#storefront-checkout-phase-4)), payment result page, and "My library" with keys revealed on request ([`orders.md` → My library](domain/orders.md#my-library-phase-4)).
 - [ ] **5. Physical products:** addresses, shipments and shipping status.
 - [ ] **6. Extras:** Meilisearch search, wishlist, reviews, coupons and sales dashboard.
 - [ ] **7. Launch:** deployment, public demo and portfolio README (screenshots, GIF, diagram).

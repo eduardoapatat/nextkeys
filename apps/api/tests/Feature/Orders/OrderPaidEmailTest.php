@@ -102,6 +102,7 @@ it('shows the keys, where to activate them, the receipt and the withdrawal condi
         ->toContain('$19.990')
         ->toContain('Código de autorización')
         ->toContain('no admiten derecho a retracto')
+        ->toContain('http://storefront.test/biblioteca')
         ->not->toContain('Se despachará')
         ->not->toContain('10 días de derecho a retracto');
 });

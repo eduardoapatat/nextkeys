@@ -98,6 +98,10 @@ Decided on 2026-11-20.
   - Expired or cancelled: a notice and a link to the catalog.
 - **`/pedidos`** lists the customer's orders; with `?estado=desconocido` (a return the API could not match) it first says the payment could not be identified. `/cuenta` links to it.
 
+### My library page (phase 4)
+
+- **`/biblioteca`** lists the key lines by hint, grouped by order, with "Mostrar claves" per line; the revealed codes live only in the page (never in `useState`, the payload or the cookie). The API side is in [`orders.md` → My library](orders.md#my-library-phase-4).
+
 ## Open questions
 
 - Visual design (component library; Tailwind/shadcn-vue shared with the admin): pending.
