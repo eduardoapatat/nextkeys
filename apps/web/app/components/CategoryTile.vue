@@ -72,11 +72,7 @@ const look: Record<TileKind, { tone: string; symbol: Symbol }> = {
     },
     license: {
         tone: 'from-tile-license to-tile-license-deep',
-        // The four panes of the Windows 11 logo (plain geometry).
-        symbol: {
-            viewBox: '0 0 24 24',
-            d: 'M0 0h11.4v11.4H0zm12.6 0H24v11.4H12.6zM0 12.6h11.4V24H0zm12.6 0H24V24H12.6z',
-        },
+        symbol: mark('windows'),
     },
     physical: {
         tone: 'from-tile-physical to-cover-5',

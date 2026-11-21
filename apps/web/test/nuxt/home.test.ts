@@ -139,4 +139,45 @@ describe('home', () => {
             categories.find('a[href="/catalogo?type=digital_key"]').exists(),
         ).toBe(true);
     });
+
+    it('guides activation per store, with arrow keys between tabs', async () => {
+        const page = await mountSuspended(HomePage, { route: '/' });
+        const guide = page.find('#activar');
+        const tabs = guide.findAll('[role="tab"]');
+
+        expect(tabs.map((tab) => tab.text())).toEqual([
+            'Steam',
+            'PlayStation Store',
+            'Xbox',
+            'Nintendo eShop',
+            'Programas',
+        ]);
+        expect(guide.findAll('[role="tabpanel"]')).toHaveLength(5);
+        expect(guide.find('#guide-panel-steam').attributes('hidden')).toBe(
+            undefined,
+        );
+
+        await tabs[0]!.trigger('keydown', { key: 'ArrowLeft' });
+        expect(tabs[4]!.attributes('aria-selected')).toBe('true');
+        expect(guide.find('#guide-panel-programas').text()).toContain(
+            'setup.office.com',
+        );
+
+        await tabs[2]!.trigger('click');
+        expect(
+            guide.find('#guide-panel-xbox').attributes('hidden'),
+        ).toBeUndefined();
+        expect(
+            guide.find('#guide-panel-programas').attributes('hidden'),
+        ).toBeDefined();
+    });
+
+    it('answers the frequent questions in native disclosures', async () => {
+        const page = await mountSuspended(HomePage, { route: '/' });
+        const faq = page.findAll('#preguntas details');
+
+        expect(faq.length).toBeGreaterThanOrEqual(5);
+        expect(page.find('#preguntas').text()).toContain('derecho a retracto');
+        expect(page.find('#preguntas').text()).toContain('15 minutos');
+    });
 });

@@ -13,7 +13,7 @@ Audience: a recruiter or tech lead walking the demo for a few minutes; it must r
 
 ## Redesign (2026-11-21)
 
-The user replaced the world below after building it: the page is now light. White ground with navy text, turquoise brand sections (#1e758a) for the header, banner slider, benefits and footer, a coral accent (#e04a2a, white bold text) for primary actions and the current menu item, Rubik and Sofia Sans Condensed, key-store product cards (price and "Agregar" at the foot) and covers with their platform's official band. On 2026-11-21 the display case and the shelf's side menu were removed: banner, shelf, a full-width turquoise platform band, benefits. DESIGN.md holds the current system; the contract below is the original direction, kept as history.
+The user replaced the world below after building it: the page is now light. White ground with navy text, turquoise brand sections (#1e758a) for the header, banner slider, benefits and footer, a coral accent (#e04a2a, white bold text) for primary actions and the current menu item, Rubik and Sofia Sans Condensed, key-store product cards (price and "Agregar" at the foot) and covers with their platform's official band. On 2026-11-21 the display case and the shelf's side menu were removed; the home is now: banner, Juegos shelf, a full-width turquoise band of drawn category tiles, Programas, ¿Cómo activo mi clave?, benefits, preguntas frecuentes. DESIGN.md holds the current system; the contract below is the original direction, kept as history.
 
 ## Direction contract (original, superseded)
 

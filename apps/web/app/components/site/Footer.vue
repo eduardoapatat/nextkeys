@@ -33,8 +33,8 @@ const columns = computed(() => [
     {
         title: 'Ayuda',
         links: [
-            { label: 'Cómo activar una clave', href: '#' },
-            { label: 'Preguntas frecuentes', href: '#' },
+            { label: 'Cómo activar una clave', to: '/#activar' },
+            { label: 'Preguntas frecuentes', to: '/#preguntas' },
             { label: 'Contacto', href: '#' },
         ],
     },

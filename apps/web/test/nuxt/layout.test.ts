@@ -62,5 +62,11 @@ describe('store layout', () => {
             'Es una demo: no guardamos tu correo.',
         );
         expect(footer.text()).toContain('los pagos son ficticios');
+        expect(footer.find('a[href="/#activar"]').text()).toBe(
+            'Cómo activar una clave',
+        );
+        expect(footer.find('a[href="/#preguntas"]').text()).toBe(
+            'Preguntas frecuentes',
+        );
     });
 });
