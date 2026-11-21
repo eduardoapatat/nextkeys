@@ -15,9 +15,9 @@ colors:
     brand-strong: '#155566'
     brand-deep: '#0d313b'
     brand-soft: '#e3f2f6'
-    accent: '#ff6b4a'
-    accent-hover: '#ff8466'
-    accent-fg: '#1a0a05'
+    accent: '#e04a2a'
+    accent-hover: '#c93f22'
+    accent-fg: '#ffffff'
     danger: '#b42318'
     danger-soft: '#fdecea'
     ok: '#1f7a3d'
@@ -209,7 +209,7 @@ Tokens are named by role (`bg`, `surface`, `fg`, `brand`, `accent`…), not by v
 **Key Characteristics:**
 
 - White ground, navy text; turquoise brand sections at the top and bottom of the page.
-- Coral marks the one primary action, the cart and the current menu item; text on it is dark.
+- Coral marks the one primary action, the cart and the current menu item; text on it is white and bold.
 - Every cover carries an official platform band; PC games show the store where they are activated.
 - Condensed extra-bold caps for headings, buttons, prices and covers; Rubik for reading.
 - Thermal paper and monospace for every money summary.
@@ -225,7 +225,7 @@ A light, cool palette: white and blue-grey neutrals, one turquoise brand family 
 
 ### Secondary
 
-- **Coral** (accent): the primary button, price stickers, the cart count when the cart has items, the current or hovered menu item, the active shelf tab underline and banner dot. Hover lifts to **Light Coral** (accent-hover); text on it is **Coral Ink** (accent-fg), never white.
+- **Coral** (accent): the primary button, price stickers, the cart count when the cart has items, the current or hovered menu item, the active shelf tab underline and banner dot. Hover deepens to **Dark Coral** (accent-hover); text on it is white (accent-fg), always bold: 4.1:1 on Coral, 5:1 on Dark Coral. The coral was darkened from `#ff6b4a` on 2026-11-21 because the user disliked the dark ink on it.
 
 ### Tertiary
 
@@ -237,7 +237,7 @@ A light, cool palette: white and blue-grey neutrals, one turquoise brand family 
 ### Neutral
 
 - **White Floor** (bg) and **White Surface** (surface): the page and cards, inputs.
-- **Mist** (bg-subtle): the display case, account and filter panels. **Mist Raised** (surface-2): secondary buttons, cover placeholders, the out-of-stock sticker, the shelf sidebar header.
+- **Mist** (bg-subtle): account and filter panels. **Mist Raised** (surface-2): secondary buttons, cover placeholders, the out-of-stock sticker.
 - **Hairline** (line) and **Steel Line** (line-strong): dividers and control borders.
 - **Navy Ink** (fg, 16:1 on white): primary text. **Slate** (fg-muted, 8:1) for secondary text, **Faint Slate** (fg-faint, 5.4:1) for labels, "Se activa en…", placeholders.
 - **Status**: **Error Red** (danger) on **Blush** (danger-soft); **Success Green** (ok) on **Mint** (ok-soft). Used as a 50% border plus soft fill with navy text, never as large solid areas.
@@ -282,7 +282,7 @@ All fonts are self-hosted woff2 (latin and latin-ext) in `app/assets/css/fonts.c
 
 ## Layout
 
-One centered container (80rem max) with a 16px side gutter at every width. The page opens with the turquoise header (logo, search, account, cart) and the deep-turquoise menu bar, and closes with the turquoise newsletter band and the night-turquoise footer. The home stacks its zones with 64px between them (80px from `md`): the banner slider and the display case below it (24px apart), the platform tiles, the shelf with its category sidebar (15rem) and tabs, then the turquoise benefits band.
+One centered container (80rem max) with a 16px side gutter at every width. The page opens with the turquoise header (logo, search, account, cart) and the deep-turquoise menu bar, and closes with the turquoise newsletter band and the night-turquoise footer. The home stacks its zones with 64px between them (80px from `md`): the banner slider, the tabbed shelf at full container width (no side menu), a full-width turquoise band with the platform tiles and type links (its background spans the viewport, its content stays in the container), then the turquoise benefits band.
 
 Listings use the card grid: 2 columns, 3 from `sm`, 4 from `xl`, with 20px between columns and 40px between rows. Card facts stack in fixed order (title, type · region, "Se activa en …"), and the price row is pushed to the card's foot so prices align across a row.
 
@@ -307,7 +307,7 @@ Mostly flat. Surfaces are tonal steps (white, Mist, Mist Raised, turquoise) sepa
 
 ## Shapes
 
-Small, practical corners: 4px for controls (buttons, inputs, stickers, the cart pill) and 6px for cards, covers, the display case, the banner, the benefits band and panels. Borders are 1px hairlines; dashed borders mark paper-like or provisional things (receipt rules, the empty state). Price stickers sit rotated (-3deg small, -2deg large) and overlap a cover's lower right corner; the error sign is rotated -2deg. The receipt is clipped with an 8px zig-zag tear at top and bottom.
+Small, practical corners: 4px for controls (buttons, inputs, stickers, the cart pill) and 6px for cards, covers, the banner, the benefits band and panels. Borders are 1px hairlines; dashed borders mark paper-like or provisional things (receipt rules, the empty state). Prices are never rotated; the error sign is rotated -2deg. The receipt is clipped with an 8px zig-zag tear at top and bottom.
 
 ## Components
 
@@ -316,7 +316,7 @@ Small, practical corners: 4px for controls (buttons, inputs, stickers, the cart 
 Bold store keys: condensed extra-bold caps, solid and pressable (`app/components/ui/Button.vue`).
 
 - **Shape:** gently squared (4px).
-- **Primary:** Coral with Coral Ink text and the tag shadow; hover Light Coral. Heights 36, 44 and 52px with 12, 16 and 24px side padding.
+- **Primary:** Coral with white bold text and the tag shadow; hover Dark Coral. Heights 36, 44 and 52px with 12, 16 and 24px side padding.
 - **Secondary:** Mist Raised with a Steel Line border and Navy Ink text; on hover the fill turns white and the border Faint Slate.
 - **Ghost:** bare Slate label that darkens to Navy Ink ("Ver todo").
 - **Press / Focus:** every pressable scales to 0.97 over 160ms on the out curve; focus is a 2px turquoise outline with 2px offset (white inside brand sections). Disabled is 50% opacity with a not-allowed cursor.
@@ -338,15 +338,15 @@ Wraps a cover; on fine hover pointers without reduced motion it rotates up to 7d
 
 ### Price Sticker
 
-A coral CLP label stuck on a box (`PriceSticker.vue`), used on the display case, the deal of the day and the product page, never on listing cards: display 800, tabular, rotated a few degrees, overlapping the cover, with the tag shadow. Out of stock it turns Mist Raised with Slate text and a "Sin stock" line. There are no strike-through or "before" prices.
+A coral CLP label stuck on a box (`PriceSticker.vue`), used only on the deal of the day: display 800, tabular, flat (never rotated), with the tag shadow. The product page shows its price as large display text in the details column, not as a sticker. Out of stock it turns Mist Raised with Slate text and a "Sin stock" line. There are no strike-through or "before" prices.
 
 ### Banner slider
 
 Home only, first zone: a turquoise brand section (6px corners) with three slides on a scroll-snap track: the deal of the day (monospace countdown to Santiago midnight, the price sticker, a tilted cover), "Paga con Webpay" with a thermal receipt slip, and "Tu clave, al instante" with three fanned covers. Dots (the active one coral), pause and arrow buttons (translucent white keys that turn white-bordered on hover) sit on the bottom edge. It advances every 7s, pauses on hover, focus and its pause button, never moves on its own under reduced motion, and off-screen slides are `inert`.
 
-### Display Case
+### Platform Band
 
-The newest games on a Mist panel with a hairline border and 6px corners: a lead cover with its sticker and facts, then a row of four covers with add buttons.
+Home only, right after the shelf: a turquoise brand section that spans the viewport width, its content in the container. Four platform tiles (translucent white, hairline border, the family name in display caps over its platforms, an arrow) that fill coral with white text on hover, then the three product types as bordered rows. It replaced the display case and the shelf's category side menu on 2026-11-21.
 
 ### Thermal Receipt
 
@@ -360,7 +360,7 @@ Cream paper, monospace print, torn zig-zag edges, dashed rules between blocks an
 
 ### Navigation
 
-The header is a turquoise brand section: logo, search field, account links in muted white, and the cart as a secondary key whose count pill turns coral once the cart has items. Under it, from `md`, the menu bar follows Koparion's main menu: a Deep Turquoise strip (52px) with Inicio, Catálogo, the platform families and the product types in bold uppercase Rubik, 20px side padding and a 2px gap so two filled items never touch, horizontally scrollable. The current page (`aria-current`) and the hovered item (fine pointers only) fill the full bar height in coral with Coral Ink text, like a button; the fill fades over 150ms. Styles live in `.menu-tab` (`main.css`). Shelf tabs use condensed caps with a 2px coral underline on the active one. On small screens a drawer slides in from the left (200ms out, 280ms in on a drawer curve).
+The header is a turquoise brand section: logo, search field, account links in muted white, and the cart as a secondary key whose count pill turns coral once the cart has items. Under it, from `md`, the menu bar follows Koparion's main menu: a Deep Turquoise strip (52px) with Inicio, Catálogo, the platform families and the product types in bold uppercase Rubik, 20px side padding and a 2px gap so two filled items never touch, horizontally scrollable. The current page (`aria-current`) and the hovered item (fine pointers only) fill the full bar height in coral with white text, like a button; the fill fades over 150ms. Styles live in `.menu-tab` (`main.css`). Shelf tabs use condensed caps with a 2px coral underline on the active one. On small screens a drawer slides in from the left (200ms out, 280ms in on a drawer curve).
 
 ### Footer
 
@@ -389,7 +389,7 @@ A dashed Steel Line box with a condensed caps message and one way forward.
 ### Don't:
 
 - **Don't** write raw colors (hex, `rgb()`, `bg-[#…]`) in `.vue` files, or color utilities without a token; the design-tokens test fails.
-- **Don't** use more than one coral action per view, or white text on coral.
+- **Don't** use more than one coral action per view, or regular-weight text on coral (white text there must be bold).
 - **Don't** add a frame around cover art; the band is the only mark.
 - **Don't** put station numbers or price stickers on listing cards.
 - **Don't** use Permanent Marker outside the error sign, or paper and board colors outside their objects.

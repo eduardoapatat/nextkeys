@@ -30,10 +30,13 @@
     --color-brand-deep: #0d313b;
     --color-brand-soft: #e3f2f6;
 
-    /* Coral accent: the primary action, the cart, the current menu item. */
-    --color-accent: #ff6b4a;
-    --color-accent-hover: #ff8466;
-    --color-accent-fg: #1a0a05;
+    /*
+     * Coral accent: the primary action, the cart, the current menu item.
+     * Deep enough for white bold text (4.1:1); hover goes darker (5:1).
+     */
+    --color-accent: #e04a2a;
+    --color-accent-hover: #c93f22;
+    --color-accent-fg: #ffffff;
 
     --color-danger: #b42318;
     --color-danger-soft: #fdecea;

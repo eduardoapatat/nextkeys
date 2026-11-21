@@ -9,6 +9,6 @@
         >
             <UiIcon name="key" :size="20" />
         </span>
-        <span>Next<span class="text-accent">Keys</span></span>
+        <span>Next<span class="font-normal text-fg-muted">Keys</span></span>
     </NuxtLink>
 </template>

@@ -202,7 +202,7 @@
             "accent": {
                 "role": "secondary",
                 "displayName": "Coral",
-                "canonical": "#ff6b4a",
+                "canonical": "#e04a2a",
                 "tonalRamp": [
                     "oklch(15% 0.092 34)",
                     "oklch(26% 0.119 34)",
@@ -216,8 +216,8 @@
             },
             "accent-hover": {
                 "role": "secondary",
-                "displayName": "Light Coral",
-                "canonical": "#ff8466",
+                "displayName": "Dark Coral",
+                "canonical": "#c93f22",
                 "tonalRamp": [
                     "oklch(15% 0.077 35)",
                     "oklch(26% 0.099 35)",
@@ -231,8 +231,8 @@
             },
             "accent-fg": {
                 "role": "secondary",
-                "displayName": "Coral Ink",
-                "canonical": "#1a0a05",
+                "displayName": "On Coral",
+                "canonical": "#ffffff",
                 "tonalRamp": [
                     "oklch(15% 0.015 41)",
                     "oklch(26% 0.020 41)",
@@ -788,7 +788,7 @@
             "refersTo": "button-primary",
             "description": "The coral action, one per view (Agregar al carrito, Ir a pagar).",
             "html": "<button class=\"ds-btn ds-btn-primary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar al carrito</button>",
-            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid var(--color-brand,#1e758a);outline-offset:2px;}.ds-btn-primary{border:0;background:var(--color-accent,#ff6b4a);color:var(--color-accent-fg,#1a0a05);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);}.ds-btn-primary:hover{background:var(--color-accent-hover,#ff8466);}"
+            "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--radius-control,4px);font-family:'Sofia Sans Condensed','Rubik',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.025em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms ease,border-color 150ms ease,color 150ms ease;}.ds-btn:active{transform:scale(0.97);}.ds-btn:focus-visible{outline:2px solid var(--color-brand,#1e758a);outline-offset:2px;}.ds-btn-primary{border:0;background:var(--color-accent,#e04a2a);color:var(--color-accent-fg,#ffffff);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);}.ds-btn-primary:hover{background:var(--color-accent-hover,#c93f22);}"
         },
         {
             "name": "Secondary Button",
@@ -820,7 +820,7 @@
             "refersTo": "menu-bar",
             "description": "Koparion-style menu: a deep turquoise strip whose current or hovered item fills its height in coral.",
             "html": "<nav class=\"ds-menu\"><a href=\"#\">Inicio</a><a class=\"is-current\" href=\"#\">Catálogo</a><a href=\"#\">PlayStation</a><a href=\"#\">Xbox</a><a href=\"#\">Nintendo</a><a href=\"#\">PC</a></nav>",
-            "css": ".ds-menu{display:flex;gap:2px;background:#155566;padding:0 16px;font-family:'Rubik',sans-serif;}.ds-menu a{display:flex;align-items:center;height:52px;padding:0 20px;font-weight:700;text-transform:uppercase;white-space:nowrap;color:#ffffff;text-decoration:none;transition:color 150ms cubic-bezier(0.23,1,0.32,1),background-color 150ms cubic-bezier(0.23,1,0.32,1);}.ds-menu a:hover,.ds-menu a.is-current{background:#ff6b4a;color:#1a0a05;}.ds-menu a:focus-visible{outline:2px solid #ffffff;outline-offset:2px;}"
+            "css": ".ds-menu{display:flex;gap:2px;background:#155566;padding:0 16px;font-family:'Rubik',sans-serif;}.ds-menu a{display:flex;align-items:center;height:52px;padding:0 20px;font-weight:700;text-transform:uppercase;white-space:nowrap;color:#ffffff;text-decoration:none;transition:color 150ms cubic-bezier(0.23,1,0.32,1),background-color 150ms cubic-bezier(0.23,1,0.32,1);}.ds-menu a:hover,.ds-menu a.is-current{background:#e04a2a;color:#ffffff;}.ds-menu a:focus-visible{outline:2px solid #ffffff;outline-offset:2px;}"
         },
         {
             "name": "Product Card",
@@ -828,7 +828,7 @@
             "refersTo": "product-card-price",
             "description": "Key-store card: cover with platform band, title, type and region, activation service, price and Agregar at the foot.",
             "html": "<article class=\"ds-card\"><div class=\"ds-cover\"><p class=\"ds-band ds-band-ps5\">PS5</p><div class=\"ds-art\"><p class=\"ds-ctitle\">Neon Heist</p><p class=\"ds-cfoot\">Clave digital · LATAM</p></div></div><h3><a href=\"#\">Neon Heist</a></h3><p class=\"ds-meta\">Clave digital · LATAM</p><p class=\"ds-faint\">Se activa en PlayStation Store</p><div class=\"ds-foot\"><data>$74.990</data><button class=\"ds-add\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/><path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6\"/></svg>Agregar</button></div></article>",
-            "css": ".ds-card{width:210px;display:flex;flex-direction:column;gap:4px;font-family:'Rubik',sans-serif;color:#0b1f33;}.ds-cover{aspect-ratio:3/4;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;background:#e8eef2;margin-bottom:8px;box-shadow:0 18px 36px -22px rgb(11 31 51 / 0.45),0 2px 6px rgb(11 31 51 / 0.12);transition:transform 260ms cubic-bezier(0.23,1,0.32,1),box-shadow 200ms;}.ds-card:hover .ds-cover{transform:perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px);box-shadow:0 18px 32px -14px rgb(11 31 51 / 0.45),0 4px 10px rgb(11 31 51 / 0.12);}.ds-band{margin:0;padding:5px 8px;font:800 0.7rem/1 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;}.ds-band-ps5{background:#f3f4f6;color:#000000;}.ds-art{flex:1;display:flex;flex-direction:column;background:#234b6b;color:#ffffff;}.ds-ctitle{margin:auto 0 0;padding:0 8%;font:800 1.7rem/0.92 'Sofia Sans Condensed',sans-serif;text-transform:uppercase;}.ds-cfoot{margin:0;padding:5% 8% 7%;font-size:0.65rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;opacity:0.9;}.ds-card h3{margin:0;font-size:1rem;font-weight:600;line-height:1.375;}.ds-card a{color:#0b1f33;text-decoration:none;}.ds-card a:hover{color:#1e758a;}.ds-meta{margin:0;font-size:0.875rem;color:#3e5163;}.ds-faint{margin:0;font-size:0.875rem;color:#586a79;}.ds-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;}.ds-foot data{font:800 1.5rem/1 'Sofia Sans Condensed',sans-serif;font-variant-numeric:tabular-nums;}.ds-add{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:0;border-radius:4px;background:#ff6b4a;color:#1a0a05;font:800 0.875rem 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms;}.ds-add:hover{background:#ff8466;}.ds-add:active{transform:scale(0.97);}"
+            "css": ".ds-card{width:210px;display:flex;flex-direction:column;gap:4px;font-family:'Rubik',sans-serif;color:#0b1f33;}.ds-cover{aspect-ratio:3/4;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;background:#e8eef2;margin-bottom:8px;box-shadow:0 18px 36px -22px rgb(11 31 51 / 0.45),0 2px 6px rgb(11 31 51 / 0.12);transition:transform 260ms cubic-bezier(0.23,1,0.32,1),box-shadow 200ms;}.ds-card:hover .ds-cover{transform:perspective(900px) rotateX(-2deg) rotateY(3deg) translateY(-4px);box-shadow:0 18px 32px -14px rgb(11 31 51 / 0.45),0 4px 10px rgb(11 31 51 / 0.12);}.ds-band{margin:0;padding:5px 8px;font:800 0.7rem/1 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;}.ds-band-ps5{background:#f3f4f6;color:#000000;}.ds-art{flex:1;display:flex;flex-direction:column;background:#234b6b;color:#ffffff;}.ds-ctitle{margin:auto 0 0;padding:0 8%;font:800 1.7rem/0.92 'Sofia Sans Condensed',sans-serif;text-transform:uppercase;}.ds-cfoot{margin:0;padding:5% 8% 7%;font-size:0.65rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;opacity:0.9;}.ds-card h3{margin:0;font-size:1rem;font-weight:600;line-height:1.375;}.ds-card a{color:#0b1f33;text-decoration:none;}.ds-card a:hover{color:#1e758a;}.ds-meta{margin:0;font-size:0.875rem;color:#3e5163;}.ds-faint{margin:0;font-size:0.875rem;color:#586a79;}.ds-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;}.ds-foot data{font:800 1.5rem/1 'Sofia Sans Condensed',sans-serif;font-variant-numeric:tabular-nums;}.ds-add{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:0;border-radius:4px;background:#e04a2a;color:#ffffff;font:800 0.875rem 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase;box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);cursor:pointer;transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 150ms;}.ds-add:hover{background:#c93f22;}.ds-add:active{transform:scale(0.97);}"
         },
         {
             "name": "Price Sticker",
@@ -836,7 +836,7 @@
             "refersTo": "price-sticker",
             "description": "Coral CLP sticker, rotated and overlapping a cover (display case, deal, product page); Mist Raised with Sin stock when out of stock.",
             "html": "<div style=\"display:flex;gap:24px;align-items:center\"><p class=\"ds-sticker\">$14.990</p><p class=\"ds-sticker ds-sticker-out\">$79.990<span>Sin stock</span></p></div>",
-            "css": ".ds-sticker{display:inline-flex;flex-direction:column;margin:0;padding:4px 8px;border-radius:4px;background:#ff6b4a;color:#1a0a05;font-family:'Sofia Sans Condensed',sans-serif;font-weight:800;font-size:1.125rem;line-height:1;font-variant-numeric:tabular-nums;transform:rotate(-3deg);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);}.ds-sticker-out{background:#e8eef2;color:#3e5163;}.ds-sticker span{margin-top:2px;font-size:0.75rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;}"
+            "css": ".ds-sticker{display:inline-flex;flex-direction:column;margin:0;padding:4px 8px;border-radius:4px;background:#e04a2a;color:#ffffff;font-family:'Sofia Sans Condensed',sans-serif;font-weight:800;font-size:1.125rem;line-height:1;font-variant-numeric:tabular-nums;box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35);}.ds-sticker-out{background:#e8eef2;color:#3e5163;}.ds-sticker span{margin-top:2px;font-size:0.75rem;font-weight:500;letter-spacing:0.025em;text-transform:uppercase;}"
         },
         {
             "name": "Platform Bands",
@@ -860,7 +860,7 @@
             "refersTo": "brand-section",
             "description": "Home banner on a turquoise brand section: scroll-snap slides (deal of the day, Webpay, library) with dots, pause and arrows.",
             "html": "<section class=\"ds-banner\"><h2>Oferta del día</h2><p>Starfall</p><span>$21.990</span><nav><i class=\"on\"></i><i></i><i></i></nav></section>",
-            "css": ".ds-banner{width:420px;padding:28px;border-radius:6px;background:#1e758a;color:#ffffff;font-family:'Rubik',sans-serif}.ds-banner h2{margin:0;font:800 18px 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase}.ds-banner p{margin:6px 0 16px;font:800 44px/1 'Sofia Sans Condensed',sans-serif;text-transform:uppercase}.ds-banner span{display:inline-block;padding:8px 12px;border-radius:4px;background:#ff6b4a;color:#1a0a05;font:800 30px/1 'Sofia Sans Condensed',sans-serif;transform:rotate(-2deg);box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35)}.ds-banner nav{display:flex;gap:8px;margin-top:24px}.ds-banner i{width:24px;height:4px;border-radius:9px;background:rgb(255 255 255 / 0.5)}.ds-banner i.on{background:#ff6b4a}"
+            "css": ".ds-banner{width:420px;padding:28px;border-radius:6px;background:#1e758a;color:#ffffff;font-family:'Rubik',sans-serif}.ds-banner h2{margin:0;font:800 18px 'Sofia Sans Condensed',sans-serif;letter-spacing:0.025em;text-transform:uppercase}.ds-banner p{margin:6px 0 16px;font:800 44px/1 'Sofia Sans Condensed',sans-serif;text-transform:uppercase}.ds-banner span{display:inline-block;padding:8px 12px;border-radius:4px;background:#e04a2a;color:#ffffff;font:800 30px/1 'Sofia Sans Condensed',sans-serif;box-shadow:0 3px 8px -2px rgb(11 31 51 / 0.35)}.ds-banner nav{display:flex;gap:8px;margin-top:24px}.ds-banner i{width:24px;height:4px;border-radius:9px;background:rgb(255 255 255 / 0.5)}.ds-banner i.on{background:#e04a2a}"
         }
     ],
     "narrative": {
