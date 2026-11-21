@@ -33,6 +33,17 @@
     --color-sticker: #f2c230;
     --color-sticker-hover: #f7d35c;
     --color-sticker-ink: #1a1405;
+    /*
+     * Game cases: the band and frame of each platform's retail box, so a
+     * cover reads as a PS5, Xbox or Switch case at a glance.
+     */
+    --color-box-ps5: #f3f4f6;
+    --color-box-ps4: #003791;
+    --color-box-xbox: #107c10;
+    --color-box-nintendo: #e60012;
+    --color-box-pc: #16181c;
+    --color-box-multi: #3a3f47;
+
     /* The black menu bar under the header. */
     --color-bar: #050608;
 

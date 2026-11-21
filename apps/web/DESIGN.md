@@ -36,6 +36,12 @@ colors:
     cover-4: '#6a4a1f'
     cover-5: '#4b3270'
     cover-6: '#1f5a5e'
+    box-ps5: '#f3f4f6'
+    box-ps4: '#003791'
+    box-xbox: '#107c10'
+    box-nintendo: '#e60012'
+    box-pc: '#16181c'
+    box-multi: '#3a3f47'
 typography:
     display:
         fontFamily: 'Sofia Sans Condensed, Rubik, ui-sans-serif, sans-serif'
@@ -287,7 +293,7 @@ A product as a numbered spot on the counter. Cover (3:4, tilting) with its stick
 
 ### Product Cover
 
-A game-case front at 3:4 with 6px corners. Uploaded covers fill it; otherwise a generated cover prints the platform band (a 55% ink strip), the title in condensed caps at the foot, and type and region in small caps, on a cover tint chosen from the slug.
+A game case at 3:4 with 6px corners, dressed as its platform's retail box (requested by the user on 2026-11-21): a frame in the platform color around the front and a band on top with the official mark in one ink. PS5 is a light case with a black mark; PS4 blue (box-ps4); Xbox green (box-xbox) with the sphere, wordmark and the generation in condensed caps; Nintendo red (box-nintendo) with the horizontal Switch or Switch 2 lockup; PC black (box-pc) with "PC" or "Mac" in condensed caps; several families or phones share the graphite case (box-multi) with one entry per family, split by a hairline. Family and look come from `platformBox()` (`app/utils/platform-box.ts`); the marks live in `app/utils/platform-marks.ts` with their sources (Simple Icons CC0 for PlayStation, public-domain Wikimedia Commons files for Xbox and Nintendo). Inside, an uploaded cover fills the front; otherwise a generated front prints the title in condensed caps at the foot and type and region in small caps, on a cover tint. The band is labeled "Plataformas: …" for screen readers.
 
 ### Cover Tilt
 
