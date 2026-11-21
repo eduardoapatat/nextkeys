@@ -33,6 +33,11 @@
     --color-sticker: #f2c230;
     --color-sticker-hover: #f7d35c;
     --color-sticker-ink: #1a1405;
+    /* The folded corner of the menu tab: the sticker in shadow. */
+    --color-sticker-deep: #9a7713;
+
+    /* The black menu bar under the header. */
+    --color-bar: #050608;
 
     /* CRT glow: active state and focus. */
     --color-crt: #9cc8d6;
@@ -334,6 +339,75 @@
             rgb(236 241 243 / 0.03)
         );
         box-shadow: 0 10px 18px -8px rgb(0 0 0 / 0.6);
+    }
+
+    /*
+     * The menu bar (Koparion's main menu): a black strip whose hovered or
+     * current item is a sticker-yellow tab rising 8px above the bar, with a
+     * folded corner on its top right. The top 8px of the strip stay clear so
+     * the tab can rise inside the scroll container without being clipped.
+     */
+    .menu-bar {
+        background: linear-gradient(
+            to bottom,
+            transparent 8px,
+            var(--color-bar) 8px
+        );
+    }
+
+    .menu-tab {
+        position: relative;
+        display: flex;
+        height: 52px;
+        align-items: center;
+        padding-inline: 20px;
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--color-chalk);
+        transition: color 150ms var(--ease-out);
+    }
+
+    .menu-tab::before,
+    .menu-tab::after {
+        content: '';
+        position: absolute;
+        opacity: 0;
+        transition: opacity 150ms var(--ease-out);
+    }
+
+    .menu-tab::before {
+        inset: -8px 0 0;
+        z-index: -1;
+        background: var(--color-sticker);
+    }
+
+    .menu-tab::after {
+        top: -8px;
+        right: -8px;
+        border: 4px solid transparent;
+        border-bottom-color: var(--color-sticker-deep);
+        border-left-color: var(--color-sticker-deep);
+    }
+
+    .menu-tab[aria-current='page'] {
+        color: var(--color-sticker-ink);
+    }
+
+    .menu-tab[aria-current='page']::before,
+    .menu-tab[aria-current='page']::after {
+        opacity: 1;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .menu-tab:hover {
+            color: var(--color-sticker-ink);
+        }
+
+        .menu-tab:hover::before,
+        .menu-tab:hover::after {
+            opacity: 1;
+        }
     }
 
     /* Thermal receipt: torn zig-zag edges top and bottom. */

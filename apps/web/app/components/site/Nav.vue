@@ -1,32 +1,40 @@
 <script setup lang="ts">
-const link =
-    'flex h-11 shrink-0 items-center px-3 font-display font-bold tracking-wide whitespace-nowrap uppercase text-chalk-muted transition-colors duration-150 hover:text-chalk';
+/**
+ * The black menu bar under the header, after Koparion's main menu: "Inicio",
+ * the catalog, the platform families and the product types. The current
+ * page (path and query) wears the yellow tab.
+ */
+const route = useRoute();
+const router = useRouter();
+
+const items = computed(() => [
+    { label: 'Inicio', to: '/' },
+    { label: 'Catálogo', to: catalogLink() },
+    ...platformFamilies.map((family) => ({
+        label: family.label,
+        to: catalogLink({ platform: [...family.platform] }),
+    })),
+    ...productTypeLinks.map((item) => ({
+        label: item.label,
+        to: catalogLink({ type: [...item.type] }),
+    })),
+]);
+
+function isCurrent(to: Parameters<typeof router.resolve>[0]): boolean {
+    return router.resolve(to).fullPath === route.fullPath;
+}
 </script>
 
 <template>
-    <nav aria-label="Principal" class="border-t border-line bg-ink-2">
+    <nav aria-label="Principal" class="menu-bar relative -mt-2">
         <ul
-            class="mx-auto flex max-w-7xl items-center overflow-x-auto px-2 [scrollbar-width:none]"
+            class="isolate mx-auto flex max-w-7xl items-end overflow-x-auto px-4 pt-2 pr-6 [scrollbar-width:none]"
         >
-            <li>
-                <NuxtLink :to="catalogLink()" :class="[link, 'text-chalk']">
-                    Catálogo
-                </NuxtLink>
-            </li>
-            <li aria-hidden="true" class="mx-1 h-4 w-px shrink-0 bg-line" />
-            <li v-for="family in platformFamilies" :key="family.label">
+            <li v-for="item in items" :key="item.label" class="shrink-0">
                 <NuxtLink
-                    :to="catalogLink({ platform: [...family.platform] })"
-                    :class="link"
-                >
-                    {{ family.label }}
-                </NuxtLink>
-            </li>
-            <li aria-hidden="true" class="mx-1 h-4 w-px shrink-0 bg-line" />
-            <li v-for="item in productTypeLinks" :key="item.label">
-                <NuxtLink
-                    :to="catalogLink({ type: [...item.type] })"
-                    :class="link"
+                    :to="item.to"
+                    class="menu-tab"
+                    :aria-current="isCurrent(item.to) ? 'page' : undefined"
                 >
                     {{ item.label }}
                 </NuxtLink>

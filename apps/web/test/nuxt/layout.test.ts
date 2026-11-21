@@ -40,6 +40,17 @@ describe('store layout', () => {
         );
     });
 
+    it('puts the menu tab only on the link to the current page and query', async () => {
+        const header = await mountSuspended(SiteHeader, {
+            route: '/catalogo?platform=ps5,ps4',
+        });
+        const current = header.findAll(
+            'nav[aria-label="Principal"] a[aria-current="page"]',
+        );
+
+        expect(current.map((link) => link.text())).toEqual(['PlayStation']);
+    });
+
     it('keeps the newsletter as a labeled example', async () => {
         const footer = await mountSuspended(SiteFooter);
 
