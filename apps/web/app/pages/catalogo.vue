@@ -251,9 +251,8 @@ function pageLink(number: number) {
                                 animationDelay: `${staggerDelay(index)}ms`,
                             }"
                         >
-                            <StationCard
+                            <ProductCard
                                 :product="product"
-                                :station="(page.meta.from ?? 1) + index"
                                 :eager="index < 4"
                             />
                         </li>

@@ -142,11 +142,8 @@ function onKeydown(event: KeyboardEvent, index: number) {
                 <ul
                     class="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 xl:grid-cols-4"
                 >
-                    <li
-                        v-for="(product, index) in tab.products"
-                        :key="product.slug"
-                    >
-                        <StationCard :product="product" :station="index + 1" />
+                    <li v-for="product in tab.products" :key="product.slug">
+                        <ProductCard :product="product" />
                     </li>
                 </ul>
             </div>
