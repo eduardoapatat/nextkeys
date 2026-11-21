@@ -99,15 +99,13 @@ class CatalogDemoSeeder extends Seeder
         DB::transaction(function (): void {
             ActivationService::query()->firstOrCreate(['slug' => 'norton-account'], ['name' => 'Norton Account']);
 
-            $titles = [];
-
             foreach (self::TITLES as $name => $description) {
-                $titles[$name] = Title::query()->create(['name' => $name, 'description' => $description]);
+                Title::query()->create(['name' => $name, 'description' => $description]);
             }
 
             foreach (self::PRODUCTS as [$titleName, $type, $slug, $serviceSlug, $regionSlug, $platformSlugs, $price, $stock, $status]) {
                 $product = Product::query()->create([
-                    'title_id' => $titles[$titleName]->id,
+                    'title_id' => Title::query()->where('name', $titleName)->sole()->id,
                     'type' => $type,
                     'slug' => $slug,
                     'activation_service_id' => $serviceSlug === null ? null : ActivationService::query()->where('slug', $serviceSlug)->sole()->id,
