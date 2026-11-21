@@ -221,7 +221,7 @@ A light, cool palette: white and blue-grey neutrals, one turquoise brand family 
 
 ### Primary
 
-- **Harbor Turquoise** (brand): the ground of every brand section (header, banner, benefits, footer), focus rings, focused input borders, in-text links, caret, native accent color. It is the user's #29a0be darkened so white text reaches 5.3:1. **Deep Turquoise** (brand-strong) is the menu bar under the header; **Night Turquoise** (brand-deep) the footer; **Turquoise Mist** (brand-soft) the text selection.
+- **Harbor Turquoise** (brand): the ground of every brand section (header, banner, platform band, FAQ bars, footer), focus rings, focused input borders, in-text links, caret, native accent color. It is the user's #29a0be darkened so white text reaches 5.3:1. **Deep Turquoise** (brand-strong) is the menu bar under the header; **Night Turquoise** (brand-deep) the footer; **Turquoise Mist** (brand-soft) the text selection.
 
 ### Secondary
 
@@ -378,7 +378,7 @@ A dashed Steel Line box with a condensed caps message and one way forward.
 
 ### Do:
 
-- **Do** keep the page on White Floor (#ffffff) with Navy Ink text, and put turquoise only on the brand sections (header, menu bar, banner, benefits, footer).
+- **Do** keep the page on White Floor (#ffffff) with Navy Ink text, and put turquoise only on the brand sections (header, menu bar, banner, platform band, FAQ bars, footer).
 - **Do** wrap every turquoise section in `.surface-brand` and keep using role tokens inside it.
 - **Do** add new colors as role tokens in `app/assets/css/main.css`; a future dark theme redefines values under `:root[data-theme='dark']`.
 - **Do** put every price in display 800 with tabular figures, in CLP from the API.
