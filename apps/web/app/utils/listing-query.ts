@@ -93,7 +93,7 @@ export function withPage(query: ListingQuery, page: number): ListingQuery {
 }
 
 /** Where the product listing lives. Every link to the catalog goes through `catalogLink`. */
-export const catalogPath = '/';
+export const catalogPath = '/catalogo';
 
 /** A link to the catalog with some facets (and optionally a sort) already applied. */
 export function catalogLink(

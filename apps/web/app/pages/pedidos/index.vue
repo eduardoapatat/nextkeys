@@ -18,7 +18,8 @@ const { data: orders } = await useAsyncData('orders', () => fetchOrders());
         </p>
 
         <p v-if="orders && orders.data.length === 0">
-            Aún no tienes pedidos. <NuxtLink to="/">Ver el catálogo</NuxtLink>
+            Aún no tienes pedidos.
+            <NuxtLink :to="catalogLink()">Ver el catálogo</NuxtLink>
         </p>
         <OrderList v-else-if="orders" :orders="orders.data" />
     </main>

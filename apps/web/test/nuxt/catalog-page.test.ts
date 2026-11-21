@@ -5,7 +5,7 @@ import {
     ProductPageSchema,
     ValidationErrorSchema,
 } from '../../app/api/schemas';
-import IndexPage from '../../app/pages/index.vue';
+import CatalogPage from '../../app/pages/catalogo.vue';
 import { fixture } from '../fixtures';
 import { resetApi, serveApi } from './api';
 
@@ -24,7 +24,7 @@ describe('catalog listing', () => {
     it('lists the products with their price in CLP', async () => {
         serveApi('/products', productPage);
 
-        const page = await mountSuspended(IndexPage, { route: '/' });
+        const page = await mountSuspended(CatalogPage, { route: '/catalogo' });
 
         expect(page.findAll('article')).toHaveLength(productPage.data.length);
         expect(page.text()).toContain('Shield Antivirus');
@@ -45,8 +45,8 @@ describe('catalog listing', () => {
     it('sends the filters, sort and page of the URL to the API', async () => {
         const queries = serveApi('/products', productPage);
 
-        const page = await mountSuspended(IndexPage, {
-            route: '/?platform=ps4&platform=ps5&region=latam&sort=-price&page=2',
+        const page = await mountSuspended(CatalogPage, {
+            route: '/catalogo?platform=ps4&platform=ps5&region=latam&sort=-price&page=2',
         });
 
         expect(queries.at(-1)).toEqual({
@@ -67,8 +67,8 @@ describe('catalog listing', () => {
     it('says so when no product matches', async () => {
         serveApi('/products', { ...productPage, data: [] });
 
-        const page = await mountSuspended(IndexPage, {
-            route: '/?region=europe',
+        const page = await mountSuspended(CatalogPage, {
+            route: '/catalogo?region=europe',
         });
 
         expect(page.text()).toContain('No hay productos con estos filtros.');
@@ -81,8 +81,8 @@ describe('catalog listing', () => {
             422,
         );
 
-        const page = await mountSuspended(IndexPage, {
-            route: '/?platform=does-not-exist',
+        const page = await mountSuspended(CatalogPage, {
+            route: '/catalogo?platform=does-not-exist',
         });
 
         expect(page.find('[role="alert"]').text()).toContain(
@@ -96,15 +96,15 @@ describe('catalog listing', () => {
             meta: { ...productPage.meta, current_page: 2, last_page: 3 },
         });
 
-        const page = await mountSuspended(IndexPage, {
-            route: '/?platform=ps5&page=2',
+        const page = await mountSuspended(CatalogPage, {
+            route: '/catalogo?platform=ps5&page=2',
         });
 
         expect(page.find('a[rel="prev"]').attributes('href')).toBe(
-            '/?platform=ps5',
+            '/catalogo?platform=ps5',
         );
         expect(page.find('a[rel="next"]').attributes('href')).toBe(
-            '/?platform=ps5&page=3',
+            '/catalogo?platform=ps5&page=3',
         );
         expect(page.text()).toContain('Página 2 de 3');
     });

@@ -25,7 +25,7 @@ useHead({ title: () => product.value?.title.name });
 
 <template>
     <main v-if="product">
-        <p><NuxtLink to="/">Volver al catálogo</NuxtLink></p>
+        <p><NuxtLink :to="catalogLink()">Volver al catálogo</NuxtLink></p>
         <article>
             <h1>{{ product.title.name }}</h1>
             <ProductCover :product="product" />

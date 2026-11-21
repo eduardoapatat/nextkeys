@@ -25,7 +25,10 @@ useHead({ title: heading });
         <p v-else>
             No pudimos cargar esta página. Intenta de nuevo en unos minutos.
         </p>
-        <a href="/" @click.prevent="clearError({ redirect: '/' })">
+        <a
+            :href="catalogPath"
+            @click.prevent="clearError({ redirect: catalogPath })"
+        >
             Volver al catálogo
         </a>
     </main>

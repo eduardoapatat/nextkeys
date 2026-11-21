@@ -205,6 +205,15 @@
         }
     }
 
+    /* The catalog filters fold on small screens and stay open on wide ones. */
+    @media (width >= 64rem) {
+        .catalog-filters::details-content {
+            content-visibility: visible;
+            display: block;
+            height: auto;
+        }
+    }
+
     /* Thermal receipt: torn zig-zag edges top and bottom. */
     .receipt {
         background-color: var(--color-paper);

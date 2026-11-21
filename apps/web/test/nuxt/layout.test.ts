@@ -25,17 +25,17 @@ describe('store layout', () => {
 
         const note = header.find('form[role="search"] [role="status"]');
         expect(note.text()).toContain('La búsqueda por nombre llega pronto');
-        expect(note.find('a').attributes('href')).toBe('/');
+        expect(note.find('a').attributes('href')).toBe('/catalogo');
     });
 
     it('links the platform families to the filtered catalog', async () => {
         const header = await mountSuspended(SiteHeader);
         const nav = header.find('nav[aria-label="Principal"]');
 
-        expect(nav.find('a[href="/?platform=ps5,ps4"]').text()).toBe(
+        expect(nav.find('a[href="/catalogo?platform=ps5,ps4"]').text()).toBe(
             'PlayStation',
         );
-        expect(nav.find('a[href="/?type=physical"]').text()).toBe(
+        expect(nav.find('a[href="/catalogo?type=physical"]').text()).toBe(
             'Juegos físicos',
         );
     });

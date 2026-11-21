@@ -173,7 +173,7 @@ async function cancel() {
                 <strong>Pedido {{ order.status.name.toLowerCase() }}.</strong>
                 No se hizo ningún cargo.
             </p>
-            <p><NuxtLink to="/">Volver al catálogo</NuxtLink></p>
+            <p><NuxtLink :to="catalogLink()">Volver al catálogo</NuxtLink></p>
         </template>
 
         <p v-if="order.status.slug === 'pending'">

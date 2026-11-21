@@ -48,7 +48,7 @@ onMounted(async () => {
         <p v-if="status === 'pending'" role="status">Verificando…</p>
         <template v-else-if="status === 'verified'">
             <p role="status">Tu correo quedó verificado. Ya puedes pagar.</p>
-            <p><NuxtLink to="/">Ir al catálogo</NuxtLink></p>
+            <p><NuxtLink :to="catalogLink()">Ir al catálogo</NuxtLink></p>
         </template>
         <template v-else>
             <p role="alert">

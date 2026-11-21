@@ -6,7 +6,7 @@ Status: **prototype implemented** (catalog listing and product page). The first 
 
 Decided on 2026-11-20.
 
-- `/`: the product listing. The filters (`platform`, `type`, `activation_service`, `region`), the sort (`newest`, `price`, `-price`, `name`) and the page all live in the URL query.
+- `/catalogo` (was `/` in the prototype; `/` now leads to the home): the product listing. The filters (`platform`, `type`, `activation_service`, `region`), the sort (`newest`, `price`, `-price`, `name`) and the page all live in the URL query.
 - `/{slug}`: the product page with the variant selector. Choosing a variant navigates to its slug.
 - The UI is in Spanish. Prices are in CLP, formatted with `es-CL`. "Sin carátula" is shown when `cover_url` is `null`. 404, 422 and an empty listing get simple messages.
 - No business logic: stock, visibility and ordering come from the API as they are. No cart or checkout yet (phase 4); customer auth is described below.

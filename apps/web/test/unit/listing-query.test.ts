@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    catalogLink,
     listingQueryFromForm,
     parseListingQuery,
     serializeListingQuery,
@@ -57,6 +58,16 @@ describe('listing query', () => {
         expect(serializeListingQuery(listingQueryFromForm(form))).toEqual({
             platform: 'ps5,switch',
             sort: 'name',
+        });
+    });
+
+    it('links to the catalog at /catalogo with canonical filters', () => {
+        expect(catalogLink()).toEqual({ path: '/catalogo', query: {} });
+        expect(
+            catalogLink({ platform: ['ps5', 'ps4'], sort: 'newest' }),
+        ).toEqual({
+            path: '/catalogo',
+            query: { platform: 'ps5,ps4', sort: 'newest' },
         });
     });
 });

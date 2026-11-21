@@ -71,7 +71,8 @@ async function pay() {
         <p v-if="notice" role="status">{{ notice }}</p>
 
         <p v-if="lines.length === 0">
-            Tu carrito está vacío. <NuxtLink to="/">Ver el catálogo</NuxtLink>
+            Tu carrito está vacío.
+            <NuxtLink :to="catalogLink()">Ver el catálogo</NuxtLink>
         </p>
         <template v-else>
             <h2>Resumen</h2>
