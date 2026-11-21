@@ -77,6 +77,16 @@ Decided and implemented on 2026-11-20; the API side is in [`users.md`](users.md#
 - **Contracts:** `auth.me.json`, `auth.me.401.json` and `auth.login.422.json`, parsed by `CustomerSchema`, `MessageSchema` and `ValidationErrorSchema`.
 - **Tests:** `test/unit/auth-utils.test.ts` and `test/nuxt/account.test.ts` (redirect to sign in, sign in and return, 422 messages, header link). `servePost` and `serveCsrfCookie` in `test/nuxt/api.ts` mock the POST endpoints.
 
+### Cart (phase 4)
+
+Decided on 2026-11-20.
+
+- **A storefront cookie, not an API table.** `nk_cart` (`useCookie`, `SameSite=Lax`, 30 days) holds only `[{slug, quantity}]`: at most 10 lines, 1 to 5 units each (the API's `orders.max_quantity_per_line`). It works with SSR (the header count renders without a flash), needs no session and reserves nothing: the API checks prices, stock and publication when the order is placed.
+- The operations are pure functions (`app/utils/cart.ts`: add sums and caps, update, remove, count) behind `useCart()`. An invalid cookie reads as an empty cart.
+- **Product page:** "Agregar al carrito" with a 1 to 5 quantity, disabled without stock.
+- **`/carrito`** fetches each product with `fetchProduct` (carts are small; no new endpoint). Each line shows the current price, an editable quantity, "Quitar" and the line subtotal; the total is informative, the order's total comes from the API. A product that no longer exists or has no stock is "No disponible" and blocks "Ir a pagar" until it is removed.
+- Rejected: `localStorage` (SSR always renders an empty cart), an API cart (needs a session or anonymous carts, more tables and endpoints).
+
 ## Open questions
 
 - Visual design (component library; Tailwind/shadcn-vue shared with the admin): pending.

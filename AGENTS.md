@@ -58,6 +58,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - API contract: `tests/Feature/Api/V1/ApiContractTest.php` fails when an `/api/v1` response changes shape against `contracts/api/v1/*.json`; `apps/web/test/unit/contract.test.ts` parses those fixtures with the valibot schemas (`app/api/schemas.ts`).
 - `apps/web` ESLint forbids value imports of `valibot` and of `app/api/schemas.ts` outside the schemas and the tests (`eslint.config.mjs`): use `import type`.
 - CI in `.github/workflows/api.yml`, filtered by `apps/api/**` and `contracts/**`, with Postgres as a service; `.github/workflows/web.yml`, filtered by `apps/web/**` and `contracts/**`, runs `pnpm ci:check`.
+- Storefront cart (`nk_cart` cookie): `apps/web/test/unit/cart.test.ts` (caps, invalid cookie) and `test/nuxt/cart.test.ts` (add, edit, remove, unavailable line blocks checkout).
 - `apps/web`: strict TypeScript (`nuxt typecheck`), ESLint (`@nuxt/eslint` + `eslint-config-prettier`), Prettier and Vitest (`test/unit` in node, `test/nuxt` in the Nuxt environment).
 - Dependabot in `.github/dependabot.yml` for actions, composer and npm in `apps/api`, and npm in `apps/web`.
 

@@ -30,6 +30,7 @@ useHead({ title: () => product.value?.title.name });
             <h1>{{ product.title.name }}</h1>
             <ProductCover :product="product" />
             <ProductFacts :product="product" />
+            <AddToCart :key="product.slug" :product="product" />
             <p>{{ product.title.description }}</p>
         </article>
         <nav aria-labelledby="variants-heading">
