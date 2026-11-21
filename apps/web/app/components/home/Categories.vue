@@ -31,7 +31,7 @@ const tiles = computed(() => [
     {
         family: 'steam' as const,
         label: 'Steam',
-        platforms: 'Juegos para Windows y macOS',
+        platforms: 'Juegos para escritorio',
         to: catalogLink({ activation_service: ['steam'] }),
     },
 ]);
