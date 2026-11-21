@@ -29,6 +29,15 @@ if (error.value || !data.value) {
 const home = data.value;
 const deal = home.newest[dealIndex(new Date(), home.newest.length)];
 
+// Three physical games, one per title, for the covers on their tile.
+const physical = [...home.newest, ...home.byName]
+    .filter((product) => product.type.slug === 'physical')
+    .filter(
+        (product, index, all) =>
+            all.findIndex((p) => p.title.name === product.title.name) === index,
+    )
+    .slice(0, 3);
+
 const tabs = [
     {
         id: 'novedades',
@@ -64,7 +73,7 @@ const tabs = [
             />
             <HomeShelfTabs :tabs="tabs" />
         </div>
-        <HomeCategories :filters="home.filters" />
+        <HomeCategories :filters="home.filters" :physical="physical" />
         <div class="mx-auto w-full max-w-7xl px-4">
             <HomeBenefits />
         </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CatalogFilters } from '~/api/schemas';
+import type { CatalogFilters, ProductSummary } from '~/api/schemas';
 import type { TileKind } from '~/components/CategoryTile.vue';
 
 /**
@@ -9,7 +9,11 @@ import type { TileKind } from '~/components/CategoryTile.vue';
  * is where PC games are activated, as the cover band says. The platform
  * names under each family come from the API.
  */
-const props = defineProps<{ filters: CatalogFilters }>();
+const props = defineProps<{
+    filters: CatalogFilters;
+    // Up to three physical games whose covers fan out on their tile.
+    physical: ProductSummary[];
+}>();
 
 function platformNames(slugs: readonly string[]): string {
     return props.filters.platforms
@@ -82,7 +86,36 @@ const typeNotes: Record<(typeof productTypeLinks)[number]['type'][0], string> =
                             :label="item.label"
                             :note="typeNotes[item.type[0]]"
                             size="md"
-                        />
+                        >
+                            <template v-if="item.type[0] === 'license'" #art>
+                                <HomeLicenseArt />
+                            </template>
+                            <template
+                                v-else-if="
+                                    item.type[0] === 'physical' &&
+                                    physical.length
+                                "
+                                #art
+                            >
+                                <span
+                                    v-for="(product, i) in physical"
+                                    :key="product.slug"
+                                    class="absolute bottom-0 w-[44%] max-w-24 translate-y-[18%] shadow-case"
+                                    :class="
+                                        [
+                                            'right-[50%] -rotate-8',
+                                            'right-[26%] z-10 translate-y-[4%]',
+                                            'right-[2%] rotate-8',
+                                        ][i]
+                                    "
+                                >
+                                    <ProductCover
+                                        :product="product"
+                                        size="sm"
+                                    />
+                                </span>
+                            </template>
+                        </CategoryTile>
                     </NuxtLink>
                 </li>
             </ul>

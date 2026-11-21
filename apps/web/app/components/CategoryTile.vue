@@ -7,9 +7,11 @@
  * - Platforms (PlayStation, Xbox, Nintendo, Steam): the brand's color and
  *   official symbol; patterns of the PlayStation shapes, rings, Joy-Con dots
  *   and diagonal rules.
- * - Product types: the store's own colors and drawn symbols, tied to no
- *   brand: a key over key codes, a certificate over ruled lines, a game case
- *   over discs.
+ * - Product types: the store's own colors and drawn symbols: a key over
+ *   key codes, the Windows panes (no pattern), a game case over discs.
+ * - The `art` slot replaces the ghost with a picture of its own (the
+ *   licenses' desktop, the physical games' covers), which grows a little
+ *   from the bottom right corner on hover.
  */
 export type TileKind =
     | 'playstation'
@@ -67,9 +69,11 @@ const look: Record<TileKind, { tone: string; symbol: Symbol }> = {
     },
     license: {
         tone: 'from-tile-license to-tile-license-deep',
-        symbol: drawn(
-            'M4 3h11l4 4v6M4 3v18h9M15 3v4h4M7 8h6M7 11.5h8M7 15h4M17.5 14a3 3 0 1 1 0 6 3 3 0 0 1 0-6ZM16 19.5 15 23l2.5-1.2L20 23l-1-3.5',
-        ),
+        // The four panes of the Windows 11 logo (plain geometry).
+        symbol: {
+            viewBox: '0 0 24 24',
+            d: 'M0 0h11.4v11.4H0zm12.6 0H24v11.4H12.6zM0 12.6h11.4V24H0zm12.6 0H24V24H12.6z',
+        },
     },
     physical: {
         tone: 'from-tile-physical to-cover-5',
@@ -84,7 +88,6 @@ const patternId = useId();
 const patternSize: Partial<Record<TileKind, number>> = {
     nintendo: 14,
     steam: 12,
-    license: 10,
     digital_key: 40,
     physical: 28,
 };
@@ -114,7 +117,8 @@ const patternSize: Partial<Record<TileKind, number>> = {
                     stroke-width="1.5"
                 />
             </template>
-            <template v-else>
+            <!-- The licenses' desktop picture is busy enough on its own. -->
+            <template v-else-if="kind !== 'license'">
                 <defs>
                     <pattern
                         :id="patternId"
@@ -137,11 +141,6 @@ const patternSize: Partial<Record<TileKind, number>> = {
                             cy="7"
                             r="1.6"
                             fill="currentColor"
-                        />
-                        <path
-                            v-else-if="kind === 'license'"
-                            d="M0 9.5h10"
-                            stroke="currentColor"
                         />
                         <text
                             v-else-if="kind === 'digital_key'"
@@ -178,23 +177,34 @@ const patternSize: Partial<Record<TileKind, number>> = {
             </template>
         </svg>
 
-        <svg
+        <span
+            v-if="$slots.art"
             aria-hidden="true"
-            :viewBox="current.symbol.viewBox"
-            class="absolute -right-6 -bottom-8 -z-10 origin-bottom-right text-on-cover opacity-15 transition-transform duration-300 ease-out group-hover:scale-110"
-            :class="size === 'lg' ? 'size-40 md:size-48' : 'size-36 md:size-40'"
-            v-bind="
-                current.symbol.stroke
-                    ? {
-                          fill: 'none',
-                          stroke: 'currentColor',
-                          'stroke-width': 1.5,
-                      }
-                    : { fill: 'currentColor' }
-            "
+            class="absolute right-0 bottom-0 -z-10 h-[78%] w-2/5 origin-bottom-right transition-transform duration-300 ease-out group-hover:scale-105"
         >
-            <path :d="current.symbol.d" />
-        </svg>
+            <slot name="art" />
+        </span>
+        <template v-else>
+            <svg
+                aria-hidden="true"
+                :viewBox="current.symbol.viewBox"
+                class="absolute -right-6 -bottom-8 -z-10 origin-bottom-right text-on-cover opacity-15 transition-transform duration-300 ease-out group-hover:scale-110"
+                :class="
+                    size === 'lg' ? 'size-40 md:size-48' : 'size-36 md:size-40'
+                "
+                v-bind="
+                    current.symbol.stroke
+                        ? {
+                              fill: 'none',
+                              stroke: 'currentColor',
+                              'stroke-width': 1.5,
+                          }
+                        : { fill: 'currentColor' }
+                "
+            >
+                <path :d="current.symbol.d" />
+            </svg>
+        </template>
 
         <span class="flex items-start justify-between">
             <svg
@@ -215,7 +225,7 @@ const patternSize: Partial<Record<TileKind, number>> = {
             </svg>
             <UiIcon name="arrowRight" />
         </span>
-        <span>
+        <span :class="{ 'max-w-[58%]': $slots.art }">
             <span
                 class="block font-display leading-none font-extrabold uppercase"
                 :class="
