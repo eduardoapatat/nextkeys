@@ -1,6 +1,6 @@
 # Catalog domain model
 
-Status: **implemented** (enums, migrations with every database rule, models, factories, seeders, tests, and the admin CRUD of titles and products with its Actions in `app/Actions/Catalog`). See *Implementation notes* at the end.
+Status: **implemented** (enums, migrations with every database rule, models, factories, seeders, tests, and the admin CRUD of titles and products with its Actions in `app/Actions/Catalog`). See _Implementation notes_ at the end.
 
 ## Overview
 
@@ -33,10 +33,10 @@ Same shape: `id`, `name`, `slug` (unique), timestamps. Tables, not enums, so the
 
 The work itself: shared content for all the ways it is sold. No slug, no page, no price, no publish flag.
 
-| Column | Notes |
-|---|---|
-| `name` | Used to generate product slugs |
-| `description` | Shared by all its products |
+| Column        | Notes                          |
+| ------------- | ------------------------------ |
+| `name`        | Used to generate product slugs |
+| `description` | Shared by all its products     |
 
 Starts with these two columns. Images, genres, developer/publisher and release date are added later as new columns, without moving data.
 
@@ -46,17 +46,17 @@ Editions (Standard, Deluxe) and license variations (device count, duration) are 
 
 What gets sold. Has a page, is listed, goes into the cart.
 
-| Column | Notes |
-|---|---|
-| `title_id` | FK → titles, `restrictOnDelete` |
-| `type` | `ProductType`. **Immutable** after creation |
-| `slug` | Globally unique. Generated on creation, editable by the admin, does not change when the title is renamed |
-| `activation_service_id` | FK, nullable (see rules) |
-| `region_id` | FK, nullable (see rules) |
-| `price` | Integer CLP (no decimals): `19990` = $19.990. `CHECK (price > 0)` |
-| `stock` | Integer, nullable. Only for `physical`. `CHECK (stock >= 0)` |
-| `status` | `ProductStatus`: `draft`, `published` or `archived` (see *Product status*). Default `draft`. CHECK `products_status_check` |
-| `cover_image` | Optional path of the variant's cover on the `public` disk (see *Variant cover and key hint*) |
+| Column                  | Notes                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `title_id`              | FK → titles, `restrictOnDelete`                                                                                            |
+| `type`                  | `ProductType`. **Immutable** after creation                                                                                |
+| `slug`                  | Globally unique. Generated on creation, editable by the admin, does not change when the title is renamed                   |
+| `activation_service_id` | FK, nullable (see rules)                                                                                                   |
+| `region_id`             | FK, nullable (see rules)                                                                                                   |
+| `price`                 | Integer CLP (no decimals): `19990` = $19.990. `CHECK (price > 0)`                                                          |
+| `stock`                 | Integer, nullable. Only for `physical`. `CHECK (stock >= 0)`                                                               |
+| `status`                | `ProductStatus`: `draft`, `published` or `archived` (see _Product status_). Default `draft`. CHECK `products_status_check` |
+| `cover_image`           | Optional path of the variant's cover on the `public` disk (see _Variant cover and key hint_)                               |
 
 Postgres has no unsigned integers (`unsignedInteger()` creates a plain `integer`), so the sign rules are explicit CHECKs. `UNIQUE (id, type)` is also required: it is redundant with the primary key, but Postgres needs it as the target of the composite FK from `product_keys`.
 
@@ -72,14 +72,14 @@ Incidental compatibility (a PS4 disc running on PS5, extra OS support of a Steam
 
 One row per code to deliver.
 
-| Column | Notes |
-|---|---|
-| `product_id` | FK → products, `restrictOnDelete` |
-| `product_type` | Copy of the product's type, for the composite FK |
-| `code` | Stored trimmed (case preserved), `encrypted` cast, hidden from serialization, never logged |
-| `code_hash` | HMAC-SHA256 of the **normalized** code (trimmed, uppercased) with `KEY_HASH_SECRET` (not `APP_KEY`, so key rotation does not break it). Hidden |
-| `code_hint` | Plain-text mask of the code shown in the admin instead of it, e.g. `XXXXX-XXXXX-X7QF2`. Not hidden |
-| `status` | `ProductKeyStatus`, default `available` |
+| Column         | Notes                                                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `product_id`   | FK → products, `restrictOnDelete`                                                                                                              |
+| `product_type` | Copy of the product's type, for the composite FK                                                                                               |
+| `code`         | Stored trimmed (case preserved), `encrypted` cast, hidden from serialization, never logged                                                     |
+| `code_hash`    | HMAC-SHA256 of the **normalized** code (trimmed, uppercased) with `KEY_HASH_SECRET` (not `APP_KEY`, so key rotation does not break it). Hidden |
+| `code_hint`    | Plain-text mask of the code shown in the admin instead of it, e.g. `XXXXX-XXXXX-X7QF2`. Not hidden                                             |
+| `status`       | `ProductKeyStatus`, default `available`                                                                                                        |
 
 Indexes:
 
@@ -90,11 +90,11 @@ Indexes:
 
 ### Per product type (Postgres CHECK on `products`)
 
-| type | activation_service_id | region_id | stock column |
-|---|---|---|---|
-| `digital_key` | required | required | null |
-| `license` | required | required | null |
-| `physical` | optional | optional | required |
+| type          | activation_service_id | region_id | stock column |
+| ------------- | --------------------- | --------- | ------------ |
+| `digital_key` | required              | required  | null         |
+| `license`     | required              | required  | null         |
+| `physical`    | optional              | optional  | required     |
 
 For `digital_key` and `license` the region is an activation lock. For `physical` it is the game's region, informational: current consoles do not region-lock discs.
 
@@ -142,7 +142,7 @@ The Action that creates or edits a product runs the same checks first and return
 Decided on 2026-11-20. Read-only, no authentication.
 
 - **Endpoints.** `GET /api/v1/products`, `GET /api/v1/products/{slug}` and `GET /api/v1/catalog/filters`.
-- **Visibility.** Only `published` products, in the listing, the detail and the `variants`. A `draft` or `archived` slug returns **404**, the same as an unknown slug (410 for archived was rejected: it reveals the slug existed). Out-of-stock products are listed (see *Stock and visibility*). Purchased archived products will be shown in "My library" (phase 4) through its own endpoint.
+- **Visibility.** Only `published` products, in the listing, the detail and the `variants`. A `draft` or `archived` slug returns **404**, the same as an unknown slug (410 for archived was rejected: it reveals the slug existed). Out-of-stock products are listed (see _Stock and visibility_). Purchased archived products will be shown in "My library" (phase 4) through its own endpoint.
 - **Filters (now).** Catalog facets only, by slug, several values comma-separated: `platform`, `type`, `activation_service`, `region` (e.g. `?platform=ps4,ps5&region=latam`). Values within one filter are OR; different filters are AND. `platform` matches products whose platform set contains any of the given platforms. **Deferred:** price range, name search, in-stock only.
 - **Sorting.** `sort` = `newest` (default, `created_at desc`), `price`, `-price`, `name` (title name, ignoring case). Always `id` as the final tiebreaker so pages are stable (descending for `newest`, ascending otherwise).
 - **Pagination.** Offset (`?page=N`), fixed 24 per page, with `total` and `last_page` (numbered pages and SEO-friendly URLs). Cursor pagination was rejected: no total, no page jumps, and the catalog is small.
@@ -164,43 +164,43 @@ Examples: `starfall-steam-macos-windows-global`, `starfall-playstation-store-ps4
 
 **products** (activation services, platforms and regions by name)
 
-| id | title | type | slug | activation service | region | platforms | price | stock | status |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | Starfall | digital_key | starfall-steam-macos-windows-global | Steam | Global | Windows, macOS | 19990 | — | published |
-| 2 | Starfall | digital_key | starfall-playstation-store-ps5-latam | PlayStation Store | LATAM | PS5 | 21990 | — | published |
-| 3 | Starfall | digital_key | starfall-playstation-store-ps4-ps5-latam | PlayStation Store | LATAM | PS4, PS5 | 24990 | — | published |
-| 4 | Starfall | digital_key | starfall-xbox-windows-xbox-series-global | Xbox | Global | Xbox Series, Windows | 20990 | — | published |
-| 5 | Starfall | physical | starfall-physical-ps5-north-america | — | North America | PS5 | 34990 | 5 | published |
-| 6 | Neon Heist | physical | neon-heist-physical-playstation-store-ps5-latam | PlayStation Store | LATAM | PS5 | 79990 | 12 | published |
-| 7 | Neon Heist | digital_key | neon-heist-playstation-store-ps5-latam | PlayStation Store | LATAM | PS5 | 74990 | — | published |
-| 8 | Pixel Kart | digital_key | pixel-kart-nintendo-eshop-switch-latam | Nintendo eShop | LATAM | Switch | 39990 | — | published |
-| 9 | Pixel Kart | physical | pixel-kart-physical-nintendo-eshop-switch-2 | Nintendo eShop | — | Switch 2 | 44990 | 3 | draft |
-| 10 | Office Suite Pro | license | office-suite-pro-microsoft-account-macos-global | Microsoft Account | Global | macOS | 49990 | — | published |
-| 11 | Shield Antivirus | license | shield-antivirus-shield-account-android-ios-macos-windows-global | Shield Account | Global | Windows, macOS, Android, iOS | 14990 | — | published |
+| id  | title            | type        | slug                                                             | activation service | region        | platforms                    | price | stock | status    |
+| --- | ---------------- | ----------- | ---------------------------------------------------------------- | ------------------ | ------------- | ---------------------------- | ----- | ----- | --------- |
+| 1   | Starfall         | digital_key | starfall-steam-macos-windows-global                              | Steam              | Global        | Windows, macOS               | 19990 | —     | published |
+| 2   | Starfall         | digital_key | starfall-playstation-store-ps5-latam                             | PlayStation Store  | LATAM         | PS5                          | 21990 | —     | published |
+| 3   | Starfall         | digital_key | starfall-playstation-store-ps4-ps5-latam                         | PlayStation Store  | LATAM         | PS4, PS5                     | 24990 | —     | published |
+| 4   | Starfall         | digital_key | starfall-xbox-windows-xbox-series-global                         | Xbox               | Global        | Xbox Series, Windows         | 20990 | —     | published |
+| 5   | Starfall         | physical    | starfall-physical-ps5-north-america                              | —                  | North America | PS5                          | 34990 | 5     | published |
+| 6   | Neon Heist       | physical    | neon-heist-physical-playstation-store-ps5-latam                  | PlayStation Store  | LATAM         | PS5                          | 79990 | 12    | published |
+| 7   | Neon Heist       | digital_key | neon-heist-playstation-store-ps5-latam                           | PlayStation Store  | LATAM         | PS5                          | 74990 | —     | published |
+| 8   | Pixel Kart       | digital_key | pixel-kart-nintendo-eshop-switch-latam                           | Nintendo eShop     | LATAM         | Switch                       | 39990 | —     | published |
+| 9   | Pixel Kart       | physical    | pixel-kart-physical-nintendo-eshop-switch-2                      | Nintendo eShop     | —             | Switch 2                     | 44990 | 3     | draft     |
+| 10  | Office Suite Pro | license     | office-suite-pro-microsoft-account-macos-global                  | Microsoft Account  | Global        | macOS                        | 49990 | —     | published |
+| 11  | Shield Antivirus | license     | shield-antivirus-shield-account-android-ios-macos-windows-global | Shield Account     | Global        | Windows, macOS, Android, iOS | 14990 | —     | published |
 
 Products 6 and 7 share title, activation service, region and platforms but differ in type: a code-in-box PS5 copy and the same game as a delivered key. Product 9 is a Switch 2 Game-Key Card (physical with an activation service, no region).
 
 **Rejected by the database**
 
-| Attempt | Blocked by |
-|---|---|
-| Another Starfall · PlayStation Store · LATAM · PS5 | constraint trigger (same identity as 2) |
-| Physical with two platforms, or any product with none | constraint trigger |
-| Changing a product's type | `BEFORE UPDATE` trigger |
-| Physical without stock, or with negative stock | CHECK |
-| Price 0 or negative | CHECK |
-| License without region | CHECK |
-| Slug with spaces or uppercase | CHECK |
-| Key for product 5 (physical) | composite FK + CHECK |
-| The same code imported into two products | unique `code_hash` |
+| Attempt                                               | Blocked by                              |
+| ----------------------------------------------------- | --------------------------------------- |
+| Another Starfall · PlayStation Store · LATAM · PS5    | constraint trigger (same identity as 2) |
+| Physical with two platforms, or any product with none | constraint trigger                      |
+| Changing a product's type                             | `BEFORE UPDATE` trigger                 |
+| Physical without stock, or with negative stock        | CHECK                                   |
+| Price 0 or negative                                   | CHECK                                   |
+| License without region                                | CHECK                                   |
+| Slug with spaces or uppercase                         | CHECK                                   |
+| Key for product 5 (physical)                          | composite FK + CHECK                    |
+| The same code imported into two products              | unique `code_hash`                      |
 
 ## Admin panel (product CRUD)
 
 Decisions taken before planning the CRUD:
 
-- **Deleting products: guarded hard delete.** A product can be deleted only while nothing references it (no `product_keys` rows now; no orders from phase 3). Otherwise the Action returns a readable validation error suggesting to archive it (`status = archived`, see *Product status*). `SoftDeletes` was rejected: the identity trigger and every query would have to decide whether a deleted product still blocks an identical new one.
+- **Deleting products: guarded hard delete.** A product can be deleted only while nothing references it (no `product_keys` rows now; no orders from phase 3). Otherwise the Action returns a readable validation error suggesting to archive it (`status = archived`, see _Product status_). `SoftDeletes` was rejected: the identity trigger and every query would have to decide whether a deleted product still blocks an identical new one.
 - **Titles have their own section.** A small CRUD (name, description). The product form only selects an existing title; it never creates one inline. A title cannot be deleted while it has products (`restrictOnDelete`), and the Action reports it as a validation error.
-- **Slug generation.** The slug field is optional. Left empty on creation, the server builds the suggestion from the rule in *Slugs* and, if it is taken, appends `-2`, `-3`… until it is free. A slug typed by the admin that is already taken is a validation error (no suffix). On edit the slug is kept unless the admin changes it; renaming the title or other fields never regenerates it. The rule lives only on the server; the form shows no live preview.
+- **Slug generation.** The slug field is optional. Left empty on creation, the server builds the suggestion from the rule in _Slugs_ and, if it is taken, appends `-2`, `-3`… until it is free. A slug typed by the admin that is already taken is a validation error (no suffix). On edit the slug is kept unless the admin changes it; renaming the title or other fields never regenerates it. The rule lives only on the server; the form shows no live preview.
 - **Product listing: one filter, the status.** A paginated list that shows the data and filters by status, to find drafts and archived products. More filters can be added later.
 - **Admin listings use `eduardoapatat/laravel-inertia-datatable`.** Pagination and sorting are resolved on the server and the state lives in the URL; adding filters later is a column method, not a rewrite. Table classes live in `app/DataTables`.
 - **Implementation.** `SaveProduct` (shared by `CreateProduct` and `UpdateProduct`) validates the per-type rules, the slug and the identity, writes the product and its platforms in one transaction and runs the identity constraint triggers before it ends (`SET CONSTRAINTS … IMMEDIATE`), turning a unique violation from a race into the same validation error. `DeleteProduct` and `DeleteTitle` lock the row (`lockForUpdate`) before checking it is unreferenced. The list's stock is one correlated subquery (`coalesce(stock, count of available keys)`, valid because of `products_stock_only_for_physical`).
@@ -234,11 +234,11 @@ Decisions taken on 2026-11-20, after closing the key import:
 
 Decided and implemented on 2026-11-20: `is_published` (boolean) was replaced by a `status` column with a `ProductStatus` enum, the same pattern as `ProductType`.
 
-| Value | UI label | Meaning |
-|---|---|---|
-| `draft` | Borrador | Being prepared; not in the storefront. Default for new products. |
-| `published` | Publicado | For sale; the only status the storefront shows. |
-| `archived` | Archivado | No longer sold and hidden from the storefront, but kept (it has keys, and orders from phase 3). |
+| Value       | UI label  | Meaning                                                                                         |
+| ----------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `draft`     | Borrador  | Being prepared; not in the storefront. Default for new products.                                |
+| `published` | Publicado | For sale; the only status the storefront shows.                                                 |
+| `archived`  | Archivado | No longer sold and hidden from the storefront, but kept (it has keys, and orders from phase 3). |
 
 - Transitions are free: the admin can move a product between any two statuses, including out of `archived`. Real restrictions, if any, come with orders in phase 3.
 - `archived` replaces the "unpublish it" suggestion: deleting a product with keys fails with an error suggesting to archive it.
@@ -266,9 +266,9 @@ Decided and implemented on 2026-11-20: `is_published` (boolean) was replaced by 
 
 The first argument of `pg_advisory_xact_lock(namespace, id)`. Add a row before using a new one.
 
-| Namespace | Used by | Second argument |
-|---|---|---|
-| 1 | `products_assert_identity()` | `title_id` (cast to `integer`) |
+| Namespace | Used by                      | Second argument                |
+| --------- | ---------------------------- | ------------------------------ |
+| 1         | `products_assert_identity()` | `title_id` (cast to `integer`) |
 
 ## Phase 3 reminders (do not block the catalog)
 
