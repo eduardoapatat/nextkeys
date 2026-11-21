@@ -3,7 +3,7 @@ import type { ProductSummary } from '~/api/schemas';
 
 /**
  * The tabbed shelf right under the banner, full width: the platform and
- * type shortcuts live in the accent band below (HomeCategories). "Novedades" is the API's
+ * type shortcuts live in the turquoise band below (HomeCategories). "Novedades" is the API's
  * newest sort; the other two tabs are real products in another order,
  * marked as an example selection until the API has offers and featured
  * products.

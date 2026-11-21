@@ -107,11 +107,11 @@ describe('home', () => {
         ).toBeDefined();
     });
 
-    it('links the platforms and types from the accent band', async () => {
+    it('links the platforms and types from the brand band', async () => {
         const page = await mountSuspended(HomePage, { route: '/' });
         const categories = page.find('[aria-labelledby="categories-heading"]');
 
-        expect(categories.classes()).toContain('surface-accent');
+        expect(categories.classes()).toContain('surface-brand');
         expect(
             categories.find('a[href="/catalogo?platform=ps5,ps4"]').text(),
         ).toContain('PlayStation');
