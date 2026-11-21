@@ -21,6 +21,7 @@ function insertPaymentAttemptRow(array $overrides = []): int
         'token' => webpayToken((string) random_int(0, PHP_INT_MAX)),
         'amount' => 19990,
         'status' => 'initialized',
+        'origin' => 'storefront',
         'created_at' => now(),
         'updated_at' => now(),
         ...$overrides,
@@ -122,3 +123,8 @@ it('rejects any change of a finished attempt', function (string $to) {
     expect(fn () => DB::table('payment_attempts')->where('id', $id)->update(['status' => $to]))
         ->toThrow(QueryException::class, 'payment_attempts_status_transition');
 })->with(['initialized', 'authorized', 'cancelled']);
+
+it('requires the origin to be the storefront or the panel', function () {
+    expect(fn () => insertPaymentAttemptRow(['origin' => 'api']))
+        ->toThrow(QueryException::class, 'payment_attempts_origin_check');
+});

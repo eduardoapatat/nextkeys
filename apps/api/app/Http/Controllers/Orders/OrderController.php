@@ -11,6 +11,7 @@ use App\Actions\Orders\ResendOrderPaidEmail;
 use App\Actions\Payments\StartPaymentAttempt;
 use App\DataTables\OrdersTable;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentOrigin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -173,7 +174,7 @@ class OrderController extends Controller
         abort_unless($this->manualPaymentsEnabled(), 404);
 
         try {
-            $redirect = $startPaymentAttempt->handle($order);
+            $redirect = $startPaymentAttempt->handle($order, PaymentOrigin::Panel);
         } catch (OrderCannotBePaid $exception) {
             throw ValidationException::withMessages(['order' => match ($exception->reason) {
                 OrderCannotBePaidReason::AlreadyPaid => 'El pedido ya está pagado.',

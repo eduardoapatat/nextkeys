@@ -6,6 +6,7 @@ use App\Actions\Orders\LockPayableOrder;
 use App\Actions\Orders\OrderBusy;
 use App\Actions\Orders\OrderCannotBePaid;
 use App\Enums\PaymentAttemptStatus;
+use App\Enums\PaymentOrigin;
 use App\Models\Order;
 use App\Models\PaymentAttempt;
 use App\Payments\PaymentGateway;
@@ -24,7 +25,8 @@ final class StartPaymentAttempt
     /**
      * Opens a new payment attempt for the order's server-side total and
      * creates its gateway transaction. An expired order is reopened first,
-     * and the hold is extended to cover the gateway's payment form.
+     * and the hold is extended to cover the gateway's payment form. The
+     * origin decides where the gateway's return sends the customer.
      *
      * The attempt is stored before the gateway call: its `buy_order` may reach
      * the gateway even when the call fails, so it is never reused.
@@ -34,9 +36,9 @@ final class StartPaymentAttempt
      * @throws OrderBusy
      * @throws PaymentGatewayException
      */
-    public function handle(Order $order): PaymentRedirect
+    public function handle(Order $order, PaymentOrigin $origin): PaymentRedirect
     {
-        $attempt = $this->lockPayableOrder->handle($order, function (Order $locked): PaymentAttempt {
+        $attempt = $this->lockPayableOrder->handle($order, function (Order $locked) use ($origin): PaymentAttempt {
             $maxAttempts = Config::integer('payments.max_attempts');
             $number = $locked->paymentAttempts()->count() + 1;
 
@@ -58,6 +60,7 @@ final class StartPaymentAttempt
                 'buy_order' => PaymentAttempt::buyOrderFor($locked, $number),
                 'amount' => $locked->total,
                 'status' => PaymentAttemptStatus::Initialized,
+                'origin' => $origin,
             ]);
         });
 

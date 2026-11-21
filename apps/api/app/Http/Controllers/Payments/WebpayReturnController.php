@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payments;
 
 use App\Actions\Payments\CancelPaymentAttempt;
 use App\Actions\Payments\ConfirmPaymentAttempt;
+use App\Enums\PaymentOrigin;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentAttempt;
 use App\Payments\Transbank\WebpayReturn;
@@ -38,7 +39,7 @@ class WebpayReturnController extends Controller
             ? $confirmPaymentAttempt->handle($attempt)
             : $attempt->status;
 
-        if (Config::boolean('orders.manual_payments')) {
+        if ($attempt->origin === PaymentOrigin::Panel) {
             return to_route('orders.show', $attempt->order);
         }
 

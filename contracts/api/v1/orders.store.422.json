@@ -1,0 +1,8 @@
+{
+    "message": "Este producto ya no está disponible.",
+    "errors": {
+        "items.0.slug": [
+            "Este producto ya no está disponible."
+        ]
+    }
+}

@@ -80,6 +80,10 @@ Statuses: `initialized` (sent to Webpay), `authorized` (committed and recorded o
 - `app/Actions/Payments`: `StartPaymentAttempt`, `ConfirmPaymentAttempt`, `CancelPaymentAttempt`, `ReconcilePaymentAttempts` (`payments:reconcile`, `routes/console.php`). Return route in `routes/payments.php` (`WebpayReturnController`).
 - Verified end to end against `webpay3gint` on 2026-11-20 (test VISA, RUT 11.111.111-1): commit, receipt and order completed. Posting the same token to Webpay twice shows Webpay's error page; the attempt stays `initialized` until reconciliation aborts it.
 
+### Attempt origin
+
+Decided on 2026-11-20. `payment_attempts.origin` (`storefront` or `panel`, CHECK) records who started the attempt; `StartPaymentAttempt` requires it. The Webpay return sends a `panel` attempt back to the order in the panel and every other attempt to the storefront result page, so turning on `ORDERS_MANUAL_PAYMENTS` locally no longer hijacks storefront payments. Rows from before the column are `panel` (the panel was the only way to start one).
+
 ### Panel and phase 4
 
 - The order detail lists its payment attempts. With `ORDERS_MANUAL_PAYMENTS=true` (local only) a "Pagar con Webpay (prueba)" button starts an attempt and auto-posts the form to Webpay, to try the integration end to end before the storefront exists.

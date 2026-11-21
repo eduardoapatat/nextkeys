@@ -110,7 +110,7 @@ it('lists the physical lines of a mixed order as waiting to ship', function () {
     Mail::fake();
     ProductKey::factory()->for($this->digital)->create(['code' => 'SECRET-00002-EFGH']);
     $box = Product::factory()->physical()->published()->create(['stock' => 2]);
-    $order = app(PlaceOrder::class)->handle($this->customer, [
+    $order = app(PlaceOrder::class)->handle(User::factory()->create(), [
         new OrderLineData($this->digital->id, 1),
         new OrderLineData($box->id, 1),
     ]);

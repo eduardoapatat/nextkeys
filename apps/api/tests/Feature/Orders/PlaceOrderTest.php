@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Orders\ExpireOrders;
 use App\Actions\Orders\OrderLineData;
 use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
@@ -119,4 +120,27 @@ it('rejects an admin', function () {
 
     expect($errors)->toBe(['user' => ['Solo los clientes pueden hacer pedidos.']]);
     $this->assertDatabaseCount('orders', 0);
+});
+
+it('refuses a second order while the customer has one pending', function () {
+    $product = Product::factory()->published()->create();
+    ProductKey::factory()->for($product)->count(2)->create();
+    $pending = app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($product->id, 1)]);
+
+    expect(validationErrorsOf(fn () => app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($product->id, 1)])))
+        ->toBe(['order' => ["Ya tienes un pedido pendiente ({$pending->reference}): págalo o cancélalo antes de hacer otro."]]);
+
+    expect($this->customer->orders()->count())->toBe(1);
+});
+
+it('lets a customer order again once the pending order expired', function () {
+    $product = Product::factory()->published()->create();
+    ProductKey::factory()->for($product)->count(2)->create();
+    app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($product->id, 1)]);
+    $this->travel(16)->minutes();
+    app(ExpireOrders::class)->handle();
+
+    $order = app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($product->id, 1)]);
+
+    expect($order->status)->toBe(OrderStatus::Pending);
 });

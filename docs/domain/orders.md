@@ -116,6 +116,18 @@ Decided and implemented on 2026-11-20.
 - **Local check:** `MAIL_MAILER=smtp` to Mailpit (`127.0.0.1:1025`, UI on http://localhost:8025) and `QUEUE_CONNECTION=database`; `composer dev` runs `queue:listen`.
 - **Phase 4:** "My library" (Sanctum endpoint listing the customer's paid lines, codes revealed on request and never in the listing, with its API contract), a link to it from the email, and the withdrawal notice in the Nuxt checkout.
 
+## Storefront checkout (phase 4)
+
+Decided on 2026-11-20.
+
+- **One pending order per customer.** `PlaceOrder` locks the customer's `users` row and refuses a new order while another is `pending` ("Ya tienes un pedido pendiente (NK-…): págalo o cancélalo antes de hacer otro."), so nobody holds stock with several checkouts. An `expired` order does not count. Not a partial unique index: `ReopenExpiredOrder` must still be able to move an expired order back to `pending` when a late payment arrives.
+- **API** (`auth:sanctum`, the customer's own orders only; another customer's reference answers 404, never 403):
+  - `POST /api/v1/orders` `{items: [{slug, quantity}]}`: requires a verified email (403 "Verifica tu correo antes de pagar."); slugs resolve to published products (422 `items.{i}.slug` otherwise), then `PlaceOrder`. 201 with `OrderResource`.
+  - `GET /api/v1/orders` (newest first, paginated) and `GET /api/v1/orders/{reference}`.
+  - `POST /api/v1/orders/{reference}/payments` starts a Webpay attempt (`{url, token}`); `POST /api/v1/orders/{reference}/cancel` cancels a pending order.
+  - `OrderResource`: reference, status, total, `expires_at`, `paid_at`, `created_at`, `can_pay`, `has_physical_items`, the snapshot lines (with the product slug) and `last_payment` (the receipt fields Transbank asks the result page to show). Never keys, ids or the `buy_order`.
+- **Nuxt `/checkout`** shows the cart summary, the withdrawal notice next to the total (same font size as the price, with the words "derecho a retracto"; the 10-day term too when the cart has physical products), blocks payment until the email is verified, links an existing pending order instead of paying, and posts `token_ws` to Webpay with a plain form (never an iframe). Placing the order empties the cart.
+
 ## Rejected alternatives
 
 - **One `order_items` row per unit**: simpler 1:1 link to a key, but every list and total has to group rows.

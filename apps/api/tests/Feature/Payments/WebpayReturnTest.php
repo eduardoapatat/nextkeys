@@ -6,6 +6,7 @@ use App\Actions\Orders\OrderLineData;
 use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentAttemptStatus;
+use App\Enums\PaymentOrigin;
 use App\Enums\ProductKeyStatus;
 use App\Models\PaymentAttempt;
 use App\Models\Product;
@@ -204,10 +205,19 @@ it('answers a repeated return without committing again', function () {
     Http::assertSentCount(1);
 });
 
-it('sends the admin back to the order in the panel when manual payments are on', function () {
+it('sends the admin back to the order in the panel for an attempt started there', function () {
     config(['orders.manual_payments' => true]);
+    $this->attempt->update(['origin' => PaymentOrigin::Panel]);
     ($this->fakeCommit)(Http::response($this->committed));
 
     $this->post(route('payments.webpay.return'), ['token_ws' => webpayToken()])
         ->assertRedirect(route('orders.show', $this->order));
+});
+
+it('sends a storefront payment to the storefront even with manual payments on', function () {
+    config(['orders.manual_payments' => true]);
+    ($this->fakeCommit)(Http::response($this->committed));
+
+    $this->post(route('payments.webpay.return'), ['token_ws' => webpayToken()])
+        ->assertRedirect(($this->resultUrl)('authorized'));
 });

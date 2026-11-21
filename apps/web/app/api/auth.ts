@@ -9,7 +9,7 @@ async function ensureCsrfCookie(): Promise<void> {
     }
 }
 
-async function post<T>(
+export async function post<T>(
     path: string,
     body?: Record<string, unknown>,
     query?: Record<string, string>,

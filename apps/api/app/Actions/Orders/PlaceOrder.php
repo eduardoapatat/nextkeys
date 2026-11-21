@@ -33,6 +33,8 @@ final class PlaceOrder
 
         try {
             return DB::transaction(function () use ($customer, $lines, $products): Order {
+                $this->ensureNoPendingOrder($customer);
+
                 $order = $this->createOrder($customer, $lines, $products);
 
                 $order->items()->createMany(array_map(function (OrderLineData $line) use ($products): array {
@@ -106,6 +108,26 @@ final class PlaceOrder
         }
 
         return $products;
+    }
+
+    /**
+     * One pending order per customer, so nobody holds stock with several
+     * checkouts (docs/domain/orders.md, "Storefront checkout"). The customer's
+     * row lock serializes two checkouts of the same customer.
+     *
+     * @throws ValidationException
+     */
+    private function ensureNoPendingOrder(User $customer): void
+    {
+        User::query()->whereKey($customer->id)->lockForUpdate()->first();
+
+        $pending = $customer->orders()->where('status', OrderStatus::Pending)->value('reference');
+
+        if (is_string($pending)) {
+            throw ValidationException::withMessages([
+                'order' => "Ya tienes un pedido pendiente ({$pending}): págalo o cancélalo antes de hacer otro.",
+            ]);
+        }
     }
 
     /**

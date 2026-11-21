@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\PaymentAttemptStatus;
+use App\Enums\PaymentOrigin;
 use App\Models\Order;
 use App\Models\PaymentAttempt;
 use App\Payments\RefundType;
@@ -28,6 +29,7 @@ class PaymentAttemptFactory extends Factory
             'gateway' => PaymentAttempt::GATEWAY_WEBPAY_PLUS,
             'token' => fn (): string => hash('sha256', fake()->unique()->uuid()),
             'status' => PaymentAttemptStatus::Initialized,
+            'origin' => PaymentOrigin::Storefront,
         ];
     }
 

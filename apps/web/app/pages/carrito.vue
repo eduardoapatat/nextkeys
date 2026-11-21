@@ -1,63 +1,13 @@
 <script setup lang="ts">
-import { fetchProduct } from '~/api/catalog';
-import type { ProductDetail } from '~/api/schemas';
-
 useHead({ title: 'Carrito' });
 
-const cart = useCart();
-const slugs = computed(() => cart.lines.value.map((line) => line.slug));
-
-/** Each product of the cart, or `null` when it no longer exists. */
-const { data: products, pending } = await useAsyncData(
-    () => `cart:${slugs.value.join(',')}`,
-    async () => {
-        const entries = await Promise.all(
-            slugs.value.map(async (slug) => {
-                try {
-                    return [slug, await fetchProduct(slug)] as const;
-                } catch (error) {
-                    if (toApiError(error).statusCode === 404) {
-                        return [slug, null] as const;
-                    }
-
-                    throw error;
-                }
-            }),
-        );
-
-        return Object.fromEntries(entries) as Record<
-            string,
-            ProductDetail | null
-        >;
-    },
-);
-
-const lines = computed(() =>
-    cart.lines.value.map((line) => {
-        const product = products.value?.[line.slug];
-
-        return {
-            ...line,
-            product: product ?? null,
-            available: Boolean(product?.in_stock),
-        };
-    }),
-);
-
-const total = computed(() =>
-    lines.value.reduce(
-        (sum, line) =>
-            sum + (line.product ? line.product.price * line.quantity : 0),
-        0,
-    ),
-);
-
-const canCheckout = computed(
-    () =>
-        !pending.value &&
-        lines.value.length > 0 &&
-        lines.value.every((line) => line.available),
-);
+const {
+    cart,
+    lines,
+    total,
+    pending,
+    ready: canCheckout,
+} = await useCartProducts();
 </script>
 
 <template>

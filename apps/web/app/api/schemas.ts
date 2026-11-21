@@ -51,8 +51,7 @@ const PaginationLink = v.strictObject({
     active: v.boolean(),
 });
 
-export const ProductPageSchema = v.strictObject({
-    data: v.array(ProductSummarySchema),
+const paginationFields = {
     links: v.strictObject({
         first: v.string(),
         last: v.string(),
@@ -69,6 +68,11 @@ export const ProductPageSchema = v.strictObject({
         to: v.nullable(v.number()),
         total: v.number(),
     }),
+};
+
+export const ProductPageSchema = v.strictObject({
+    data: v.array(ProductSummarySchema),
+    ...paginationFields,
 });
 
 export const CatalogFiltersSchema = v.strictObject({
@@ -107,5 +111,79 @@ export type ProductSummary = v.InferOutput<typeof ProductSummarySchema>;
 export type ProductDetail = v.InferOutput<typeof ProductDetailSchema>['data'];
 export type ProductPage = v.InferOutput<typeof ProductPageSchema>;
 export type CatalogFilters = v.InferOutput<typeof CatalogFiltersSchema>['data'];
+export const orderStatuses = [
+    'pending',
+    'paid',
+    'completed',
+    'cancelled',
+    'expired',
+] as const;
+
+export const paymentStatuses = [
+    'initialized',
+    'authorized',
+    'rejected',
+    'cancelled',
+    'aborted',
+    'refunded',
+] as const;
+
+const OrderSchemaData = v.strictObject({
+    reference: v.string(),
+    status: v.strictObject({
+        slug: v.picklist(orderStatuses),
+        name: v.string(),
+    }),
+    total: v.pipe(v.number(), v.integer()),
+    created_at: v.string(),
+    expires_at: v.string(),
+    paid_at: v.nullable(v.string()),
+    can_pay: v.boolean(),
+    has_physical_items: v.boolean(),
+    items: v.array(
+        v.strictObject({
+            product_slug: v.string(),
+            title_name: v.string(),
+            type: ProductTypeReference,
+            quantity: v.number(),
+            unit_price: v.number(),
+            line_total: v.number(),
+        }),
+    ),
+    last_payment: v.nullable(
+        v.strictObject({
+            status: v.strictObject({
+                slug: v.picklist(paymentStatuses),
+                name: v.string(),
+            }),
+            amount: v.number(),
+            authorization_code: v.nullable(v.string()),
+            payment_type: v.nullable(v.string()),
+            installments_number: v.nullable(v.number()),
+            installments_amount: v.nullable(v.number()),
+            card_last_digits: v.nullable(v.string()),
+            transaction_date: v.nullable(v.string()),
+        }),
+    ),
+});
+
+/** A customer's order (`/orders/{reference}`, and the result of placing one). */
+export const OrderSchema = v.strictObject({ data: OrderSchemaData });
+
+export const OrderPageSchema = v.strictObject({
+    data: v.array(OrderSchemaData),
+    ...paginationFields,
+});
+
+/** Where the storefront posts `token_ws` to start the Webpay payment. */
+export const PaymentRedirectSchema = v.strictObject({
+    data: v.strictObject({ url: v.string(), token: v.string() }),
+});
+
+export type Order = v.InferOutput<typeof OrderSchemaData>;
+export type OrderPage = v.InferOutput<typeof OrderPageSchema>;
+export type PaymentRedirect = v.InferOutput<
+    typeof PaymentRedirectSchema
+>['data'];
 export type Customer = v.InferOutput<typeof CustomerSchema>['data'];
 export type ValidationErrorBody = v.InferOutput<typeof ValidationErrorSchema>;

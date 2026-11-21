@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PaymentAttemptStatus;
+use App\Enums\PaymentOrigin;
 use App\Payments\GatewayPayment;
 use App\Payments\RefundType;
 use Database\Factories\PaymentAttemptFactory;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $token Null until the gateway created the transaction.
  * @property int $amount
  * @property PaymentAttemptStatus $status
+ * @property PaymentOrigin $origin
  * @property int|null $response_code
  * @property string|null $authorization_code
  * @property string|null $payment_type_code
@@ -41,7 +43,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon|null $updated_at
  * @property-read Order $order
  */
-#[Fillable(['order_id', 'number', 'gateway', 'buy_order', 'token', 'amount', 'status'])]
+#[Fillable(['order_id', 'number', 'gateway', 'buy_order', 'token', 'amount', 'status', 'origin'])]
 class PaymentAttempt extends Model
 {
     /** @use HasFactory<PaymentAttemptFactory> */
@@ -139,6 +141,7 @@ class PaymentAttempt extends Model
             'number' => 'integer',
             'amount' => 'integer',
             'status' => PaymentAttemptStatus::class,
+            'origin' => PaymentOrigin::class,
             'response_code' => 'integer',
             'installments_number' => 'integer',
             'installments_amount' => 'integer',

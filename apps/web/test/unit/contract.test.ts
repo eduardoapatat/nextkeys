@@ -5,6 +5,9 @@ import {
     CustomerSchema,
     MessageSchema,
     NotFoundSchema,
+    OrderPageSchema,
+    OrderSchema,
+    PaymentRedirectSchema,
     ProductDetailSchema,
     ProductPageSchema,
     ValidationErrorSchema,
@@ -21,6 +24,11 @@ describe('API contract fixtures', () => {
         ['auth.me', CustomerSchema],
         ['auth.me.401', MessageSchema],
         ['auth.login.422', ValidationErrorSchema],
+        ['orders.store', OrderSchema],
+        ['orders.store.422', ValidationErrorSchema],
+        ['orders.show', OrderSchema],
+        ['orders.index', OrderPageSchema],
+        ['payments.store', PaymentRedirectSchema],
     ] as const)('%s matches its schema', (name, schema) => {
         expect(() => fixture(name, schema)).not.toThrow();
     });

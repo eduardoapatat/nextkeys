@@ -7,6 +7,7 @@ use App\Actions\Orders\PlaceOrder;
 use App\Actions\Payments\StartPaymentAttempt;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentAttemptStatus;
+use App\Enums\PaymentOrigin;
 use App\Models\Order;
 use App\Models\PaymentAttempt;
 use App\Models\Product;
@@ -31,12 +32,13 @@ beforeEach(function () {
 it('creates a transaction for the order total with a buy order per attempt', function () {
     ($this->fakeCreate)();
 
-    $redirect = app(StartPaymentAttempt::class)->handle($this->order);
+    $redirect = app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront);
 
     $attempt = $this->order->paymentAttempts()->sole();
     expect($redirect->token)->toBe(webpayToken())
         ->and($attempt->number)->toBe(1)
         ->and($attempt->buy_order)->toBe("{$this->order->reference}-1")
+        ->and($attempt->origin)->toBe(PaymentOrigin::Storefront)
         ->and($attempt->token)->toBe(webpayToken())
         ->and($attempt->amount)->toBe(19990)
         ->and($attempt->status)->toBe(PaymentAttemptStatus::Initialized);
@@ -50,7 +52,7 @@ it('numbers the next attempt after the previous ones', function () {
     ($this->fakeCreate)();
     PaymentAttempt::factory()->for($this->order)->create(['status' => PaymentAttemptStatus::Aborted, 'token' => null, 'finished_at' => now()]);
 
-    app(StartPaymentAttempt::class)->handle($this->order);
+    app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront);
 
     expect($this->order->paymentAttempts()->pluck('buy_order')->all())
         ->toBe(["{$this->order->reference}-1", "{$this->order->reference}-2"]);
@@ -61,7 +63,7 @@ it('extends the hold to cover the payment form', function () {
     $this->travel(10)->minutes();
     $this->freezeTime();
 
-    app(StartPaymentAttempt::class)->handle($this->order);
+    app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront);
 
     expect($this->order->fresh()?->expires_at->toDateTimeString())->toBe(now()->addMinutes(11)->toDateTimeString());
 });
@@ -70,7 +72,7 @@ it('keeps a hold that already covers the payment form', function () {
     ($this->fakeCreate)();
     $expiresAt = $this->order->expires_at->toDateTimeString();
 
-    app(StartPaymentAttempt::class)->handle($this->order);
+    app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront);
 
     expect($this->order->fresh()?->expires_at->toDateTimeString())->toBe($expiresAt);
 });
@@ -80,7 +82,7 @@ it('reopens an expired order whose stock is still there', function () {
     $this->travel(16)->minutes();
     app(ExpireOrders::class)->handle();
 
-    app(StartPaymentAttempt::class)->handle($this->order);
+    app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront);
 
     expect($this->order->fresh()?->status)->toBe(OrderStatus::Pending);
 });
@@ -91,7 +93,7 @@ it('refuses a sixth attempt', function () {
         PaymentAttempt::factory()->for($this->order)->create(['number' => $number, 'status' => PaymentAttemptStatus::Cancelled, 'finished_at' => now()]);
     }
 
-    expect(validationErrorsOf(fn () => app(StartPaymentAttempt::class)->handle($this->order)))
+    expect(validationErrorsOf(fn () => app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront)))
         ->toBe(['order' => ['El pedido alcanzó el máximo de 5 intentos de pago. Crea un pedido nuevo.']]);
     Http::assertNothingSent();
 });
@@ -99,7 +101,7 @@ it('refuses a sixth attempt', function () {
 it('refuses an order that cannot be charged', function (Closure $makeOrder) {
     Http::fake();
 
-    expect(fn () => app(StartPaymentAttempt::class)->handle($makeOrder()))->toThrow(OrderCannotBePaid::class);
+    expect(fn () => app(StartPaymentAttempt::class)->handle($makeOrder(), PaymentOrigin::Storefront))->toThrow(OrderCannotBePaid::class);
     expect(PaymentAttempt::query()->count())->toBe(0);
     Http::assertNothingSent();
 })->with([
@@ -110,7 +112,7 @@ it('refuses an order that cannot be charged', function (Closure $makeOrder) {
 it('aborts the attempt, without reusing its buy order, when the gateway fails', function () {
     Http::fake([webpayUrl() => Http::response(['error_message' => 'Internal error'], 500)]);
 
-    expect(fn () => app(StartPaymentAttempt::class)->handle($this->order))->toThrow(PaymentGatewayException::class);
+    expect(fn () => app(StartPaymentAttempt::class)->handle($this->order, PaymentOrigin::Storefront))->toThrow(PaymentGatewayException::class);
 
     $attempt = $this->order->paymentAttempts()->sole();
     expect($attempt->status)->toBe(PaymentAttemptStatus::Aborted)

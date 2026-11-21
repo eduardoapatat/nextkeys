@@ -1,8 +1,12 @@
 <?php
 
+use App\Actions\Orders\MarkOrderPaid;
+use App\Enums\PaymentAttemptStatus;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Testing\TestResponse;
@@ -109,4 +113,39 @@ it('answers the auth endpoints with the shape of their contract fixtures', funct
     expectContract('auth.me.401', $this->getJson('/api/v1/auth/me')->assertUnauthorized());
     expectContract('auth.login.422', $this->postJson('/api/v1/auth/login', ['email' => 'ana@example.com', 'password' => 'wrong'])->assertUnprocessable());
     expectContract('auth.me', $this->actingAs($customer, 'customer')->getJson('/api/v1/auth/me')->assertOk());
+});
+
+it('answers the order endpoints with the shape of their contract fixtures', function () {
+    Http::preventStrayRequests();
+    Http::fake([webpayUrl() => Http::response([
+        'token' => webpayToken(),
+        'url' => 'https://webpay3gint.transbank.cl/webpayserver/initTransaction',
+    ])]);
+    $this->withHeaders(fromStorefront());
+    $this->actingAs(User::factory()->create(), 'customer');
+
+    expectContract('orders.store.422', $this->postJson('/api/v1/orders', ['items' => [['slug' => 'does-not-exist', 'quantity' => 1]]])->assertUnprocessable());
+
+    $created = $this->postJson('/api/v1/orders', ['items' => [['slug' => 'starfall-steam-macos-windows-global', 'quantity' => 1]]])->assertCreated();
+    expectContract('orders.store', $created);
+    $reference = $created->json('data.reference');
+
+    expectContract('payments.store', $this->postJson("/api/v1/orders/{$reference}/payments")->assertCreated());
+
+    $order = Order::query()->where('reference', $reference)->sole();
+    $order->paymentAttempts()->sole()->forceFill([
+        'status' => PaymentAttemptStatus::Authorized,
+        'finished_at' => now(),
+        'response_code' => 0,
+        'authorization_code' => '1213',
+        'payment_type_code' => 'VN',
+        'installments_number' => 0,
+        'card_last_digits' => '6623',
+        'transaction_date' => now(),
+        'accounting_date' => '1120',
+    ])->save();
+    app(MarkOrderPaid::class)->handle($order);
+
+    expectContract('orders.show', $this->getJson("/api/v1/orders/{$reference}")->assertOk());
+    expectContract('orders.index', $this->getJson('/api/v1/orders')->assertOk());
 });

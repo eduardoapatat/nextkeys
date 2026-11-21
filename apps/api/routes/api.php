@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
 use App\Http\Controllers\Api\V1\Auth\SessionController;
 use App\Http\Controllers\Api\V1\CatalogFilterController;
+use App\Http\Controllers\Api\V1\Orders\CustomerOrderController;
+use App\Http\Controllers\Api\V1\Orders\CustomerPaymentController;
 use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +40,13 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
                 ->middleware('throttle:6,1')
                 ->name('verification.send');
         });
+    });
+
+    Route::middleware('auth:sanctum')->prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [CustomerOrderController::class, 'index'])->name('index');
+        Route::post('/', [CustomerOrderController::class, 'store'])->middleware('throttle:10,1')->name('store');
+        Route::get('{reference}', [CustomerOrderController::class, 'show'])->name('show');
+        Route::post('{reference}/payments', CustomerPaymentController::class)->middleware('throttle:10,1')->name('payments.store');
+        Route::post('{reference}/cancel', [CustomerOrderController::class, 'cancel'])->name('cancel');
     });
 });
