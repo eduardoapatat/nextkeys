@@ -52,7 +52,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
         >
             <h2
                 id="side-categories-heading"
-                class="flex h-11 items-center rounded-t-card bg-panel-2 px-4 font-display text-lg font-extrabold tracking-wide text-chalk uppercase"
+                class="flex h-11 items-center rounded-t-card bg-surface-2 px-4 font-display text-lg font-extrabold tracking-wide text-fg uppercase"
             >
                 Categorías
             </h2>
@@ -60,7 +60,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
                 <li v-for="platform in filters.platforms" :key="platform.slug">
                     <NuxtLink
                         :to="catalogLink({ platform: [platform.slug] })"
-                        class="flex h-9 items-center justify-between px-4 text-chalk-muted hover:bg-panel hover:text-chalk"
+                        class="flex h-9 items-center justify-between px-4 text-fg-muted hover:bg-surface hover:text-fg"
                     >
                         {{ platform.name }}
                         <UiIcon name="chevronRight" :size="14" />
@@ -70,7 +70,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
                 <li v-for="type in filters.types" :key="type.slug">
                     <NuxtLink
                         :to="catalogLink({ type: [type.slug] })"
-                        class="flex h-9 items-center justify-between px-4 text-chalk-muted hover:bg-panel hover:text-chalk"
+                        class="flex h-9 items-center justify-between px-4 text-fg-muted hover:bg-surface hover:text-fg"
                     >
                         {{ type.name }}
                         <UiIcon name="chevronRight" :size="14" />
@@ -98,8 +98,8 @@ function onKeydown(event: KeyboardEvent, index: number) {
                         class="relative h-12 px-4 font-display text-lg font-extrabold tracking-wide uppercase transition-colors duration-150"
                         :class="
                             active === tab.id
-                                ? 'text-chalk'
-                                : 'text-chalk-faint hover:text-chalk-muted'
+                                ? 'text-fg'
+                                : 'text-fg-faint hover:text-fg-muted'
                         "
                         @click="active = tab.id"
                         @keydown="onKeydown($event, index)"
@@ -107,7 +107,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
                         {{ tab.label }}
                         <span
                             aria-hidden="true"
-                            class="absolute inset-x-3 -bottom-px h-0.5 bg-sticker"
+                            class="absolute inset-x-3 -bottom-px h-0.5 bg-accent"
                             :class="
                                 active === tab.id ? 'opacity-100' : 'opacity-0'
                             "
@@ -134,7 +134,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
             >
                 <p
                     v-if="tab.example"
-                    class="mb-5 inline-flex items-center gap-2 rounded-control border border-line-strong px-2 py-1 text-xs text-chalk-muted"
+                    class="mb-5 inline-flex items-center gap-2 rounded-control border border-line-strong px-2 py-1 text-xs text-fg-muted"
                 >
                     Selección de ejemplo: productos reales, sin descuentos
                     inventados.

@@ -11,11 +11,9 @@ withDefaults(
 
 <template>
     <p
-        class="inline-flex flex-col items-start rounded-control font-display leading-none font-extrabold shadow-sticker"
+        class="inline-flex flex-col items-start rounded-control font-display leading-none font-extrabold shadow-tag"
         :class="[
-            inStock
-                ? 'bg-sticker text-sticker-ink'
-                : 'bg-panel-2 text-chalk-muted',
+            inStock ? 'bg-accent text-accent-fg' : 'bg-surface-2 text-fg-muted',
             size === 'lg'
                 ? '-rotate-2 px-3 py-2 text-3xl'
                 : '-rotate-3 px-2 py-1 text-lg',

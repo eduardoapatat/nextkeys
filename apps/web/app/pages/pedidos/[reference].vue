@@ -82,10 +82,10 @@ async function cancel() {
     <main v-if="order" class="mx-auto max-w-3xl px-4 py-8 md:py-10">
         <NuxtLink
             to="/pedidos"
-            class="inline-flex items-center gap-1 text-sm text-chalk-muted hover:text-chalk"
+            class="inline-flex items-center gap-1 text-sm text-fg-muted hover:text-fg"
             ><UiIcon name="chevronLeft" :size="16" />Mis pedidos</NuxtLink
         >
-        <h1 class="mt-4 text-5xl text-chalk uppercase md:text-6xl">
+        <h1 class="mt-4 text-5xl text-fg uppercase md:text-6xl">
             Pedido
             <span class="font-mono text-4xl md:text-5xl">{{
                 order.reference
@@ -96,7 +96,7 @@ async function cancel() {
         <div class="mt-6 flex flex-col gap-6">
             <template v-if="view === 'paid'">
                 <div
-                    class="flex flex-col gap-2 rounded-card border px-5 py-4 border-ok/50 bg-ok-deep text-chalk"
+                    class="flex flex-col gap-2 rounded-card border px-5 py-4 border-ok/50 bg-ok-deep text-fg"
                 >
                     <p
                         role="status"
@@ -108,9 +108,9 @@ async function cancel() {
                             class="text-ok"
                         /><strong>Pago aprobado.</strong>
                     </p>
-                    <p class="text-chalk-muted">
+                    <p class="text-fg-muted">
                         Te enviamos las claves a tu correo. También están en
-                        <NuxtLink to="/biblioteca" class="text-crt underline"
+                        <NuxtLink to="/biblioteca" class="text-brand underline"
                             >Mi biblioteca</NuxtLink
                         >.
                         <template v-if="order.has_physical_items">
@@ -224,7 +224,7 @@ async function cancel() {
 
             <div
                 v-else-if="view === 'rejected'"
-                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-danger/50 bg-danger-deep text-chalk"
+                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-danger/50 bg-danger-deep text-fg"
             >
                 <p
                     role="alert"
@@ -235,10 +235,10 @@ async function cancel() {
                         {{ order.reference }} rechazada.</strong
                     >
                 </p>
-                <p class="text-chalk-muted">
+                <p class="text-fg-muted">
                     Las posibles causas de este rechazo son:
                 </p>
-                <ul class="list-disc pl-5 text-chalk-muted">
+                <ul class="list-disc pl-5 text-fg-muted">
                     <li>Error en el ingreso de los datos de tu tarjeta.</li>
                     <li>Tu tarjeta no tiene saldo o cupo suficiente.</li>
                     <li>
@@ -249,7 +249,7 @@ async function cancel() {
 
             <div
                 v-else-if="view === 'unpaid'"
-                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-crt/40 bg-crt-deep text-chalk"
+                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-brand/40 bg-brand-soft text-fg"
             >
                 <p
                     v-if="route.query.estado === 'error'"
@@ -267,9 +267,9 @@ async function cancel() {
                         order.last_payment.status.name
                     }}). No se hizo ningún cargo.
                 </p>
-                <p class="text-chalk-muted">
+                <p class="text-fg-muted">
                     Tu pedido está pendiente: reservamos el stock hasta las
-                    <time class="tabular text-chalk">{{
+                    <time class="tabular text-fg">{{
                         formatDateTime(order.expires_at)
                     }}</time>.
                 </p>
@@ -277,7 +277,7 @@ async function cancel() {
 
             <div
                 v-else
-                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-line-strong bg-panel text-chalk"
+                class="flex flex-col gap-2 rounded-card border px-5 py-4 border-line-strong bg-surface text-fg"
             >
                 <p role="status">
                     <strong class="font-display text-2xl uppercase"
@@ -321,9 +321,9 @@ async function cancel() {
             <section
                 v-if="view !== 'paid'"
                 aria-labelledby="items-heading"
-                class="rounded-card border border-line bg-ink-2 p-5"
+                class="rounded-card border border-line bg-bg-subtle p-5"
             >
-                <h2 id="items-heading" class="text-2xl text-chalk uppercase">
+                <h2 id="items-heading" class="text-2xl text-fg uppercase">
                     Lo que compraste
                 </h2>
                 <ul class="mt-3 flex flex-col divide-y divide-line">
@@ -336,20 +336,20 @@ async function cancel() {
                             {{ item.quantity }} ×
                             <NuxtLink
                                 :to="`/${item.product_slug}`"
-                                class="font-semibold text-chalk hover:text-sticker"
+                                class="font-semibold text-fg hover:text-accent"
                                 >{{ item.title_name }}</NuxtLink
                             >
-                            <span class="block text-sm text-chalk-muted">{{
+                            <span class="block text-sm text-fg-muted">{{
                                 item.type.name
                             }}</span>
                         </span>
-                        <span class="tabular shrink-0 text-chalk">{{
+                        <span class="tabular shrink-0 text-fg">{{
                             formatClp(item.line_total)
                         }}</span>
                     </li>
                 </ul>
                 <p
-                    class="flex justify-between border-t border-line-strong pt-3 font-semibold text-chalk"
+                    class="flex justify-between border-t border-line-strong pt-3 font-semibold text-fg"
                 >
                     Total:
                     <span class="tabular font-display text-2xl">{{

@@ -40,13 +40,9 @@ function add() {
                 product.in_stock ? 'Agregar al carrito' : 'Sin stock'
             }}</template>
         </UiButton>
-        <p
-            v-if="added && !compact"
-            role="status"
-            class="text-sm text-chalk-muted"
-        >
+        <p v-if="added && !compact" role="status" class="text-sm text-fg-muted">
             Agregado.
-            <NuxtLink to="/carrito" class="text-crt underline"
+            <NuxtLink to="/carrito" class="text-brand underline"
                 >Ver carrito</NuxtLink
             >
         </p>

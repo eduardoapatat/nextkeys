@@ -50,7 +50,7 @@ const columns = computed(() => [
 </script>
 
 <template>
-    <footer class="mt-24 border-t border-line bg-ink-2">
+    <footer class="mt-24 border-t border-line bg-bg-subtle">
         <section
             aria-labelledby="newsletter-heading"
             class="border-b border-line"
@@ -61,11 +61,11 @@ const columns = computed(() => [
                 <div>
                     <h2
                         id="newsletter-heading"
-                        class="text-3xl text-chalk uppercase"
+                        class="text-3xl text-fg uppercase"
                     >
                         Lo nuevo de la vitrina, cada viernes
                     </h2>
-                    <p class="mt-2 max-w-prose text-chalk-muted">
+                    <p class="mt-2 max-w-prose text-fg-muted">
                         Lanzamientos, reposiciones y la oferta del día en un
                         solo correo.
                     </p>
@@ -85,7 +85,7 @@ const columns = computed(() => [
                             required
                             autocomplete="email"
                             placeholder="tu@correo.cl"
-                            class="h-11 min-w-0 flex-1 rounded-control border border-line bg-panel px-3 text-chalk placeholder:text-chalk-faint focus:border-crt focus:outline-none"
+                            class="h-11 min-w-0 flex-1 rounded-control border border-line bg-surface px-3 text-fg placeholder:text-fg-faint focus:border-brand focus:outline-none"
                         />
                         <UiButton type="submit" variant="primary"
                             >Suscribirme</UiButton
@@ -94,7 +94,7 @@ const columns = computed(() => [
                     <p
                         v-if="subscribed"
                         role="status"
-                        class="text-sm text-chalk-muted"
+                        class="text-sm text-fg-muted"
                     >
                         Es una demo: no guardamos tu correo.
                     </p>
@@ -107,7 +107,7 @@ const columns = computed(() => [
         >
             <div class="flex flex-col gap-4">
                 <SiteLogo />
-                <p class="max-w-xs text-sm text-chalk-muted">
+                <p class="max-w-xs text-sm text-fg-muted">
                     Claves digitales, licencias y juegos físicos, en pesos
                     chilenos y con pago Webpay.
                 </p>
@@ -118,7 +118,7 @@ const columns = computed(() => [
                 :aria-label="column.title"
             >
                 <h2
-                    class="font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
+                    class="font-display text-sm font-extrabold tracking-wider text-fg-faint uppercase"
                 >
                     {{ column.title }}
                 </h2>
@@ -127,13 +127,13 @@ const columns = computed(() => [
                         <NuxtLink
                             v-if="'to' in item"
                             :to="item.to"
-                            class="text-chalk-muted hover:text-chalk"
+                            class="text-fg-muted hover:text-fg"
                             >{{ item.label }}</NuxtLink
                         >
                         <a
                             v-else
                             :href="item.href"
-                            class="text-chalk-muted hover:text-chalk"
+                            class="text-fg-muted hover:text-fg"
                             >{{ item.label }}</a
                         >
                     </li>
@@ -143,7 +143,7 @@ const columns = computed(() => [
 
         <div class="border-t border-line">
             <p
-                class="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-6 text-sm text-chalk-faint sm:flex-row sm:justify-between"
+                class="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-6 text-sm text-fg-faint sm:flex-row sm:justify-between"
             >
                 <span
                     >NextKeys es un proyecto de portafolio: los productos, los

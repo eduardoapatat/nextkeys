@@ -40,14 +40,14 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
                 <UiIcon
                     :name="benefit.icon"
                     :size="24"
-                    class="mt-0.5 text-sticker"
+                    class="mt-0.5 text-accent"
                 />
                 <p>
                     <strong
-                        class="block font-display text-lg font-extrabold tracking-wide text-chalk uppercase"
+                        class="block font-display text-lg font-extrabold tracking-wide text-fg uppercase"
                         >{{ benefit.title }}</strong
                     >
-                    <span class="text-sm text-chalk-muted">{{
+                    <span class="text-sm text-fg-muted">{{
                         benefit.text
                     }}</span>
                 </p>

@@ -106,23 +106,18 @@ function pageLink(number: number) {
             class="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5"
         >
             <div>
-                <h1 class="text-5xl text-chalk uppercase md:text-6xl">
-                    Catálogo
-                </h1>
-                <p
-                    v-if="page && !apiError"
-                    class="tabular mt-1 text-chalk-muted"
-                >
+                <h1 class="text-5xl text-fg uppercase md:text-6xl">Catálogo</h1>
+                <p v-if="page && !apiError" class="tabular mt-1 text-fg-muted">
                     {{ page.meta.total }}
                     {{ page.meta.total === 1 ? 'producto' : 'productos' }}
                 </p>
             </div>
-            <label class="flex items-center gap-3 text-sm text-chalk-muted">
+            <label class="flex items-center gap-3 text-sm text-fg-muted">
                 Ordenar por
                 <select
                     name="sort"
                     form="catalog-filters"
-                    class="h-10 rounded-control border border-line bg-panel px-3 text-chalk focus:border-crt focus:outline-none"
+                    class="h-10 rounded-control border border-line bg-surface px-3 text-fg focus:border-brand focus:outline-none"
                     @change="autoApply"
                 >
                     <option
@@ -139,16 +134,16 @@ function pageLink(number: number) {
 
         <div class="mt-6 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
             <details
-                class="catalog-filters group rounded-card border border-line bg-ink-2 lg:border-0 lg:bg-transparent"
+                class="catalog-filters group rounded-card border border-line bg-bg-subtle lg:border-0 lg:bg-transparent"
             >
                 <summary
-                    class="flex h-12 cursor-pointer list-none items-center justify-between px-4 font-display font-extrabold tracking-wide text-chalk uppercase lg:hidden"
+                    class="flex h-12 cursor-pointer list-none items-center justify-between px-4 font-display font-extrabold tracking-wide text-fg uppercase lg:hidden"
                 >
                     <span class="flex items-center gap-2">
                         <UiIcon name="filter" />Filtros
                         <span
                             v-if="activeFilters > 0"
-                            class="tabular grid h-6 min-w-6 place-items-center rounded-control bg-sticker px-1.5 text-sm text-sticker-ink"
+                            class="tabular grid h-6 min-w-6 place-items-center rounded-control bg-accent px-1.5 text-sm text-accent-fg"
                             >{{ activeFilters }}</span
                         >
                     </span>
@@ -174,14 +169,14 @@ function pageLink(number: number) {
                             class="flex flex-col gap-1"
                         >
                             <legend
-                                class="mb-2 font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
+                                class="mb-2 font-display text-sm font-extrabold tracking-wider text-fg-faint uppercase"
                             >
                                 {{ facetLabels[facet] }}
                             </legend>
                             <label
                                 v-for="option in facetOptions(facet, filters)"
                                 :key="option.slug"
-                                class="flex min-h-9 cursor-pointer items-center gap-3 rounded-control px-2 text-chalk-muted hover:bg-panel hover:text-chalk has-checked:text-chalk"
+                                class="flex min-h-9 cursor-pointer items-center gap-3 rounded-control px-2 text-fg-muted hover:bg-surface hover:text-fg has-checked:text-fg"
                             >
                                 <input
                                     type="checkbox"
@@ -215,12 +210,12 @@ function pageLink(number: number) {
                 <div
                     v-if="apiError"
                     role="alert"
-                    class="rounded-card border border-danger/50 bg-danger-deep p-5 text-chalk"
+                    class="rounded-card border border-danger/50 bg-danger-deep p-5 text-fg"
                 >
                     <p class="font-semibold">
                         No pudimos aplicar estos filtros:
                     </p>
-                    <ul class="mt-2 list-disc pl-5 text-chalk-muted">
+                    <ul class="mt-2 list-disc pl-5 text-fg-muted">
                         <li v-for="message in apiError.messages" :key="message">
                             {{ message }}
                         </li>
@@ -231,7 +226,7 @@ function pageLink(number: number) {
                 </div>
                 <p
                     v-else-if="status === 'pending'"
-                    class="py-16 text-center text-chalk-muted"
+                    class="py-16 text-center text-fg-muted"
                 >
                     Cargando…
                 </p>
@@ -266,7 +261,7 @@ function pageLink(number: number) {
                     <nav
                         v-if="page.meta.last_page > 1"
                         aria-label="Paginación"
-                        class="mt-12 flex items-center justify-center gap-4 text-chalk-muted"
+                        class="mt-12 flex items-center justify-center gap-4 text-fg-muted"
                     >
                         <UiButton
                             v-if="page.meta.current_page > 1"

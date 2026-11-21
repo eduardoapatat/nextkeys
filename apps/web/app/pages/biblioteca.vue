@@ -58,8 +58,8 @@ function activation(item: LibraryItem): string {
 
 <template>
     <main class="mx-auto max-w-4xl px-4 py-8 md:py-10">
-        <h1 class="text-5xl text-chalk uppercase md:text-6xl">Mi biblioteca</h1>
-        <p class="mt-2 text-chalk-muted">
+        <h1 class="text-5xl text-fg uppercase md:text-6xl">Mi biblioteca</h1>
+        <p class="mt-2 text-fg-muted">
             Las claves de tus pedidos pagados. Se muestran solo cuando las
             pides.
         </p>
@@ -78,22 +78,22 @@ function activation(item: LibraryItem): string {
         <ul class="mt-8 flex flex-col gap-4">
             <li v-for="item in library?.data" :key="lineKey(item)">
                 <article
-                    class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-4 rounded-card border border-line bg-ink-2 p-4 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-6 sm:p-5"
+                    class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-4 rounded-card border border-line bg-bg-subtle p-4 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-6 sm:p-5"
                 >
                     <ProductCover :product="coverOf(item)" size="sm" />
                     <div class="flex min-w-0 flex-col gap-3">
                         <div>
-                            <h2 class="text-2xl text-chalk uppercase">
+                            <h2 class="text-2xl text-fg uppercase">
                                 {{ item.title_name }}
                             </h2>
-                            <p class="text-sm text-chalk-muted">
+                            <p class="text-sm text-fg-muted">
                                 {{ item.type.name }} · {{ activation(item) }}
                             </p>
-                            <p class="text-sm text-chalk-faint">
+                            <p class="text-sm text-fg-faint">
                                 Pedido
                                 <NuxtLink
                                     :to="`/pedidos/${item.order_reference}`"
-                                    class="font-mono text-crt hover:text-chalk"
+                                    class="font-mono text-brand hover:text-fg"
                                     >{{ item.order_reference }}</NuxtLink
                                 >
                                 <template v-if="item.paid_at">
@@ -137,7 +137,7 @@ function activation(item: LibraryItem): string {
                                 <li
                                     v-for="key in item.keys"
                                     :key="key.hint"
-                                    class="rounded-control border border-dashed border-line-strong px-2 py-1 font-mono text-sm text-chalk-muted"
+                                    class="rounded-control border border-dashed border-line-strong px-2 py-1 font-mono text-sm text-fg-muted"
                                 >
                                     {{ key.hint }}
                                     <template v-if="key.revealed">

@@ -81,14 +81,14 @@ function onFocusOut(event: FocusEvent) {
 }
 
 const control =
-    'pressable grid size-11 place-items-center rounded-control border border-line bg-ink-2 text-chalk hover:border-crt hover:text-crt';
+    'pressable grid size-11 place-items-center rounded-control border border-line bg-bg-subtle text-fg hover:border-brand hover:text-brand';
 </script>
 
 <template>
     <section
         aria-roledescription="carrusel"
         aria-label="Destacados de la tienda"
-        class="relative overflow-hidden rounded-card border border-line bg-ink-2"
+        class="relative overflow-hidden rounded-card border border-line bg-bg-subtle"
         @mouseenter="hovered = true"
         @mouseleave="hovered = false"
         @focusin="focused = true"
@@ -112,26 +112,26 @@ const control =
                     <div aria-labelledby="deal-heading" class="max-w-xl">
                         <h2
                             id="deal-heading"
-                            class="flex items-center gap-2 font-display text-lg font-extrabold tracking-wide text-sticker uppercase"
+                            class="flex items-center gap-2 font-display text-lg font-extrabold tracking-wide text-accent uppercase"
                         >
                             Oferta del día
                             <span
-                                class="flex items-center gap-1.5 font-mono text-sm font-normal tracking-normal text-chalk-muted normal-case"
+                                class="flex items-center gap-1.5 font-mono text-sm font-normal tracking-normal text-fg-muted normal-case"
                             >
                                 <UiIcon name="clock" :size="16" />
                                 <DealCountdown />
                             </span>
                         </h2>
                         <p
-                            class="mt-2 text-4xl leading-none text-chalk uppercase md:text-6xl font-display font-extrabold"
+                            class="mt-2 text-4xl leading-none text-fg uppercase md:text-6xl font-display font-extrabold"
                         >
                             <NuxtLink
                                 :to="`/${deal.slug}`"
-                                class="hover:text-sticker"
+                                class="hover:text-accent"
                                 >{{ deal.title.name }}</NuxtLink
                             >
                         </p>
-                        <p class="mt-3 text-chalk-muted">
+                        <p class="mt-3 text-fg-muted">
                             {{ deal.type.name }} ·
                             {{ deal.platforms.map((p) => p.name).join(', ') }}.
                             Elegida para hoy, a su precio de siempre. Cambia a
@@ -163,11 +163,11 @@ const control =
                 <template v-else-if="slide === 'webpay'">
                     <div class="max-w-xl">
                         <h2
-                            class="text-4xl leading-none text-chalk uppercase md:text-6xl"
+                            class="text-4xl leading-none text-fg uppercase md:text-6xl"
                         >
                             Paga con Webpay, en pesos chilenos
                         </h2>
-                        <p class="mt-3 text-chalk-muted">
+                        <p class="mt-3 text-fg-muted">
                             Débito, crédito o prepago. El precio que ves en la
                             vitrina es el que pagas.
                         </p>
@@ -208,11 +208,11 @@ const control =
                 <template v-else-if="slide === 'library'">
                     <div class="max-w-xl">
                         <h2
-                            class="text-4xl leading-none text-chalk uppercase md:text-6xl"
+                            class="text-4xl leading-none text-fg uppercase md:text-6xl"
                         >
                             Tu clave, al instante en tu biblioteca
                         </h2>
-                        <p class="mt-3 text-chalk-muted">
+                        <p class="mt-3 text-fg-muted">
                             Al pagar, la clave queda guardada en Mi biblioteca y
                             te llega por correo. La revelas cuando la vayas a
                             activar.
@@ -265,8 +265,8 @@ const control =
                             class="h-1 w-6 rounded-full transition-colors duration-200"
                             :class="
                                 index === active
-                                    ? 'bg-sticker'
-                                    : 'bg-line-strong group-hover:bg-chalk-faint'
+                                    ? 'bg-accent'
+                                    : 'bg-line-strong group-hover:bg-fg-faint'
                             "
                         />
                     </button>

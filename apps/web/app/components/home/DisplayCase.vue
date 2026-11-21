@@ -22,7 +22,7 @@ const shelf = computed(() => props.products.slice(1, 5));
         />
         <h1
             id="case-heading"
-            class="max-w-[24ch] text-4xl text-chalk uppercase md:text-5xl"
+            class="max-w-[24ch] text-4xl text-fg uppercase md:text-5xl"
         >
             Claves y juegos al instante, en pesos chilenos
         </h1>
@@ -43,27 +43,27 @@ const shelf = computed(() => props.products.slice(1, 5));
                 />
             </div>
             <div class="flex flex-col gap-4 pb-2">
-                <h2 class="text-4xl text-chalk uppercase md:text-5xl">
-                    <NuxtLink :to="`/${lead.slug}`" class="hover:text-sticker">
+                <h2 class="text-4xl text-fg uppercase md:text-5xl">
+                    <NuxtLink :to="`/${lead.slug}`" class="hover:text-accent">
                         {{ lead.title.name }}
                     </NuxtLink>
                 </h2>
                 <dl
                     class="grid max-w-md grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm"
                 >
-                    <dt class="text-chalk-faint">Plataformas</dt>
-                    <dd class="text-chalk">
+                    <dt class="text-fg-faint">Plataformas</dt>
+                    <dd class="text-fg">
                         {{ lead.platforms.map((p) => p.name).join(', ') }}
                     </dd>
-                    <dt class="text-chalk-faint">Tipo</dt>
-                    <dd class="text-chalk">{{ lead.type.name }}</dd>
+                    <dt class="text-fg-faint">Tipo</dt>
+                    <dd class="text-fg">{{ lead.type.name }}</dd>
                     <template v-if="lead.region">
-                        <dt class="text-chalk-faint">Región</dt>
-                        <dd class="text-chalk">{{ lead.region.name }}</dd>
+                        <dt class="text-fg-faint">Región</dt>
+                        <dd class="text-fg">{{ lead.region.name }}</dd>
                     </template>
                     <template v-if="lead.activation_service">
-                        <dt class="text-chalk-faint">Se activa en</dt>
-                        <dd class="text-chalk">
+                        <dt class="text-fg-faint">Se activa en</dt>
+                        <dd class="text-fg">
                             {{ lead.activation_service.name }}
                         </dd>
                     </template>

@@ -7,7 +7,7 @@ defineProps<{ message: string }>();
     <div
         class="flex flex-col items-center gap-4 rounded-card border border-dashed border-line-strong px-6 py-16 text-center"
     >
-        <p class="font-display text-2xl text-chalk uppercase">{{ message }}</p>
+        <p class="font-display text-2xl text-fg uppercase">{{ message }}</p>
         <slot />
     </div>
 </template>

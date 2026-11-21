@@ -21,14 +21,14 @@ watch(() => route.fullPath, close);
 defineExpose({ open });
 
 const link =
-    'flex h-11 items-center rounded-control px-3 text-chalk-muted hover:bg-panel hover:text-chalk';
+    'flex h-11 items-center rounded-control px-3 text-fg-muted hover:bg-surface hover:text-fg';
 </script>
 
 <template>
     <dialog
         ref="dialog"
         aria-label="Menú"
-        class="mobile-menu m-0 h-dvh max-h-dvh w-[min(22rem,88vw)] max-w-none border-r border-line bg-ink p-0 text-chalk backdrop:bg-ink/70"
+        class="mobile-menu m-0 h-dvh max-h-dvh w-[min(22rem,88vw)] max-w-none border-r border-line bg-bg p-0 text-fg backdrop:bg-bg/70"
         @click.self="close"
     >
         <div class="flex h-full flex-col gap-6 overflow-y-auto p-4">
@@ -36,7 +36,7 @@ const link =
                 <SiteLogo />
                 <button
                     type="button"
-                    class="pressable grid size-10 place-items-center rounded-control text-chalk-muted hover:text-chalk"
+                    class="pressable grid size-10 place-items-center rounded-control text-fg-muted hover:text-fg"
                     aria-label="Cerrar menú"
                     @click="close"
                 >
@@ -71,7 +71,7 @@ const link =
                 </ul>
                 <div>
                     <p
-                        class="px-3 pb-1 font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
+                        class="px-3 pb-1 font-display text-sm font-extrabold tracking-wider text-fg-faint uppercase"
                     >
                         Plataformas
                     </p>
@@ -94,7 +94,7 @@ const link =
                 </div>
                 <div>
                     <p
-                        class="px-3 pb-1 font-display text-sm font-extrabold tracking-wider text-chalk-faint uppercase"
+                        class="px-3 pb-1 font-display text-sm font-extrabold tracking-wider text-fg-faint uppercase"
                     >
                         Tipos
                     </p>

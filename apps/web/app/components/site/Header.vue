@@ -9,13 +9,13 @@ const searchNote = ref(false);
 </script>
 
 <template>
-    <header class="border-b border-line bg-ink md:border-b-0">
+    <header class="border-b border-line bg-bg md:border-b-0">
         <div
             class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4 md:flex-nowrap md:py-5"
         >
             <button
                 type="button"
-                class="pressable -ml-2 grid size-10 place-items-center rounded-control text-chalk-muted hover:text-chalk md:hidden"
+                class="pressable -ml-2 grid size-10 place-items-center rounded-control text-fg-muted hover:text-fg md:hidden"
                 aria-label="Abrir menú"
                 @click="menu?.open()"
             >
@@ -31,7 +31,7 @@ const searchNote = ref(false);
             >
                 <label class="sr-only" for="site-search">Buscar</label>
                 <div
-                    class="flex h-11 items-center rounded-control border border-line bg-panel focus-within:border-crt"
+                    class="flex h-11 items-center rounded-control border border-line bg-surface focus-within:border-brand"
                 >
                     <input
                         id="site-search"
@@ -39,12 +39,12 @@ const searchNote = ref(false);
                         name="q"
                         placeholder="Busca un juego o un programa"
                         autocomplete="off"
-                        class="h-full min-w-0 flex-1 bg-transparent px-3 text-chalk placeholder:text-chalk-faint focus:outline-none"
+                        class="h-full min-w-0 flex-1 bg-transparent px-3 text-fg placeholder:text-fg-faint focus:outline-none"
                         @input="searchNote = false"
                     />
                     <button
                         type="submit"
-                        class="pressable grid h-full w-11 place-items-center text-chalk-muted hover:text-chalk"
+                        class="pressable grid h-full w-11 place-items-center text-fg-muted hover:text-fg"
                         aria-label="Buscar"
                     >
                         <UiIcon name="search" />
@@ -53,12 +53,12 @@ const searchNote = ref(false);
                 <p
                     v-if="searchNote"
                     role="status"
-                    class="mt-2 text-sm text-chalk-muted"
+                    class="mt-2 text-sm text-fg-muted"
                 >
                     La búsqueda por nombre llega pronto. Mientras,
                     <NuxtLink
                         :to="catalogLink()"
-                        class="text-crt underline hover:text-chalk"
+                        class="text-brand underline hover:text-fg"
                         >filtra el catálogo</NuxtLink
                     >.
                 </p>
@@ -71,28 +71,28 @@ const searchNote = ref(false);
                 <NuxtLink
                     v-if="customer"
                     to="/biblioteca"
-                    class="hidden h-10 items-center gap-2 rounded-control px-3 text-chalk-muted hover:text-chalk lg:flex"
-                    active-class="text-chalk"
+                    class="hidden h-10 items-center gap-2 rounded-control px-3 text-fg-muted hover:text-fg lg:flex"
+                    active-class="text-fg"
                 >
                     <UiIcon name="library" />Mi biblioteca</NuxtLink
                 >
                 <NuxtLink
                     v-if="customer"
                     to="/cuenta"
-                    class="hidden h-10 max-w-48 items-center gap-2 truncate rounded-control px-3 text-chalk-muted hover:text-chalk sm:flex"
-                    active-class="text-chalk"
+                    class="hidden h-10 max-w-48 items-center gap-2 truncate rounded-control px-3 text-fg-muted hover:text-fg sm:flex"
+                    active-class="text-fg"
                     ><UiIcon name="user" />{{ customer.name }}</NuxtLink
                 >
                 <NuxtLink
                     v-else
                     to="/cuenta/ingresar"
-                    class="hidden h-10 items-center gap-2 rounded-control px-3 text-chalk-muted hover:text-chalk sm:flex"
-                    active-class="text-chalk"
+                    class="hidden h-10 items-center gap-2 rounded-control px-3 text-fg-muted hover:text-fg sm:flex"
+                    active-class="text-fg"
                     ><UiIcon name="user" />Ingresar</NuxtLink
                 >
                 <NuxtLink
                     to="/carrito"
-                    class="pressable relative flex h-10 items-center gap-2 rounded-control border border-line-strong bg-panel px-3 font-display font-extrabold tracking-wide text-chalk uppercase hover:border-chalk-faint"
+                    class="pressable relative flex h-10 items-center gap-2 rounded-control border border-line-strong bg-surface px-3 font-display font-extrabold tracking-wide text-fg uppercase hover:border-fg-faint"
                     :aria-label="`Carrito, ${cart.count.value} ${cart.count.value === 1 ? 'producto' : 'productos'}`"
                 >
                     <UiIcon name="cart" />
@@ -101,8 +101,8 @@ const searchNote = ref(false);
                         class="tabular grid h-6 min-w-6 place-items-center rounded-control px-1.5 text-sm"
                         :class="
                             cart.count.value > 0
-                                ? 'bg-sticker text-sticker-ink'
-                                : 'bg-panel-2 text-chalk-muted'
+                                ? 'bg-accent text-accent-fg'
+                                : 'bg-surface-2 text-fg-muted'
                         "
                         >{{ cart.count.value }}</span
                     >

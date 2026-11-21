@@ -65,14 +65,14 @@ async function pay() {
 
 <template>
     <main v-if="customer" class="mx-auto max-w-3xl px-4 py-8 md:py-10">
-        <h1 class="text-5xl text-chalk uppercase md:text-6xl">Pagar</h1>
+        <h1 class="text-5xl text-fg uppercase md:text-6xl">Pagar</h1>
 
         <div class="mt-6 flex flex-col gap-3">
             <FormErrors :messages="errors" />
             <p
                 v-if="notice"
                 role="status"
-                class="rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-chalk"
+                class="rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-fg"
             >
                 {{ notice }}
             </p>

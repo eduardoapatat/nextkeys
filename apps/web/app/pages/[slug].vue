@@ -33,7 +33,7 @@ const deliveryNote = computed(() =>
     <main v-if="product" class="mx-auto max-w-7xl px-4 py-6 md:py-10">
         <NuxtLink
             :to="catalogLink()"
-            class="inline-flex items-center gap-1 text-sm text-chalk-muted hover:text-chalk"
+            class="inline-flex items-center gap-1 text-sm text-fg-muted hover:text-fg"
             ><UiIcon name="chevronLeft" :size="16" />Volver al
             catálogo</NuxtLink
         >
@@ -54,11 +54,11 @@ const deliveryNote = computed(() =>
             </div>
 
             <div class="flex flex-col gap-6">
-                <h1 class="text-5xl text-chalk uppercase md:text-7xl">
+                <h1 class="text-5xl text-fg uppercase md:text-7xl">
                     {{ product.title.name }}
                 </h1>
                 <ProductFacts :product="product" />
-                <p class="flex items-start gap-2 text-sm text-chalk-muted">
+                <p class="flex items-start gap-2 text-sm text-fg-muted">
                     <UiIcon
                         :name="
                             product.type.slug === 'physical'
@@ -66,11 +66,11 @@ const deliveryNote = computed(() =>
                                 : 'bolt'
                         "
                         :size="18"
-                        class="mt-0.5 text-sticker"
+                        class="mt-0.5 text-accent"
                     />{{ deliveryNote }}
                 </p>
                 <AddToCart :key="product.slug" :product="product" />
-                <p class="max-w-prose leading-relaxed text-chalk-muted">
+                <p class="max-w-prose leading-relaxed text-fg-muted">
                     {{ product.title.description }}
                 </p>
             </div>
@@ -80,10 +80,10 @@ const deliveryNote = computed(() =>
             aria-labelledby="variants-heading"
             class="mt-16 border-t border-line pt-8"
         >
-            <h2 id="variants-heading" class="text-3xl text-chalk uppercase">
+            <h2 id="variants-heading" class="text-3xl text-fg uppercase">
                 Variantes
             </h2>
-            <p class="mt-1 text-sm text-chalk-muted">
+            <p class="mt-1 text-sm text-fg-muted">
                 Cada variante dice su tipo, dónde se activa, sus plataformas y
                 su región.
             </p>
@@ -101,14 +101,14 @@ const deliveryNote = computed(() =>
                         class="pressable tabular flex min-h-12 flex-1 items-center rounded-control border px-4 py-2 text-sm"
                         :class="
                             variant.slug === product.slug
-                                ? 'border-crt bg-crt-deep text-chalk'
-                                : 'border-line text-chalk-muted hover:border-line-strong hover:text-chalk'
+                                ? 'border-brand bg-brand-soft text-fg'
+                                : 'border-line text-fg-muted hover:border-line-strong hover:text-fg'
                         "
                         >{{ variantLabel(variant) }}</NuxtLink
                     >
                     <span
                         v-if="!variant.in_stock"
-                        class="shrink-0 text-xs text-chalk-faint"
+                        class="shrink-0 text-xs text-fg-faint"
                         >(sin stock)</span
                     >
                 </li>

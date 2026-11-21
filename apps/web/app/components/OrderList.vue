@@ -7,7 +7,7 @@ defineProps<{ orders: Order[] }>();
 <template>
     <table class="w-full text-left">
         <thead
-            class="font-display text-sm tracking-wider text-chalk-faint uppercase"
+            class="font-display text-sm tracking-wider text-fg-faint uppercase"
         >
             <tr class="border-b border-line">
                 <th scope="col" class="py-2 pr-4 font-bold">Pedido</th>
@@ -30,13 +30,13 @@ defineProps<{ orders: Order[] }>();
                 <td class="py-3 pr-4">
                     <NuxtLink
                         :to="`/pedidos/${order.reference}`"
-                        class="font-mono text-crt hover:text-chalk"
+                        class="font-mono text-brand hover:text-fg"
                     >
                         {{ order.reference }}
                     </NuxtLink>
                 </td>
                 <td
-                    class="tabular hidden py-3 pr-4 text-chalk-muted sm:table-cell"
+                    class="tabular hidden py-3 pr-4 text-fg-muted sm:table-cell"
                 >
                     {{ formatDateTime(order.created_at) }}
                 </td>
@@ -47,13 +47,13 @@ defineProps<{ orders: Order[] }>();
                             ['paid', 'completed'].includes(order.status.slug)
                                 ? 'bg-ok-deep text-ok'
                                 : order.status.slug === 'pending'
-                                  ? 'bg-crt-deep text-crt'
-                                  : 'bg-panel-2 text-chalk-muted'
+                                  ? 'bg-brand-soft text-brand'
+                                  : 'bg-surface-2 text-fg-muted'
                         "
                         >{{ order.status.name }}</span
                     >
                 </td>
-                <td class="tabular py-3 text-right text-chalk">
+                <td class="tabular py-3 text-right text-fg">
                     {{ formatClp(order.total) }}
                 </td>
             </tr>

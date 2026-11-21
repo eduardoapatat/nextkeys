@@ -23,7 +23,7 @@ useHead({ title: heading });
         >
             <p
                 aria-hidden="true"
-                class="-rotate-2 rounded-control bg-board px-4 py-2 font-marker text-2xl text-board-red shadow-sticker"
+                class="-rotate-2 rounded-control bg-board px-4 py-2 font-marker text-2xl text-board-red shadow-tag"
             >
                 {{
                     error.statusCode === 404
@@ -31,18 +31,18 @@ useHead({ title: heading });
                         : 'Fuera de servicio'
                 }}
             </p>
-            <h1 class="text-5xl text-chalk uppercase md:text-6xl">
+            <h1 class="text-5xl text-fg uppercase md:text-6xl">
                 {{ heading }}
             </h1>
-            <p v-if="error.statusCode === 404" class="text-chalk-muted">
+            <p v-if="error.statusCode === 404" class="text-fg-muted">
                 No existe o ya no está disponible.
             </p>
-            <p v-else class="text-chalk-muted">
+            <p v-else class="text-fg-muted">
                 No pudimos cargar esta página. Intenta de nuevo en unos minutos.
             </p>
             <a
                 :href="catalogPath"
-                class="pressable inline-flex h-11 items-center rounded-control bg-sticker px-4 font-display font-extrabold tracking-wide text-sticker-ink uppercase hover:bg-sticker-hover"
+                class="pressable inline-flex h-11 items-center rounded-control bg-accent px-4 font-display font-extrabold tracking-wide text-accent-fg uppercase hover:bg-accent-hover"
                 @click.prevent="clearError({ redirect: catalogPath })"
             >
                 Volver al catálogo

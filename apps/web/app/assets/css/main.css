@@ -11,17 +11,17 @@
     --color-*: initial;
 
     /* Night room and melamine. */
-    --color-ink: #0f1319;
-    --color-ink-2: #141922;
-    --color-panel: #1d232c;
-    --color-panel-2: #262e39;
+    --color-bg: #0f1319;
+    --color-bg-subtle: #141922;
+    --color-surface: #1d232c;
+    --color-surface-2: #262e39;
     --color-line: #313a47;
     --color-line-strong: #4a5564;
 
     /* Text on the dark ground: 15:1, 8.4:1 and 6:1 on ink; faint keeps 5:1 on panels. */
-    --color-chalk: #ece7dc;
-    --color-chalk-muted: #a7afb9;
-    --color-chalk-faint: #8a94a1;
+    --color-fg: #ece7dc;
+    --color-fg-muted: #a7afb9;
+    --color-fg-faint: #8a94a1;
 
     /* Thermal receipt. */
     --color-paper: #efe8d8;
@@ -30,14 +30,15 @@
     --color-paper-line: #cfc6b2;
 
     /* Price stickers and the primary action. */
-    --color-sticker: #f2c230;
-    --color-sticker-hover: #f7d35c;
-    --color-sticker-ink: #1a1405;
+    --color-accent: #f2c230;
+    --color-accent-hover: #f7d35c;
+    --color-accent-fg: #1a1405;
     /*
      * Platform bands: the top band of each platform's retail box, so a
      * cover reads as PS5, Xbox or Switch at a glance.
      */
     --color-box-ps5: #f3f4f6;
+    --color-box-ink: #000000;
     --color-box-ps4: #003791;
     --color-box-xbox: #107c10;
     --color-box-nintendo: #e60012;
@@ -45,11 +46,11 @@
     --color-box-multi: #3a3f47;
 
     /* The black menu bar under the header. */
-    --color-bar: #050608;
+    --color-brand-strong: #050608;
 
     /* CRT glow: active state and focus. */
-    --color-crt: #9cc8d6;
-    --color-crt-deep: #1f3640;
+    --color-brand: #9cc8d6;
+    --color-brand-soft: #1f3640;
 
     --color-danger: #e2735f;
     --color-danger-deep: #3a1f1b;
@@ -87,7 +88,7 @@
         0 24px 48px -24px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.35);
     --shadow-lift:
         0 18px 32px -12px rgb(0 0 0 / 0.65), 0 4px 10px rgb(0 0 0 / 0.4);
-    --shadow-sticker: 0 3px 8px -2px rgb(0 0 0 / 0.55);
+    --shadow-tag: 0 3px 8px -2px rgb(0 0 0 / 0.55);
     --shadow-receipt: 0 12px 28px -10px rgb(0 0 0 / 0.6);
 
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -112,13 +113,13 @@
 @layer base {
     html {
         color-scheme: dark;
-        background-color: var(--color-ink);
-        color: var(--color-chalk);
+        background-color: var(--color-bg);
+        color: var(--color-fg);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
-        scrollbar-color: var(--color-line-strong) var(--color-ink);
-        accent-color: var(--color-sticker);
-        caret-color: var(--color-sticker);
+        scrollbar-color: var(--color-line-strong) var(--color-bg);
+        accent-color: var(--color-accent);
+        caret-color: var(--color-accent);
     }
 
     body {
@@ -127,12 +128,12 @@
     }
 
     ::selection {
-        background-color: var(--color-sticker);
-        color: var(--color-sticker-ink);
+        background-color: var(--color-accent);
+        color: var(--color-accent-fg);
     }
 
     :focus-visible {
-        outline: 2px solid var(--color-crt);
+        outline: 2px solid var(--color-brand);
         outline-offset: 2px;
     }
 
@@ -168,9 +169,9 @@
         width: 100%;
         border-radius: var(--radius-control);
         border: 1px solid var(--color-line-strong);
-        background-color: var(--color-panel);
+        background-color: var(--color-surface);
         padding-inline: 0.75rem;
-        color: var(--color-chalk);
+        color: var(--color-fg);
     }
 
     :where(
@@ -179,7 +180,7 @@
         input[type='password'],
         input:not([type])
     ):focus {
-        border-color: var(--color-crt);
+        border-color: var(--color-brand);
         outline: none;
     }
 
@@ -234,16 +235,16 @@
     }
 
     .account-page h1 {
-        @apply text-5xl text-chalk uppercase;
+        @apply text-5xl text-fg uppercase;
     }
 
     .account-page h2 {
-        @apply text-2xl text-chalk uppercase;
+        @apply text-2xl text-fg uppercase;
     }
 
     .account-page form,
     .account-page section {
-        @apply flex flex-col gap-4 rounded-card border border-line bg-ink-2 p-6;
+        @apply flex flex-col gap-4 rounded-card border border-line bg-bg-subtle p-6;
     }
 
     .account-page form > p {
@@ -251,24 +252,24 @@
     }
 
     .account-page label {
-        @apply text-sm text-chalk-muted;
+        @apply text-sm text-fg-muted;
     }
 
     .account-page label:has(input[type='checkbox']) {
-        @apply flex cursor-pointer items-center gap-2 text-base text-chalk;
+        @apply flex cursor-pointer items-center gap-2 text-base text-fg;
     }
 
     .account-page :where(p, dd) a {
-        @apply text-crt underline hover:text-chalk;
+        @apply text-brand underline hover:text-fg;
     }
 
     .account-page > p,
     .account-page dl {
-        @apply text-chalk-muted;
+        @apply text-fg-muted;
     }
 
     .account-page [role='status'] {
-        @apply rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-chalk;
+        @apply rounded-card border border-ok/50 bg-ok-deep px-4 py-3 text-fg;
     }
 
     /* The small-screen menu slides in from the left edge (Emil's drawer curve). */
@@ -324,7 +325,11 @@
                 rgb(236 241 243 / 0.07),
                 transparent 45%
             ),
-            linear-gradient(to bottom, var(--color-panel), var(--color-ink-2));
+            linear-gradient(
+                to bottom,
+                var(--color-surface),
+                var(--color-bg-subtle)
+            );
         box-shadow:
             inset 0 1px 0 rgb(255 255 255 / 0.08),
             var(--shadow-case);
@@ -361,21 +366,21 @@
         font-weight: 700;
         text-transform: uppercase;
         white-space: nowrap;
-        color: var(--color-chalk);
+        color: var(--color-fg);
         transition:
             color 150ms var(--ease-out),
             background-color 150ms var(--ease-out);
     }
 
     .menu-tab[aria-current='page'] {
-        background-color: var(--color-sticker);
-        color: var(--color-sticker-ink);
+        background-color: var(--color-accent);
+        color: var(--color-accent-fg);
     }
 
     @media (hover: hover) and (pointer: fine) {
         .menu-tab:hover {
-            background-color: var(--color-sticker);
-            color: var(--color-sticker-ink);
+            background-color: var(--color-accent);
+            color: var(--color-accent-fg);
         }
     }
 

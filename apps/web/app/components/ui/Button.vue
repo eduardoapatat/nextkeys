@@ -27,11 +27,10 @@ const classes = computed(() => [
         lg: 'h-13 px-6 text-lg',
     }[props.size],
     {
-        primary:
-            'bg-sticker text-sticker-ink hover:bg-sticker-hover shadow-sticker',
+        primary: 'bg-accent text-accent-fg hover:bg-accent-hover shadow-tag',
         secondary:
-            'border border-line-strong bg-panel-2 text-chalk hover:border-chalk-faint hover:bg-panel',
-        ghost: 'text-chalk-muted hover:text-chalk',
+            'border border-line-strong bg-surface-2 text-fg hover:border-fg-faint hover:bg-surface',
+        ghost: 'text-fg-muted hover:text-fg',
     }[props.variant],
 ]);
 </script>

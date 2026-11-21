@@ -12,7 +12,7 @@ const {
 
 <template>
     <main class="mx-auto max-w-7xl px-4 py-8 md:py-10">
-        <h1 class="text-5xl text-chalk uppercase md:text-6xl">Carrito</h1>
+        <h1 class="text-5xl text-fg uppercase md:text-6xl">Carrito</h1>
 
         <EmptyState
             v-if="lines.length === 0"
@@ -51,11 +51,11 @@ const {
                         <template v-if="line.product">
                             <NuxtLink
                                 :to="`/${line.slug}`"
-                                class="font-semibold text-chalk hover:text-sticker"
+                                class="font-semibold text-fg hover:text-accent"
                             >
                                 {{ line.product.title.name }}
                             </NuxtLink>
-                            <p class="text-sm text-chalk-muted">
+                            <p class="text-sm text-fg-muted">
                                 {{ variantFacts(line.product) }}
                             </p>
                             <p
@@ -66,7 +66,7 @@ const {
                             </p>
                         </template>
                         <template v-else>
-                            <p class="font-mono text-sm text-chalk-muted">
+                            <p class="font-mono text-sm text-fg-muted">
                                 {{ line.slug }}
                             </p>
                             <p class="text-sm text-danger">
@@ -79,7 +79,7 @@ const {
                                 :name="`quantity-${line.slug}`"
                                 :aria-label="`Cantidad de ${line.product?.title.name ?? line.slug}`"
                                 :value="line.quantity"
-                                class="tabular h-9 rounded-control border border-line-strong bg-panel px-2 text-chalk focus:border-crt focus:outline-none"
+                                class="tabular h-9 rounded-control border border-line-strong bg-surface px-2 text-fg focus:border-brand focus:outline-none"
                                 @change="
                                     cart.update(
                                         line.slug,
@@ -100,7 +100,7 @@ const {
                             </select>
                             <button
                                 type="button"
-                                class="pressable text-sm text-chalk-muted underline hover:text-danger"
+                                class="pressable text-sm text-fg-muted underline hover:text-danger"
                                 :aria-label="`Quitar ${line.product?.title.name ?? line.slug}`"
                                 @click="cart.remove(line.slug)"
                             >
@@ -113,7 +113,7 @@ const {
                         class="tabular col-start-2 flex flex-col items-end text-right sm:col-start-auto"
                     >
                         <span
-                            class="font-display text-2xl font-extrabold text-chalk"
+                            class="font-display text-2xl font-extrabold text-fg"
                             >{{
                                 line.product
                                     ? formatClp(
@@ -124,7 +124,7 @@ const {
                         >
                         <span
                             v-if="line.product && line.quantity > 1"
-                            class="text-sm text-chalk-muted"
+                            class="text-sm text-fg-muted"
                             >{{ line.quantity }} ×
                             {{ formatClp(line.product.price) }}</span
                         >

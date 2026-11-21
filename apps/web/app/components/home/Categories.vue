@@ -23,21 +23,21 @@ const typeNotes: Record<string, string> = {
 
 <template>
     <section aria-labelledby="categories-heading">
-        <h2 id="categories-heading" class="text-3xl text-chalk uppercase">
+        <h2 id="categories-heading" class="text-3xl text-fg uppercase">
             Elige tu plataforma
         </h2>
         <ul class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
             <li v-for="family in platformFamilies" :key="family.label">
                 <NuxtLink
                     :to="catalogLink({ platform: [...family.platform] })"
-                    class="pressable group flex h-full flex-col justify-end gap-6 pt-8 rounded-card border border-line bg-panel p-4 hover:border-crt"
+                    class="pressable group flex h-full flex-col justify-end gap-6 pt-8 rounded-card border border-line bg-surface p-4 hover:border-brand"
                 >
                     <span>
                         <span
-                            class="block font-display text-3xl leading-none font-extrabold text-chalk uppercase group-hover:text-crt md:text-4xl"
+                            class="block font-display text-3xl leading-none font-extrabold text-fg uppercase group-hover:text-brand md:text-4xl"
                             >{{ family.label }}</span
                         >
-                        <span class="mt-1 block text-sm text-chalk-muted">{{
+                        <span class="mt-1 block text-sm text-fg-muted">{{
                             platformNames(family.platform)
                         }}</span>
                     </span>
@@ -48,20 +48,20 @@ const typeNotes: Record<string, string> = {
             <li v-for="item in productTypeLinks" :key="item.label">
                 <NuxtLink
                     :to="catalogLink({ type: [...item.type] })"
-                    class="pressable group flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3 hover:border-sticker"
+                    class="pressable group flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3 hover:border-accent"
                 >
                     <span>
                         <span
-                            class="block font-display text-xl font-extrabold text-chalk uppercase"
+                            class="block font-display text-xl font-extrabold text-fg uppercase"
                             >{{ item.label }}</span
                         >
-                        <span class="block text-sm text-chalk-muted">{{
+                        <span class="block text-sm text-fg-muted">{{
                             typeNotes[item.type[0]]
                         }}</span>
                     </span>
                     <UiIcon
                         name="arrowRight"
-                        class="text-chalk-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:text-sticker"
+                        class="text-fg-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent"
                     />
                 </NuxtLink>
             </li>

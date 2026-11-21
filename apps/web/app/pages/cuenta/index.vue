@@ -48,12 +48,12 @@ async function signOut() {
         <p v-if="notice" role="status">{{ notice }}</p>
 
         <dl
-            class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-card border border-line bg-ink-2 p-6"
+            class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-card border border-line bg-bg-subtle p-6"
         >
-            <dt class="text-chalk-faint">Nombre</dt>
-            <dd class="text-chalk">{{ customer.name }}</dd>
-            <dt class="text-chalk-faint">Correo electrónico</dt>
-            <dd class="break-all text-chalk">{{ customer.email }}</dd>
+            <dt class="text-fg-faint">Nombre</dt>
+            <dd class="text-fg">{{ customer.name }}</dd>
+            <dt class="text-fg-faint">Correo electrónico</dt>
+            <dd class="break-all text-fg">{{ customer.email }}</dd>
         </dl>
 
         <section
@@ -61,7 +61,7 @@ async function signOut() {
             aria-labelledby="verify-heading"
         >
             <h2 id="verify-heading">Verifica tu correo</h2>
-            <p class="text-chalk-muted">
+            <p class="text-fg-muted">
                 Para pagar necesitas verificar tu correo: ahí te enviamos las
                 claves. Revisa el enlace que mandamos a {{ customer.email }}.
             </p>

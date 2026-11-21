@@ -26,7 +26,7 @@ function isCurrent(to: Parameters<typeof router.resolve>[0]): boolean {
 </script>
 
 <template>
-    <nav aria-label="Principal" class="bg-bar">
+    <nav aria-label="Principal" class="bg-brand-strong">
         <ul
             class="mx-auto flex max-w-7xl gap-0.5 overflow-x-auto px-4 [scrollbar-width:none]"
         >

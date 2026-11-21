@@ -35,12 +35,12 @@ const boxed = computed(
 
 // The band: the platform's color with its mark.
 const band: Record<BoxTone, string> = {
-    ps5: 'bg-box-ps5 text-ink',
-    ps4: 'bg-box-ps4 text-chalk',
-    xbox: 'bg-box-xbox text-chalk',
-    nintendo: 'bg-box-nintendo text-chalk',
-    pc: 'bg-box-pc text-chalk',
-    multi: 'bg-box-multi text-chalk',
+    ps5: 'bg-box-ps5 text-box-ink',
+    ps4: 'bg-box-ps4 text-fg',
+    xbox: 'bg-box-xbox text-fg',
+    nintendo: 'bg-box-nintendo text-fg',
+    pc: 'bg-box-pc text-fg',
+    multi: 'bg-box-multi text-fg',
 };
 
 const bandSize = {
@@ -56,11 +56,11 @@ const bandSize = {
         :src="product.cover_url!"
         :alt="label"
         :loading="eager ? 'eager' : 'lazy'"
-        class="aspect-3/4 w-full rounded-card bg-panel-2 object-cover"
+        class="aspect-3/4 w-full rounded-card bg-surface-2 object-cover"
     />
     <div
         v-else
-        class="relative flex aspect-3/4 w-full flex-col overflow-hidden rounded-card bg-panel-2"
+        class="relative flex aspect-3/4 w-full flex-col overflow-hidden rounded-card bg-surface-2"
         data-cover-box
         :data-tone="box.tone"
     >
@@ -100,7 +100,7 @@ const bandSize = {
                 role="img"
                 :aria-label="label"
                 data-cover="generated"
-                class="flex size-full flex-col text-chalk"
+                class="flex size-full flex-col text-fg"
                 :class="coverTint(product.slug)"
             >
                 <p
@@ -119,7 +119,7 @@ const bandSize = {
                 <p
                     aria-hidden="true"
                     :class="{ 'max-sm:hidden': size === 'sm' }"
-                    class="flex flex-wrap items-center gap-x-1.5 px-[8%] pt-[5%] pb-[7%] text-[0.65rem] font-medium tracking-wide text-chalk/90 uppercase"
+                    class="flex flex-wrap items-center gap-x-1.5 px-[8%] pt-[5%] pb-[7%] text-[0.65rem] font-medium tracking-wide text-fg/90 uppercase"
                 >
                     <span>{{ product.type.name }}</span>
                     <span v-if="product.region"

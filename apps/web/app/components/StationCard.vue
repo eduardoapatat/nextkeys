@@ -38,7 +38,7 @@ const platforms = computed(() =>
         <p
             v-if="station !== undefined"
             aria-hidden="true"
-            class="tabular -mb-2 pt-1 font-mono text-xs text-chalk-faint"
+            class="tabular -mb-2 pt-1 font-mono text-xs text-fg-faint"
         >
             PC {{ String(station).padStart(2, '0') }}
         </p>
@@ -48,17 +48,17 @@ const platforms = computed(() =>
         >
             <NuxtLink
                 :to="`/${product.slug}`"
-                class="text-chalk after:absolute after:inset-0 after:rounded-card hover:text-sticker focus-visible:outline-none after:focus-visible:outline-2 after:focus-visible:outline-offset-4 after:focus-visible:outline-crt"
+                class="text-fg after:absolute after:inset-0 after:rounded-card hover:text-accent focus-visible:outline-none after:focus-visible:outline-2 after:focus-visible:outline-offset-4 after:focus-visible:outline-brand"
             >
                 {{ product.title.name }}
             </NuxtLink>
         </component>
 
         <dl
-            class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-sm text-chalk-muted"
+            class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-sm text-fg-muted"
         >
             <dt class="sr-only">Plataformas</dt>
-            <dd class="col-span-2 truncate text-chalk">{{ platforms }}</dd>
+            <dd class="col-span-2 truncate text-fg">{{ platforms }}</dd>
             <dt class="sr-only">Tipo</dt>
             <dd>{{ product.type.name }}</dd>
             <dt class="sr-only">Región</dt>
@@ -66,7 +66,7 @@ const platforms = computed(() =>
                 {{ product.region?.name ?? 'Sin región' }}
             </dd>
             <dt class="sr-only">Activación</dt>
-            <dd class="col-span-2 truncate text-chalk-faint">
+            <dd class="col-span-2 truncate text-fg-faint">
                 {{
                     product.activation_service
                         ? `Se activa en ${product.activation_service.name}`

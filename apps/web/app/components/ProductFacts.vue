@@ -9,27 +9,25 @@ defineProps<{ product: ProductSummary }>();
     <dl
         class="grid grid-cols-[minmax(0,9rem)_1fr] border-t border-line text-sm"
     >
-        <dt class="border-b border-line py-2.5 text-chalk-faint">Tipo</dt>
-        <dd class="border-b border-line py-2.5 text-chalk">
+        <dt class="border-b border-line py-2.5 text-fg-faint">Tipo</dt>
+        <dd class="border-b border-line py-2.5 text-fg">
             {{ product.type.name }}
         </dd>
-        <dt class="border-b border-line py-2.5 text-chalk-faint">
-            Plataformas
-        </dt>
-        <dd class="border-b border-line py-2.5 text-chalk">
+        <dt class="border-b border-line py-2.5 text-fg-faint">Plataformas</dt>
+        <dd class="border-b border-line py-2.5 text-fg">
             {{ product.platforms.map((platform) => platform.name).join(', ') }}
         </dd>
         <template v-if="product.region">
-            <dt class="border-b border-line py-2.5 text-chalk-faint">Región</dt>
-            <dd class="border-b border-line py-2.5 text-chalk">
+            <dt class="border-b border-line py-2.5 text-fg-faint">Región</dt>
+            <dd class="border-b border-line py-2.5 text-fg">
                 {{ product.region.name }}
             </dd>
         </template>
         <template v-if="product.activation_service">
-            <dt class="border-b border-line py-2.5 text-chalk-faint">
+            <dt class="border-b border-line py-2.5 text-fg-faint">
                 Servicio de activación
             </dt>
-            <dd class="border-b border-line py-2.5 text-chalk">
+            <dd class="border-b border-line py-2.5 text-fg">
                 {{ product.activation_service.name }}
             </dd>
         </template>
