@@ -64,9 +64,9 @@
     --color-current: currentColor;
 
     --font-sans: 'Rubik', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Barlow Condensed', 'Rubik', ui-sans-serif, sans-serif;
+    --font-display: 'Saira Condensed', 'Rubik', ui-sans-serif, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-    --font-marker: 'Permanent Marker', 'Barlow Condensed', cursive;
+    --font-marker: 'Permanent Marker', 'Saira Condensed', cursive;
 
     --radius-card: 6px;
     --radius-control: 4px;
