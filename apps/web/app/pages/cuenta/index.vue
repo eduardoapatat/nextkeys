@@ -68,6 +68,8 @@ async function signOut() {
             </button>
         </section>
 
+        <p><NuxtLink to="/pedidos">Mis pedidos</NuxtLink></p>
+
         <p>
             <button type="button" :disabled="pending" @click="signOut">
                 Cerrar sesión

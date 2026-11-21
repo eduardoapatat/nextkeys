@@ -87,6 +87,17 @@ Decided on 2026-11-20.
 - **`/carrito`** fetches each product with `fetchProduct` (carts are small; no new endpoint). Each line shows the current price, an editable quantity, "Quitar" and the line subtotal; the total is informative, the order's total comes from the API. A product that no longer exists or has no stock is "No disponible" and blocks "Ir a pagar" until it is removed.
 - Rejected: `localStorage` (SSR always renders an empty cart), an API cart (needs a session or anonymous carts, more tables and endpoints).
 
+### Payment result and orders (phase 4)
+
+Decided on 2026-11-20.
+
+- **`/pedidos/{reference}`** is where the Webpay return lands (`?estado=` the attempt status). The query only picks the wording; the order from the API (`status`, `last_payment`) is the truth.
+  - Paid or completed: the receipt Transbank asks for (order number, store, amount in CLP, authorization code, date, payment type and installments, last 4 digits, what was bought), "Te enviamos las claves a tu correo" and a link to the library.
+  - Rejected: "Orden de Compra NK-… rechazada" with the possible causes; "Reintentar el pago" while `can_pay`, and "Cancelar el pedido".
+  - Cancelled in Webpay, aborted or without a payment yet: retry or cancel.
+  - Expired or cancelled: a notice and a link to the catalog.
+- **`/pedidos`** lists the customer's orders; with `?estado=desconocido` (a return the API could not match) it first says the payment could not be identified. `/cuenta` links to it.
+
 ## Open questions
 
 - Visual design (component library; Tailwind/shadcn-vue shared with the admin): pending.
