@@ -6,9 +6,11 @@ use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
 use App\Models\Order;
+use App\Models\PaymentAttempt;
 use App\Models\Product;
 use App\Models\ProductKey;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -78,7 +80,35 @@ it('shows an order by its reference with lines and key hints, never codes', func
                 ->missingAll(['code', 'code_hash'])
                 ->etc())
             ->where('canCancel', true)
-            ->where('canMarkPaid', false));
+            ->where('canMarkPaid', false)
+            ->where('canPayWithWebpay', false));
+});
+
+it('lists the payment attempts of an order with their receipt, never the token', function () {
+    $order = Order::factory()->create();
+    $refunded = PaymentAttempt::factory()->for($order)->refunded()->create();
+
+    $this->get(route('orders.show', $order))
+        ->assertDontSee((string) $refunded->token)
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('order.payments.0', fn (Assert $payment) => $payment
+                ->where('buy_order', "{$order->reference}-1")
+                ->where('status.label', 'Reembolsado')
+                ->where('authorization_code', '1213')
+                ->where('card_last_digits', '6623')
+                ->where('refunded_amount', $order->total)
+                ->missing('token')
+                ->etc()));
+});
+
+it('hides the Webpay test payment unless manual payments are enabled', function () {
+    $order = ($this->placeOrder)();
+    session()->flash('webpay_redirect', ['url' => 'https://webpay.test', 'token' => webpayToken()]);
+
+    $this->post(route('orders.pay-with-webpay', $order))->assertNotFound();
+    $this->get(route('orders.webpay-redirect', $order))->assertNotFound();
+
+    expect($order->paymentAttempts()->count())->toBe(0);
 });
 
 it('does not find an order by its id', function () {
@@ -146,6 +176,37 @@ describe('with manual payments enabled', function () {
             ->post(route('orders.mark-paid', $order))
             ->assertRedirect(route('orders.show', $order))
             ->assertSessionHasErrors(['order' => 'El pedido no se puede pagar: expiró y ya no hay stock para reservarlo.']);
+    });
+
+    it('starts a Webpay test payment and posts its token to Webpay', function () {
+        Http::fake([webpayUrl() => Http::response([
+            'token' => webpayToken(),
+            'url' => 'https://webpay3gint.transbank.cl/webpayserver/initTransaction',
+        ])]);
+        $order = ($this->placeOrder)();
+
+        $this->get(route('orders.show', $order))
+            ->assertInertia(fn (Assert $page) => $page->where('canPayWithWebpay', true));
+
+        $this->post(route('orders.pay-with-webpay', $order), [], ['X-Inertia' => 'true'])
+            ->assertStatus(409)
+            ->assertHeader('X-Inertia-Location', route('orders.webpay-redirect', $order));
+
+        $this->get(route('orders.webpay-redirect', $order))
+            ->assertOk()
+            ->assertSee('action="https://webpay3gint.transbank.cl/webpayserver/initTransaction"', escape: false)
+            ->assertSee('name="token_ws" value="'.webpayToken().'"', escape: false);
+        expect($order->paymentAttempts()->sole()->token)->toBe(webpayToken());
+    });
+
+    it('explains why the Webpay test payment could not start', function () {
+        Http::fake([webpayUrl() => Http::response(['error_message' => 'Internal error'], 500)]);
+        $order = ($this->placeOrder)();
+
+        $this->from(route('orders.show', $order))
+            ->post(route('orders.pay-with-webpay', $order))
+            ->assertRedirect(route('orders.show', $order))
+            ->assertSessionHasErrors(['order' => 'No se pudo iniciar el pago con Webpay. Inténtalo de nuevo.']);
     });
 
     it('explains why a cancelled order cannot be paid', function () {

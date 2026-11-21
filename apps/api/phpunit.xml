@@ -31,11 +31,15 @@
         <env name="DB_URL" value=""/>
         <env name="KEY_HASH_SECRET" value="testing-key-hash-secret"/>
         <env name="MAIL_MAILER" value="array"/>
+        <env name="ORDERS_MANUAL_PAYMENTS" value="false"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="STOREFRONT_URL" value="http://storefront.test"/>
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="TRANSBANK_ENVIRONMENT" value="integration"/>
+        <env name="TRANSBANK_COMMERCE_CODE" value="597055555532"/>
+        <env name="TRANSBANK_API_KEY" value="testing-transbank-secret"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
     </php>
 </phpunit>

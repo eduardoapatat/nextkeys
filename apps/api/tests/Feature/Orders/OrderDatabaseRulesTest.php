@@ -61,7 +61,7 @@ it('allows the transitions of the order lifecycle', function (string $from, stri
     ['pending', 'paid'],
     ['pending', 'cancelled'],
     ['pending', 'expired'],
-    ['expired', 'paid'],
+    ['expired', 'pending'],
     ['paid', 'completed'],
 ]);
 
@@ -83,7 +83,7 @@ it('rejects any other transition', function (string $from, string $to) {
     ['completed', 'paid'],
     ['cancelled', 'pending'],
     ['cancelled', 'paid'],
-    ['expired', 'pending'],
+    ['expired', 'paid'],
     ['expired', 'cancelled'],
 ]);
 

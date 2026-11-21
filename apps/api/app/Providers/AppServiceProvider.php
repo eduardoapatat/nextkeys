@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Payments\PaymentGateway;
+use App\Payments\Transbank\WebpayPlusGateway;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\DevCommands;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -21,7 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(PaymentGateway::class, fn (): PaymentGateway => new WebpayPlusGateway(
+            host: Config::string('payments.webpay_plus.hosts.'.Config::string('payments.webpay_plus.environment')),
+            commerceCode: Config::string('payments.webpay_plus.commerce_code'),
+            apiKey: Config::string('payments.webpay_plus.api_key'),
+            connectTimeoutSeconds: Config::integer('payments.webpay_plus.connect_timeout'),
+            timeoutSeconds: Config::integer('payments.webpay_plus.timeout'),
+            commitRetries: Config::integer('payments.webpay_plus.commit_retries'),
+        ));
     }
 
     /**

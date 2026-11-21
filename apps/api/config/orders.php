@@ -21,4 +21,11 @@ return [
     */
     'manual_payments' => (bool) env('ORDERS_MANUAL_PAYMENTS', false),
 
+    /*
+    | Seconds a payment waits for the order's row lock before giving up
+    | (`LockPayableOrder`). Short, so a busy lock cannot push a Webpay commit
+    | past its window of under a minute (docs/domain/payments.md).
+    */
+    'payment_lock_timeout_seconds' => 3,
+
 ];

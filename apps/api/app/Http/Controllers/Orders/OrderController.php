@@ -3,20 +3,26 @@
 namespace App\Http\Controllers\Orders;
 
 use App\Actions\Orders\CancelOrder;
-use App\Actions\Orders\InsufficientStock;
 use App\Actions\Orders\MarkOrderPaid;
+use App\Actions\Orders\OrderBusy;
 use App\Actions\Orders\OrderCannotBePaid;
+use App\Actions\Orders\OrderCannotBePaidReason;
+use App\Actions\Payments\StartPaymentAttempt;
 use App\DataTables\OrdersTable;
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\PaymentAttempt;
 use App\Models\ProductKey;
+use App\Payments\PaymentGatewayException;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class OrderController extends Controller
 {
@@ -36,6 +42,7 @@ class OrderController extends Controller
             'user:id,name,email',
             'items' => fn ($query) => $query->orderBy('id'),
             'items.keys' => fn ($query) => $query->select(['id', 'order_item_id', 'code_hint', 'status'])->orderBy('id'),
+            'paymentAttempts' => fn ($query) => $query->orderBy('number'),
         ]);
 
         return Inertia::render('orders/Show', [
@@ -66,9 +73,29 @@ class OrderController extends Controller
                         'status' => $key->status->label(),
                     ])->all(),
                 ])->all(),
+                'payments' => $order->paymentAttempts->map(fn (PaymentAttempt $attempt): array => [
+                    'number' => $attempt->number,
+                    'buy_order' => $attempt->buy_order,
+                    'status' => [
+                        'value' => $attempt->status->value,
+                        'label' => $attempt->status->label(),
+                        'variant' => $attempt->status->badgeVariant(),
+                    ],
+                    'amount' => $attempt->amount,
+                    'authorization_code' => $attempt->authorization_code,
+                    'payment_type_code' => $attempt->payment_type_code,
+                    'installments_number' => $attempt->installments_number,
+                    'card_last_digits' => $attempt->card_last_digits,
+                    'created_at' => $attempt->created_at?->toIso8601String(),
+                    'finished_at' => $attempt->finished_at?->toIso8601String(),
+                    'refunded_amount' => $attempt->refunded_amount,
+                    'refunded_at' => $attempt->refunded_at?->toIso8601String(),
+                ])->all(),
             ],
             'canCancel' => $order->status === OrderStatus::Pending,
             'canMarkPaid' => $this->manualPaymentsEnabled()
+                && in_array($order->status, [OrderStatus::Pending, OrderStatus::Expired], true),
+            'canPayWithWebpay' => $this->manualPaymentsEnabled()
                 && in_array($order->status, [OrderStatus::Pending, OrderStatus::Expired], true),
         ]);
     }
@@ -100,7 +127,7 @@ class OrderController extends Controller
             $markOrderPaid->handle($order);
         } catch (OrderCannotBePaid $exception) {
             throw ValidationException::withMessages([
-                'order' => $exception->getPrevious() instanceof InsufficientStock
+                'order' => $exception->reason === OrderCannotBePaidReason::OutOfStock
                     ? 'El pedido no se puede pagar: expiró y ya no hay stock para reservarlo.'
                     : 'El pedido no se puede pagar: está cancelado.',
             ]);
@@ -109,6 +136,48 @@ class OrderController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Pago registrado.']);
 
         return to_route('orders.show', $order);
+    }
+
+    /**
+     * Starts a real Webpay payment in the integration environment, to try the
+     * gateway end to end before the storefront checkout exists (phase 4).
+     * Local only, like markPaid(). The browser then loads webpayRedirect(),
+     * which posts the token to Webpay.
+     *
+     * @throws ValidationException
+     */
+    public function payWithWebpay(Order $order, StartPaymentAttempt $startPaymentAttempt): SymfonyResponse
+    {
+        abort_unless($this->manualPaymentsEnabled(), 404);
+
+        try {
+            $redirect = $startPaymentAttempt->handle($order);
+        } catch (OrderCannotBePaid $exception) {
+            throw ValidationException::withMessages(['order' => match ($exception->reason) {
+                OrderCannotBePaidReason::AlreadyPaid => 'El pedido ya está pagado.',
+                OrderCannotBePaidReason::Cancelled => 'El pedido no se puede pagar: está cancelado.',
+                OrderCannotBePaidReason::OutOfStock => 'El pedido no se puede pagar: expiró y ya no hay stock para reservarlo.',
+            }]);
+        } catch (OrderBusy|PaymentGatewayException) {
+            throw ValidationException::withMessages(['order' => 'No se pudo iniciar el pago con Webpay. Inténtalo de nuevo.']);
+        }
+
+        session()->flash('webpay_redirect', ['url' => $redirect->url, 'token' => $redirect->token]);
+
+        return Inertia::location(route('orders.webpay-redirect', $order));
+    }
+
+    /**
+     * The page that posts the token to Webpay (a form, never an iframe).
+     */
+    public function webpayRedirect(Order $order): View
+    {
+        abort_unless($this->manualPaymentsEnabled(), 404);
+
+        $redirect = session('webpay_redirect');
+        abort_unless(is_array($redirect) && is_string($redirect['url'] ?? null) && is_string($redirect['token'] ?? null), 404);
+
+        return view('payments.webpay-redirect', ['url' => $redirect['url'], 'token' => $redirect['token']]);
     }
 
     private function manualPaymentsEnabled(): bool

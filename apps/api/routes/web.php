@@ -10,6 +10,8 @@ Route::get('.well-known/passkey-endpoints', fn () => response()->json([
     'manage' => route('security.edit'),
 ]))->name('well-known.passkeys');
 
+require __DIR__.'/payments.php';
+
 /*
  * The admin panel. Every authenticated route belongs in this group, so it is
  * restricted to admins (enforced by tests/Feature/AdminPanelRoutesTest.php).

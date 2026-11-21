@@ -27,6 +27,25 @@ type OrderLine = {
     keys: { id: number; code_hint: string; status: string }[];
 };
 
+type PaymentAttempt = {
+    number: number;
+    buy_order: string;
+    status: {
+        value: string;
+        label: string;
+        variant: NonNullable<BadgeVariants['variant']>;
+    };
+    amount: number;
+    authorization_code: string | null;
+    payment_type_code: string | null;
+    installments_number: number | null;
+    card_last_digits: string | null;
+    created_at: string | null;
+    finished_at: string | null;
+    refunded_amount: number | null;
+    refunded_at: string | null;
+};
+
 type OrderDetail = {
     reference: string;
     status: {
@@ -42,12 +61,14 @@ type OrderDetail = {
     completed_at: string | null;
     cancelled_at: string | null;
     items: OrderLine[];
+    payments: PaymentAttempt[];
 };
 
 const props = defineProps<{
     order: OrderDetail;
     canCancel: boolean;
     canMarkPaid: boolean;
+    canPayWithWebpay: boolean;
 }>();
 
 setLayoutProps({
@@ -71,6 +92,30 @@ const dateTime = new Intl.DateTimeFormat('es-CL', {
 
 function formatDateTime(value: string | null): string {
     return value === null ? '—' : dateTime.format(new Date(value));
+}
+
+/** Webpay `payment_type_code`, as the customer's receipt names it. */
+const paymentTypes: Record<string, string> = {
+    VD: 'Débito',
+    VP: 'Prepago',
+    VN: 'Crédito',
+    VC: 'Crédito en cuotas',
+    SI: '3 cuotas sin interés',
+    S2: '2 cuotas sin interés',
+    NC: 'Cuotas sin interés',
+};
+
+function formatPaymentType(payment: PaymentAttempt): string {
+    if (payment.payment_type_code === null) {
+        return '—';
+    }
+
+    const label =
+        paymentTypes[payment.payment_type_code] ?? payment.payment_type_code;
+
+    return payment.installments_number
+        ? `${label} (${payment.installments_number} cuotas)`
+        : label;
 }
 
 /** Dates of the order, only the ones that apply to its status. */
@@ -105,6 +150,15 @@ const timeline = [
             </div>
 
             <div class="flex gap-2">
+                <ConfirmActionButton
+                    v-if="canPayWithWebpay"
+                    :action="OrderController.payWithWebpay(order.reference)"
+                    :title="`¿Pagar ${order.reference} con Webpay?`"
+                    description="Solo para pruebas locales: abre Webpay en el ambiente de integración, con las tarjetas de prueba de Transbank."
+                    confirm-label="Ir a Webpay"
+                >
+                    <Button variant="outline">Pagar con Webpay (prueba)</Button>
+                </ConfirmActionButton>
                 <ConfirmActionButton
                     v-if="canMarkPaid"
                     :action="OrderController.markPaid(order.reference)"
@@ -197,6 +251,82 @@ const timeline = [
                             </TableCell>
                         </TableRow>
                     </TableFooter>
+                </Table>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Pagos</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p
+                    v-if="order.payments.length === 0"
+                    class="text-sm text-muted-foreground"
+                >
+                    Sin intentos de pago.
+                </p>
+                <Table v-else>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Orden de compra</TableHead>
+                            <TableHead>Estado</TableHead>
+                            <TableHead>Tipo de pago</TableHead>
+                            <TableHead>Tarjeta</TableHead>
+                            <TableHead>Autorización</TableHead>
+                            <TableHead>Fecha</TableHead>
+                            <TableHead class="text-right">Monto</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow
+                            v-for="payment in order.payments"
+                            :key="payment.number"
+                        >
+                            <TableCell class="font-mono">
+                                {{ payment.buy_order }}
+                            </TableCell>
+                            <TableCell>
+                                <Badge :variant="payment.status.variant">
+                                    {{ payment.status.label }}
+                                </Badge>
+                                <div
+                                    v-if="payment.refunded_at !== null"
+                                    class="mt-1 text-sm text-muted-foreground"
+                                >
+                                    {{
+                                        clp.format(payment.refunded_amount ?? 0)
+                                    }}
+                                    devueltos el
+                                    {{ formatDateTime(payment.refunded_at) }}
+                                </div>
+                            </TableCell>
+                            <TableCell>{{
+                                formatPaymentType(payment)
+                            }}</TableCell>
+                            <TableCell class="font-mono">
+                                {{
+                                    payment.card_last_digits === null
+                                        ? '—'
+                                        : `•••• ${payment.card_last_digits}`
+                                }}
+                            </TableCell>
+                            <TableCell class="font-mono">
+                                {{ payment.authorization_code ?? '—' }}
+                            </TableCell>
+                            <TableCell>
+                                {{
+                                    formatDateTime(
+                                        payment.finished_at ??
+                                            payment.created_at,
+                                    )
+                                }}
+                            </TableCell>
+                            <TableCell class="text-right">
+                                {{ clp.format(payment.amount) }}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
                 </Table>
             </CardContent>
         </Card>

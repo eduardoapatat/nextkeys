@@ -195,3 +195,48 @@ function validationErrorsOf(Closure $action): array
 
     Assert::fail('Expected a ValidationException, none was thrown.');
 }
+
+/**
+ * A 64-character Webpay token; `$seed` makes different tokens.
+ */
+function webpayToken(string $seed = 'a'): string
+{
+    return hash('sha256', $seed);
+}
+
+/**
+ * The URL of a Webpay Plus transaction in the integration environment, or of
+ * the transactions collection without a token.
+ */
+function webpayUrl(?string $token = null, string $suffix = ''): string
+{
+    $base = 'https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions';
+
+    return $token === null ? $base : "{$base}/{$token}{$suffix}";
+}
+
+/**
+ * A Webpay commit/status body of an authorized payment, as the integration
+ * environment returns it.
+ *
+ * @param  array<string, mixed>  $overrides
+ * @return array<string, mixed>
+ */
+function webpayTransaction(array $overrides = []): array
+{
+    return [
+        'vci' => 'TSY',
+        'amount' => 19990,
+        'status' => 'AUTHORIZED',
+        'buy_order' => 'NK-7QF2K9-1',
+        'session_id' => 'NK-7QF2K9',
+        'card_detail' => ['card_number' => '6623'],
+        'accounting_date' => '1120',
+        'transaction_date' => '2026-11-20T15:30:12.345Z',
+        'authorization_code' => '1213',
+        'payment_type_code' => 'VN',
+        'response_code' => 0,
+        'installments_number' => 0,
+        ...$overrides,
+    ];
+}

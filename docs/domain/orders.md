@@ -1,6 +1,6 @@
 # Orders domain model
 
-Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action. No HTTP endpoints yet (checkout comes with Sanctum in phase 4, the webhook with `PaymentGateway`). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email gets its own section when designed.
+Status: **model implemented** (2026-11-20): tables, rules, reservation, expiry and `MarkOrderPaid` as a domain Action, called by the Webpay return and reconciliation. No storefront endpoints yet (checkout comes with Sanctum in phase 4). Phase 3. Payments live in [`payments.md`](payments.md); key delivery by email gets its own section when designed.
 
 ## Overview
 
@@ -84,8 +84,8 @@ pending ──payment──▶ paid ──delivery──▶ completed
 
 ## Implementation
 
-- **Actions** in `app/Actions/Orders`: `PlaceOrder` (validates role, empty cart, published products, quantity, duplicates; then one transaction), `CancelOrder`, `ExpireOrders`, `MarkOrderPaid`, and the shared `ReserveOrderStock` / `ReleaseOrderStock`. Errors are Spanish `ValidationException`s keyed `items.{i}.product_id` / `items.{i}.quantity`; a payment that cannot be taken throws `OrderCannotBePaid`.
-- **Locking.** `ReserveOrderStock` walks lines in `product_id` order (no deadlocks between checkouts): keys with one `UPDATE … WHERE id IN (SELECT … FOR UPDATE SKIP LOCKED)`, boxes with `UPDATE … SET stock = stock - n WHERE stock >= n`. `CancelOrder` and `MarkOrderPaid` lock the order row first; `ExpireOrders` takes pending orders `FOR UPDATE SKIP LOCKED`, so it skips an order whose payment is being recorded.
+- **Actions** in `app/Actions/Orders`: `PlaceOrder` (validates role, empty cart, published products, quantity, duplicates; then one transaction), `CancelOrder`, `ExpireOrders`, `MarkOrderPaid`, `LockPayableOrder` / `ReopenExpiredOrder` (see [`payments.md`](payments.md)), and the shared `ReserveOrderStock` / `ReleaseOrderStock`. Errors are Spanish `ValidationException`s keyed `items.{i}.product_id` / `items.{i}.quantity`; a payment that cannot be taken throws `OrderCannotBePaid`.
+- **Locking.** `ReserveOrderStock` walks lines in `product_id` order (no deadlocks between checkouts): keys with one `UPDATE … WHERE id IN (SELECT … FOR UPDATE SKIP LOCKED)`, boxes with `UPDATE … SET stock = stock - n WHERE stock >= n`. `CancelOrder` and `MarkOrderPaid` lock the order row first (a payment through `LockPayableOrder`, with a 3-second lock timeout); `ExpireOrders` takes pending orders `FOR UPDATE SKIP LOCKED`, so it skips an order whose payment is being recorded.
 - **Reference.** `Order::generateReference()`; `PlaceOrder` inserts in a savepoint and retries on a unique violation (an error would otherwise abort the Postgres transaction).
 - **Expiry.** `orders:expire` runs `ExpireOrders` every minute (`routes/console.php`). `composer dev` starts `schedule:work` (`AppServiceProvider::configureDevCommands`).
 - **Settings.** `config/orders.php`: `reservation_minutes`, `max_quantity_per_line` (the CHECK repeats 5).

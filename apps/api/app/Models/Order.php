@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read User $user
  * @property-read Collection<int, OrderItem> $items
+ * @property-read Collection<int, PaymentAttempt> $paymentAttempts
  */
 #[Fillable(['user_id', 'reference', 'status', 'total', 'expires_at', 'paid_at', 'completed_at', 'cancelled_at'])]
 class Order extends Model
@@ -79,6 +80,14 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * @return HasMany<PaymentAttempt, $this>
+     */
+    public function paymentAttempts(): HasMany
+    {
+        return $this->hasMany(PaymentAttempt::class);
     }
 
     /**

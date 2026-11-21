@@ -1,6 +1,6 @@
 # Payments domain model
 
-Status: **design decided** (2026-11-20), implementation in progress. Phase 3.
+Status: **implemented** (2026-11-20) in the integration environment; checkout and receipt page in phase 4. Phase 3.
 
 ## Decisions
 
@@ -54,7 +54,7 @@ Statuses: `initialized` (sent to Webpay), `authorized` (committed and recorded o
 
 - **Reopening replaces late payment.** The `orders` trigger trades `expired` → `paid` for `expired` → `pending`. `ReopenExpiredOrder` reserves the stock again and gives the order a fresh hold; `MarkOrderPaid` only takes a `pending` order. So "the stock is held" means exactly "`pending` (or paid)". If the bank then rejects the payment, the reopened order stays `pending` and the customer can try again.
 - **Starting an attempt extends the hold** to `max(expires_at, now + 11 min)` (`payments.payment_window_minutes`: the 10-minute integration form plus the commit), so an order rarely expires while the customer is in Webpay.
-- `LockPayableOrder` is the single "can it still be charged?" rule: it locks the order with `SET LOCAL lock_timeout = '3s'`, returns it when `pending`, reopens it when `expired`, and throws `OrderCannotBePaid` otherwise.
+- `LockPayableOrder` is the single "can it still be charged?" rule: it runs a callback in a transaction holding the order's row lock, taken with `SET LOCAL lock_timeout = '3s'` (`orders.payment_lock_timeout_seconds`, `OrderBusy` when it runs out); the order goes to the callback when `pending`, is reopened first when `expired`, and `OrderCannotBePaid` (with a reason: already paid, cancelled, out of stock) is thrown otherwise. `MarkOrderPaid`, `StartPaymentAttempt`, `ConfirmPaymentAttempt` and the reconciliation all go through it.
 
 ### Gateway
 
@@ -72,7 +72,13 @@ Statuses: `initialized` (sent to Webpay), `authorized` (committed and recorded o
 
 ### Reconciliation
 
-`payments:reconcile` every 5 minutes takes `initialized` attempts older than 15 minutes (`payments.reconcile_after_minutes`), skipping locked orders: no token or older than 7 days → `aborted` without a call; `status` `INITIALIZED` → `aborted`; `FAILED` → `rejected`; `AUTHORIZED` → recorded as paid if the order can take it, otherwise refunded in full and `refunded`; `REVERSED` / `NULLIFIED` → `refunded`. A gateway error is logged and retried on the next run.
+`payments:reconcile` every 5 minutes takes `initialized` attempts older than 15 minutes (`payments.reconcile_after_minutes`); a busy order (`OrderBusy`) is retried on the next run: no token or older than 7 days → `aborted` without a call; `status` `INITIALIZED` → `aborted`; `FAILED` → `rejected`; `AUTHORIZED` → recorded as paid if the order can take it, otherwise refunded in full and `refunded`; `REVERSED` / `NULLIFIED` → `refunded`. A gateway error is logged and retried on the next run.
+
+### Implementation
+
+- `app/Payments`: `PaymentGateway`, its results and `PaymentGatewayException`; `app/Payments/Transbank`: `WebpayPlusGateway`, `WebpayResponse` (field-by-field parsing), `WebpayReturn` (the four return cases). Bound in `AppServiceProvider` from `config/payments.php`.
+- `app/Actions/Payments`: `StartPaymentAttempt`, `ConfirmPaymentAttempt`, `CancelPaymentAttempt`, `ReconcilePaymentAttempts` (`payments:reconcile`, `routes/console.php`). Return route in `routes/payments.php` (`WebpayReturnController`).
+- Verified end to end against `webpay3gint` on 2026-11-20 (test VISA, RUT 11.111.111-1): commit, receipt and order completed. Posting the same token to Webpay twice shows Webpay's error page; the attempt stays `initialized` until reconciliation aborts it.
 
 ### Panel and phase 4
 
