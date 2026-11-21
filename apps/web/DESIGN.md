@@ -18,7 +18,6 @@ colors:
     sticker: '#f2c230'
     sticker-hover: '#f7d35c'
     sticker-ink: '#1a1405'
-    sticker-deep: '#9a7713'
     bar: '#050608'
     crt: '#9cc8d6'
     crt-deep: '#1f3640'
@@ -314,7 +313,7 @@ Error page only: an off-white board sign in marker ("Fuera de servicio").
 
 ### Navigation
 
-The header is the counter: logo, search on a Melamine field, account links in Chalk Muted, and the cart as a secondary key whose count pill turns yellow once the cart has items. Under it, from `md`, the menu bar follows Koparion's main menu (requested by the user on 2026-11-21): a near-black strip (bar, #050608, 52px) with Inicio, Catálogo, the platform families and the product types in bold uppercase Barlow 16px (Chalk), 20px side padding, no seams, horizontally scrollable. The current page (path and query, `aria-current`) and the hovered item (fine pointers only) wear a sticker-yellow tab that rises 8px above the strip, with Sticker Ink text and a folded corner in sticker-deep (#9a7713) on its top right; the tab fades in over 150ms. Styles live in `.menu-bar` and `.menu-tab` (`main.css`). Tabs on the shelf use the same caps with a 2px yellow underline on the active one. On small screens a drawer slides in from the left (200ms out, 280ms in on a drawer curve).
+The header is the counter: logo, search on a Melamine field, account links in Chalk Muted, and the cart as a secondary key whose count pill turns yellow once the cart has items. Under it, from `md`, the menu bar follows Koparion's main menu (requested by the user on 2026-11-21): a near-black strip (bar, #050608, 52px) with Inicio, Catálogo, the platform families and the product types in bold uppercase Barlow 16px (Chalk), 20px side padding, no seams, horizontally scrollable. The current page (path and query, `aria-current`) and the hovered item (fine pointers only) fill the full strip height in sticker yellow with Sticker Ink text, like a button (no raised tab or folded corner); the fill fades in over 150ms. Styles live in `.menu-tab` (`main.css`). Tabs on the shelf use the same caps with a 2px yellow underline on the active one. On small screens a drawer slides in from the left (200ms out, 280ms in on a drawer curve).
 
 ### Empty State
 

@@ -2,7 +2,7 @@
 /**
  * The black menu bar under the header, after Koparion's main menu: "Inicio",
  * the catalog, the platform families and the product types. The current
- * page (path and query) wears the yellow tab.
+ * page (path and query) is filled in yellow.
  */
 const route = useRoute();
 const router = useRouter();
@@ -26,9 +26,9 @@ function isCurrent(to: Parameters<typeof router.resolve>[0]): boolean {
 </script>
 
 <template>
-    <nav aria-label="Principal" class="menu-bar relative -mt-2">
+    <nav aria-label="Principal" class="bg-bar">
         <ul
-            class="isolate mx-auto flex max-w-7xl items-end overflow-x-auto px-4 pt-2 pr-6 [scrollbar-width:none]"
+            class="mx-auto flex max-w-7xl overflow-x-auto px-4 [scrollbar-width:none]"
         >
             <li v-for="item in items" :key="item.label" class="shrink-0">
                 <NuxtLink
