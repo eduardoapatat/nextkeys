@@ -43,6 +43,12 @@ class CatalogDemoSeeder extends Seeder
         'Red Dead Redemption 2' => 'An epic tale of outlaw life in the dying days of America\'s Wild West.',
         'The Witcher 3: Wild Hunt' => 'Geralt of Rivia hunts for his adopted daughter across a war-torn open world.',
         'Animal Crossing: New Horizons' => 'Build your own island paradise and live at your own pace.',
+        'Windows 11 Home' => 'The Windows 11 operating system for home PCs, one device, perpetual license.',
+        'Windows 11 Pro' => 'Windows 11 with BitLocker, Remote Desktop and domain join, one device, perpetual license.',
+        'Microsoft 365 Personal' => 'Word, Excel, PowerPoint, Outlook and 1 TB of OneDrive for one person, one-year subscription.',
+        'Microsoft 365 Family' => 'Word, Excel, PowerPoint, Outlook and 1 TB of OneDrive each for up to six people, one-year subscription.',
+        'Kaspersky Standard' => 'Antivirus and performance tools for up to three devices, one-year subscription.',
+        'ESET NOD32 Antivirus' => 'Lightweight antivirus for one Windows PC, one-year subscription.',
     ];
 
     /**
@@ -87,6 +93,13 @@ class CatalogDemoSeeder extends Seeder
         ['Red Dead Redemption 2', ProductType::Physical, 'red-dead-redemption-2-physical-ps4-latam', null, 'latam', ['ps4'], 24990, 7, ProductStatus::Published],
         ['The Witcher 3: Wild Hunt', ProductType::DigitalKey, 'the-witcher-3-wild-hunt-steam-windows-global', 'steam', 'global', ['windows'], 14990, null, ProductStatus::Published],
         ['The Witcher 3: Wild Hunt', ProductType::DigitalKey, 'the-witcher-3-wild-hunt-playstation-store-ps5-latam', 'playstation-store', 'latam', ['ps5'], 19990, null, ProductStatus::Published],
+        // More real programs for the home's "Programas" section.
+        ['Windows 11 Home', ProductType::License, 'windows-11-home-microsoft-account-windows-global', 'microsoft-account', 'global', ['windows'], 89990, null, ProductStatus::Published],
+        ['Windows 11 Pro', ProductType::License, 'windows-11-pro-microsoft-account-windows-global', 'microsoft-account', 'global', ['windows'], 119990, null, ProductStatus::Published],
+        ['Microsoft 365 Personal', ProductType::License, 'microsoft-365-personal-microsoft-account-android-ios-macos-windows-global', 'microsoft-account', 'global', ['windows', 'macos', 'android', 'ios'], 59990, null, ProductStatus::Published],
+        ['Microsoft 365 Family', ProductType::License, 'microsoft-365-family-microsoft-account-android-ios-macos-windows-global', 'microsoft-account', 'global', ['windows', 'macos', 'android', 'ios'], 79990, null, ProductStatus::Published],
+        ['Kaspersky Standard', ProductType::License, 'kaspersky-standard-kaspersky-account-android-ios-macos-windows-global', 'kaspersky-account', 'global', ['windows', 'macos', 'android', 'ios'], 24990, null, ProductStatus::Published],
+        ['ESET NOD32 Antivirus', ProductType::License, 'eset-nod32-antivirus-eset-home-windows-global', 'eset-home', 'global', ['windows'], 19990, null, ProductStatus::Published],
         ['Animal Crossing: New Horizons', ProductType::DigitalKey, 'animal-crossing-new-horizons-nintendo-eshop-switch-latam', 'nintendo-eshop', 'latam', ['switch'], 44990, null, ProductStatus::Published],
     ];
 
@@ -98,6 +111,8 @@ class CatalogDemoSeeder extends Seeder
     {
         DB::transaction(function (): void {
             ActivationService::query()->firstOrCreate(['slug' => 'norton-account'], ['name' => 'Norton Account']);
+            ActivationService::query()->firstOrCreate(['slug' => 'kaspersky-account'], ['name' => 'Kaspersky Account']);
+            ActivationService::query()->firstOrCreate(['slug' => 'eset-home'], ['name' => 'ESET HOME']);
 
             foreach (self::TITLES as $name => $description) {
                 Title::query()->create(['name' => $name, 'description' => $description]);

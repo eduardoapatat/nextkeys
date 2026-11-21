@@ -12,7 +12,7 @@ it('suggests the slug of every product of the demo seeder', function () {
 
     $products = Product::query()->with(['title', 'activationService', 'platforms', 'region'])->get();
 
-    expect($products)->toHaveCount(35);
+    expect($products)->toHaveCount(41);
 
     foreach ($products as $product) {
         $suggestion = $generator->suggest($product->title, $product->type, $product->activationService, $product->platforms, $product->region);
