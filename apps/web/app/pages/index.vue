@@ -3,14 +3,18 @@ import { fetchCatalogFilters, fetchProducts } from '~/api/catalog';
 
 useHead({ title: 'Claves y juegos al instante' });
 
-// Three real orderings of the catalog: newest for the deal and "Novedades",
-// cheapest for the banner receipt and the example offers, by name for
-// the banner covers and the example featured selection.
+// Games (keys and boxes) in three real orderings: newest for the deal and
+// "Novedades", cheapest for the banner receipt and the example offers, by
+// name for the banner covers and the example featured selection. Programs
+// (licenses) have their own section.
+const GAMES = 'digital_key,physical';
+
 const { data, error } = await useAsyncData('home', async () => {
-    const [newest, cheapest, byName, filters] = await Promise.all([
-        fetchProducts({ sort: 'newest' }),
-        fetchProducts({ sort: 'price' }),
-        fetchProducts({ sort: 'name' }),
+    const [newest, cheapest, byName, programs, filters] = await Promise.all([
+        fetchProducts({ type: GAMES, sort: 'newest' }),
+        fetchProducts({ type: GAMES, sort: 'price' }),
+        fetchProducts({ type: GAMES, sort: 'name' }),
+        fetchProducts({ type: 'license', sort: 'name' }),
         fetchCatalogFilters(),
     ]);
 
@@ -18,6 +22,7 @@ const { data, error } = await useAsyncData('home', async () => {
         newest: newest.data,
         cheapest: cheapest.data,
         byName: byName.data,
+        programs: programs.data,
         filters,
     };
 });
@@ -74,7 +79,13 @@ const tabs = [
             <HomeShelfTabs :tabs="tabs" />
         </div>
         <HomeCategories :filters="home.filters" :physical="physical" />
-        <div class="mx-auto w-full max-w-7xl px-4">
+        <div
+            class="mx-auto flex w-full max-w-7xl flex-col gap-16 px-4 md:gap-20"
+        >
+            <HomePrograms
+                v-if="home.programs.length"
+                :products="home.programs.slice(0, 8)"
+            />
             <HomeBenefits />
         </div>
     </main>

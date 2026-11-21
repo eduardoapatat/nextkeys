@@ -24,14 +24,28 @@ describe('home', () => {
         useCart().clear();
     });
 
-    it('asks the API for three real orderings of the catalog', async () => {
+    it('asks the API for games in three orderings and for the programs', async () => {
         await mountSuspended(HomePage, { route: '/' });
 
-        expect(queries.map((query) => query.sort).sort()).toEqual([
-            'name',
-            'newest',
-            'price',
+        expect(
+            queries.map((query) => `${query.type} ${query.sort}`).sort(),
+        ).toEqual([
+            'digital_key,physical name',
+            'digital_key,physical newest',
+            'digital_key,physical price',
+            'license name',
         ]);
+    });
+
+    it('titles the shelf "Juegos" and adds a "Programas" section', async () => {
+        const page = await mountSuspended(HomePage, { route: '/' });
+
+        expect(page.find('#shelf-heading').text()).toBe('Juegos');
+        const programs = page.find('[aria-labelledby="programs-heading"]');
+        expect(programs.find('a[href="/catalogo?type=license"]').exists()).toBe(
+            true,
+        );
+        expect(programs.findAll('li').length).toBeGreaterThan(0);
     });
 
     it('shows the shelf right after the banner, without a side menu', async () => {
