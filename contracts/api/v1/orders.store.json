@@ -1,13 +1,13 @@
 {
     "data": {
-        "reference": "NK-JK2J91",
+        "reference": "NK-27J53J",
         "status": {
             "slug": "pending",
             "name": "Pendiente"
         },
         "total": 19990,
-        "created_at": "2026-11-21T06:15:11+00:00",
-        "expires_at": "2026-11-21T06:30:11+00:00",
+        "created_at": "2026-11-24T18:19:47+00:00",
+        "expires_at": "2026-11-24T18:34:47+00:00",
         "paid_at": null,
         "can_pay": true,
         "has_physical_items": false,

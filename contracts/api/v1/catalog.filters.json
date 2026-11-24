@@ -3,105 +3,139 @@
         "platforms": [
             {
                 "slug": "android",
-                "name": "Android"
+                "name": "Android",
+                "count": 4
             },
             {
                 "slug": "ios",
-                "name": "iOS"
+                "name": "iOS",
+                "count": 4
             },
             {
                 "slug": "macos",
-                "name": "macOS"
+                "name": "macOS",
+                "count": 9
             },
             {
                 "slug": "ps4",
-                "name": "PS4"
+                "name": "PS4",
+                "count": 3
             },
             {
                 "slug": "ps5",
-                "name": "PS5"
+                "name": "PS5",
+                "count": 12
             },
             {
                 "slug": "switch",
-                "name": "Switch"
+                "name": "Switch",
+                "count": 6
             },
             {
                 "slug": "switch-2",
-                "name": "Switch 2"
+                "name": "Switch 2",
+                "count": 2
             },
             {
                 "slug": "windows",
-                "name": "Windows"
+                "name": "Windows",
+                "count": 17
             },
             {
                 "slug": "xbox-one",
-                "name": "Xbox One"
+                "name": "Xbox One",
+                "count": 1
             },
             {
                 "slug": "xbox-series",
-                "name": "Xbox Series"
+                "name": "Xbox Series",
+                "count": 4
             }
         ],
         "types": [
             {
                 "slug": "digital_key",
-                "name": "Clave digital"
+                "name": "Clave digital",
+                "count": 25
             },
             {
                 "slug": "license",
-                "name": "Licencia"
+                "name": "Licencia",
+                "count": 8
             },
             {
                 "slug": "physical",
-                "name": "Físico"
+                "name": "Físico",
+                "count": 7
             }
         ],
         "activation_services": [
             {
+                "slug": "eset-home",
+                "name": "ESET HOME",
+                "count": 1
+            },
+            {
+                "slug": "kaspersky-account",
+                "name": "Kaspersky Account",
+                "count": 1
+            },
+            {
                 "slug": "microsoft-account",
-                "name": "Microsoft Account"
+                "name": "Microsoft Account",
+                "count": 5
             },
             {
                 "slug": "microsoft-store",
-                "name": "Microsoft Store"
+                "name": "Microsoft Store",
+                "count": 0
             },
             {
                 "slug": "nintendo-eshop",
-                "name": "Nintendo eShop"
+                "name": "Nintendo eShop",
+                "count": 6
             },
             {
                 "slug": "norton-account",
-                "name": "Norton Account"
+                "name": "Norton Account",
+                "count": 1
             },
             {
                 "slug": "playstation-store",
-                "name": "PlayStation Store"
+                "name": "PlayStation Store",
+                "count": 10
             },
             {
                 "slug": "steam",
-                "name": "Steam"
+                "name": "Steam",
+                "count": 7
             },
             {
                 "slug": "xbox",
-                "name": "Xbox"
+                "name": "Xbox",
+                "count": 4
             }
         ],
         "regions": [
             {
                 "slug": "europe",
-                "name": "Europe"
+                "name": "Europe",
+                "count": 0
             },
             {
                 "slug": "global",
-                "name": "Global"
+                "name": "Global",
+                "count": 19
             },
             {
                 "slug": "latam",
-                "name": "LATAM"
+                "name": "LATAM",
+                "count": 17
             },
             {
                 "slug": "north-america",
-                "name": "North America"
+                "name": "North America",
+                "count": 2
             }
         ]
     }

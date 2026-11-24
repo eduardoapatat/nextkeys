@@ -29,6 +29,210 @@
             }
         },
         {
+            "slug": "eset-nod32-antivirus-eset-home-windows-global",
+            "type": {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            "price": 19990,
+            "in_stock": true,
+            "cover_url": null,
+            "cover_band": true,
+            "title": {
+                "name": "ESET NOD32 Antivirus"
+            },
+            "platforms": [
+                {
+                    "slug": "windows",
+                    "name": "Windows"
+                }
+            ],
+            "region": {
+                "slug": "global",
+                "name": "Global"
+            },
+            "activation_service": {
+                "slug": "eset-home",
+                "name": "ESET HOME"
+            }
+        },
+        {
+            "slug": "kaspersky-standard-kaspersky-account-android-ios-macos-windows-global",
+            "type": {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            "price": 24990,
+            "in_stock": true,
+            "cover_url": null,
+            "cover_band": true,
+            "title": {
+                "name": "Kaspersky Standard"
+            },
+            "platforms": [
+                {
+                    "slug": "windows",
+                    "name": "Windows"
+                },
+                {
+                    "slug": "macos",
+                    "name": "macOS"
+                },
+                {
+                    "slug": "android",
+                    "name": "Android"
+                },
+                {
+                    "slug": "ios",
+                    "name": "iOS"
+                }
+            ],
+            "region": {
+                "slug": "global",
+                "name": "Global"
+            },
+            "activation_service": {
+                "slug": "kaspersky-account",
+                "name": "Kaspersky Account"
+            }
+        },
+        {
+            "slug": "microsoft-365-family-microsoft-account-android-ios-macos-windows-global",
+            "type": {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            "price": 79990,
+            "in_stock": true,
+            "cover_url": null,
+            "cover_band": true,
+            "title": {
+                "name": "Microsoft 365 Family"
+            },
+            "platforms": [
+                {
+                    "slug": "windows",
+                    "name": "Windows"
+                },
+                {
+                    "slug": "macos",
+                    "name": "macOS"
+                },
+                {
+                    "slug": "android",
+                    "name": "Android"
+                },
+                {
+                    "slug": "ios",
+                    "name": "iOS"
+                }
+            ],
+            "region": {
+                "slug": "global",
+                "name": "Global"
+            },
+            "activation_service": {
+                "slug": "microsoft-account",
+                "name": "Microsoft Account"
+            }
+        },
+        {
+            "slug": "microsoft-365-personal-microsoft-account-android-ios-macos-windows-global",
+            "type": {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            "price": 59990,
+            "in_stock": true,
+            "cover_url": null,
+            "cover_band": true,
+            "title": {
+                "name": "Microsoft 365 Personal"
+            },
+            "platforms": [
+                {
+                    "slug": "windows",
+                    "name": "Windows"
+                },
+                {
+                    "slug": "macos",
+                    "name": "macOS"
+                },
+                {
+                    "slug": "android",
+                    "name": "Android"
+                },
+                {
+                    "slug": "ios",
+                    "name": "iOS"
+                }
+            ],
+            "region": {
+                "slug": "global",
+                "name": "Global"
+            },
+            "activation_service": {
+                "slug": "microsoft-account",
+                "name": "Microsoft Account"
+            }
+        },
+        {
+            "slug": "windows-11-pro-microsoft-account-windows-global",
+            "type": {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            "price": 119990,
+            "in_stock": true,
+            "cover_url": null,
+            "cover_band": true,
+            "title": {
+                "name": "Windows 11 Pro"
+            },
+            "platforms": [
+                {
+                    "slug": "windows",
+                    "name": "Windows"
+                }
+            ],
+            "region": {
+                "slug": "global",
+                "name": "Global"
+            },
+            "activation_service": {
+                "slug": "microsoft-account",
+                "name": "Microsoft Account"
+            }
+        },
+        {
+            "slug": "windows-11-home-microsoft-account-windows-global",
+            "type": {
+                "slug": "license",
+                "name": "Licencia"
+            },
+            "price": 89990,
+            "in_stock": true,
+            "cover_url": null,
+            "cover_band": true,
+            "title": {
+                "name": "Windows 11 Home"
+            },
+            "platforms": [
+                {
+                    "slug": "windows",
+                    "name": "Windows"
+                }
+            ],
+            "region": {
+                "slug": "global",
+                "name": "Global"
+            },
+            "activation_service": {
+                "slug": "microsoft-account",
+                "name": "Microsoft Account"
+            }
+        },
+        {
             "slug": "the-witcher-3-wild-hunt-playstation-store-ps5-latam",
             "type": {
                 "slug": "digital_key",
@@ -509,178 +713,6 @@
                 "name": "North America"
             },
             "activation_service": null
-        },
-        {
-            "slug": "marvels-spider-man-2-playstation-store-ps5-latam",
-            "type": {
-                "slug": "digital_key",
-                "name": "Clave digital"
-            },
-            "price": 54990,
-            "in_stock": true,
-            "cover_url": null,
-            "cover_band": true,
-            "title": {
-                "name": "Marvel's Spider-Man 2"
-            },
-            "platforms": [
-                {
-                    "slug": "ps5",
-                    "name": "PS5"
-                }
-            ],
-            "region": {
-                "slug": "latam",
-                "name": "LATAM"
-            },
-            "activation_service": {
-                "slug": "playstation-store",
-                "name": "PlayStation Store"
-            }
-        },
-        {
-            "slug": "god-of-war-ragnarok-playstation-store-ps4-ps5-latam",
-            "type": {
-                "slug": "digital_key",
-                "name": "Clave digital"
-            },
-            "price": 44990,
-            "in_stock": true,
-            "cover_url": null,
-            "cover_band": true,
-            "title": {
-                "name": "God of War Ragnarök"
-            },
-            "platforms": [
-                {
-                    "slug": "ps4",
-                    "name": "PS4"
-                },
-                {
-                    "slug": "ps5",
-                    "name": "PS5"
-                }
-            ],
-            "region": {
-                "slug": "latam",
-                "name": "LATAM"
-            },
-            "activation_service": {
-                "slug": "playstation-store",
-                "name": "PlayStation Store"
-            }
-        },
-        {
-            "slug": "god-of-war-ragnarok-physical-playstation-store-ps5-latam",
-            "type": {
-                "slug": "physical",
-                "name": "Físico"
-            },
-            "price": 49990,
-            "in_stock": true,
-            "cover_url": null,
-            "cover_band": true,
-            "title": {
-                "name": "God of War Ragnarök"
-            },
-            "platforms": [
-                {
-                    "slug": "ps5",
-                    "name": "PS5"
-                }
-            ],
-            "region": {
-                "slug": "latam",
-                "name": "LATAM"
-            },
-            "activation_service": {
-                "slug": "playstation-store",
-                "name": "PlayStation Store"
-            }
-        },
-        {
-            "slug": "cyberpunk-2077-xbox-xbox-series-global",
-            "type": {
-                "slug": "digital_key",
-                "name": "Clave digital"
-            },
-            "price": 31990,
-            "in_stock": true,
-            "cover_url": null,
-            "cover_band": true,
-            "title": {
-                "name": "Cyberpunk 2077"
-            },
-            "platforms": [
-                {
-                    "slug": "xbox-series",
-                    "name": "Xbox Series"
-                }
-            ],
-            "region": {
-                "slug": "global",
-                "name": "Global"
-            },
-            "activation_service": {
-                "slug": "xbox",
-                "name": "Xbox"
-            }
-        },
-        {
-            "slug": "cyberpunk-2077-playstation-store-ps5-latam",
-            "type": {
-                "slug": "digital_key",
-                "name": "Clave digital"
-            },
-            "price": 32990,
-            "in_stock": true,
-            "cover_url": null,
-            "cover_band": true,
-            "title": {
-                "name": "Cyberpunk 2077"
-            },
-            "platforms": [
-                {
-                    "slug": "ps5",
-                    "name": "PS5"
-                }
-            ],
-            "region": {
-                "slug": "latam",
-                "name": "LATAM"
-            },
-            "activation_service": {
-                "slug": "playstation-store",
-                "name": "PlayStation Store"
-            }
-        },
-        {
-            "slug": "cyberpunk-2077-steam-windows-global",
-            "type": {
-                "slug": "digital_key",
-                "name": "Clave digital"
-            },
-            "price": 29990,
-            "in_stock": true,
-            "cover_url": null,
-            "cover_band": true,
-            "title": {
-                "name": "Cyberpunk 2077"
-            },
-            "platforms": [
-                {
-                    "slug": "windows",
-                    "name": "Windows"
-                }
-            ],
-            "region": {
-                "slug": "global",
-                "name": "Global"
-            },
-            "activation_service": {
-                "slug": "steam",
-                "name": "Steam"
-            }
         }
     ],
     "links": {
@@ -722,6 +754,6 @@
         "path": "http://localhost:8000/api/v1/products",
         "per_page": 24,
         "to": 24,
-        "total": 34
+        "total": 40
     }
 }

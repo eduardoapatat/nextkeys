@@ -1,14 +1,14 @@
 {
     "data": {
-        "reference": "NK-JK2J91",
+        "reference": "NK-27J53J",
         "status": {
             "slug": "completed",
             "name": "Completado"
         },
         "total": 19990,
-        "created_at": "2026-11-21T06:15:11+00:00",
-        "expires_at": "2026-11-21T06:30:11+00:00",
-        "paid_at": "2026-11-21T06:15:11+00:00",
+        "created_at": "2026-11-24T18:19:47+00:00",
+        "expires_at": "2026-11-24T18:34:47+00:00",
+        "paid_at": "2026-11-24T18:19:47+00:00",
         "can_pay": false,
         "has_physical_items": false,
         "items": [
@@ -35,7 +35,7 @@
             "installments_number": 0,
             "installments_amount": null,
             "card_last_digits": "6623",
-            "transaction_date": "2026-11-21T06:15:11+00:00"
+            "transaction_date": "2026-11-24T18:19:47+00:00"
         }
     }
 }
