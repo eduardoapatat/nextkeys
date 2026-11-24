@@ -142,6 +142,39 @@ export const paymentStatuses = [
     'refunded',
 ] as const;
 
+export const shipmentStatuses = ['pending', 'shipped', 'delivered'] as const;
+
+/** A Chilean region by its ISO 3166-2:CL code. */
+const ChileRegionReference = v.strictObject({
+    code: v.string(),
+    name: v.string(),
+});
+
+const addressFields = {
+    recipient_name: v.string(),
+    phone: v.string(),
+    region: ChileRegionReference,
+    commune: v.string(),
+    street: v.string(),
+    street_number: v.string(),
+    apartment: v.nullable(v.string()),
+};
+
+/** An order's parcel: the address copied at checkout and where it is. */
+const ShipmentData = v.strictObject({
+    status: v.strictObject({
+        slug: v.picklist(shipmentStatuses),
+        name: v.string(),
+    }),
+    address: v.strictObject(addressFields),
+    carrier: v.nullable(Reference),
+    tracking_number: v.nullable(v.string()),
+    tracking_url: v.nullable(v.string()),
+    shipped_at: v.nullable(v.string()),
+    delivered_at: v.nullable(v.string()),
+    returnable_until: v.nullable(v.string()),
+});
+
 const OrderSchemaData = v.strictObject({
     reference: v.string(),
     status: v.strictObject({
@@ -149,6 +182,7 @@ const OrderSchemaData = v.strictObject({
         name: v.string(),
     }),
     total: v.pipe(v.number(), v.integer()),
+    shipping_cost: v.pipe(v.number(), v.integer()),
     created_at: v.string(),
     expires_at: v.string(),
     paid_at: v.nullable(v.string()),
@@ -179,6 +213,7 @@ const OrderSchemaData = v.strictObject({
             transaction_date: v.nullable(v.string()),
         }),
     ),
+    shipment: v.nullable(ShipmentData),
 });
 
 /** A customer's order (`/orders/{reference}`, and the result of placing one). */
@@ -228,6 +263,7 @@ export type RevealedKey = v.InferOutput<
     typeof LibraryKeysSchema
 >['data']['keys'][number];
 export type Order = v.InferOutput<typeof OrderSchemaData>;
+export type Shipment = v.InferOutput<typeof ShipmentData>;
 export type OrderPage = v.InferOutput<typeof OrderPageSchema>;
 export type PaymentRedirect = v.InferOutput<
     typeof PaymentRedirectSchema

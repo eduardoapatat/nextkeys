@@ -23,7 +23,8 @@ User (customer)
 | `user_id`                                 | FK to `users`, required                                                                                                                                                                                                                                      |
 | `reference`                               | Public identifier for the API, URLs and emails (never the `id`, the public API exposes no ids). `NK-` + 6 random Crockford base32 characters (e.g. `NK-7QF2K9`), unique, regenerated on collision. A ULID was rejected: unreadable for customers and support |
 | `status`                                  | `OrderStatus` (see _Statuses_), CHECK                                                                                                                                                                                                                        |
-| `total`                                   | Integer CLP, sum of the lines' `line_total`. `CHECK (total > 0)`                                                                                                                                                                                             |
+| `total`                                   | Integer CLP, sum of the lines' `line_total` plus `shipping_cost`. `CHECK (total > 0)`                                                                                                                                                                        |
+| `shipping_cost`                           | Flat shipping fee when the order has physical lines, 0 otherwise (see [`shipping.md`](shipping.md))                                                                                                                                                          |
 | `expires_at`                              | End of the reservation: `created_at + 15 min`. The only expiry of the order's stock (keys have no expiry of their own)                                                                                                                                       |
 | `paid_at`, `completed_at`, `cancelled_at` | Nullable timestamps of each transition                                                                                                                                                                                                                       |
 
@@ -63,7 +64,7 @@ pending ──payment──▶ paid ──delivery──▶ completed
 
 - `pending`: created at checkout; its stock is held until `expires_at`.
 - `paid`: payment confirmed (webhook). In the same transaction the reserved keys become `sold`.
-- `completed`: everything delivered. An order with only key-delivered lines goes `paid` → `completed` in the same transaction (the keys are assigned; the email is a notification, its failure does not undo the delivery). An order with physical lines stays `paid` until it ships (phase 5).
+- `completed`: everything delivered. An order with only key-delivered lines goes `paid` → `completed` in the same transaction (the keys are assigned; the email is a notification, its failure does not undo the delivery). An order with physical lines stays `paid` until its shipment is delivered, then becomes `completed` (decided 2026-11-24, see [`shipping.md`](shipping.md)); the trigger rejects `paid` → `completed` while a shipment is not `delivered`.
 - `cancelled` / `expired`: stock released (see _Reservation_).
 - Transitions are enforced in the database (a `BEFORE UPDATE OF status` trigger on `orders`), like the key lifecycle. There is no `refunded` order status: a refund belongs to the payment attempt, and the order keeps its own status (see [`payments.md`](payments.md)).
 
@@ -79,7 +80,7 @@ pending ──payment──▶ paid ──delivery──▶ completed
 ## Mixed orders
 
 - One order can mix key-delivered and physical products, with one payment.
-- Keys are delivered on payment; physical lines wait for shipping (phase 5), and the order stays `paid` until then. Order status is not per line: shipping status per line, if needed, comes with phase 5.
+- Keys are delivered on payment; physical lines wait for shipping, and the order stays `paid` until the shipment is delivered. Order status is not per line, and neither is shipping: one shipment per order (see [`shipping.md`](shipping.md)).
 - Splitting a mixed cart into two orders was rejected: one payment spanning two orders complicates webhooks and refunds.
 
 ## Implementation

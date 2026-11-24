@@ -7,6 +7,7 @@ use App\Actions\Orders\OrderLineData;
 use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductKey;
@@ -32,10 +33,11 @@ it('sells the keys and completes an order with nothing to ship', function () {
 
 it('leaves a mixed order paid until it ships', function () {
     $box = Product::factory()->physical()->published()->create(['stock' => 2]);
-    $order = app(PlaceOrder::class)->handle(User::factory()->create(), [
+    $customer = User::factory()->create();
+    $order = app(PlaceOrder::class)->handle($customer, [
         new OrderLineData($this->digital->id, 1),
         new OrderLineData($box->id, 1),
-    ]);
+    ], CustomerAddress::factory()->for($customer)->create());
 
     app(MarkOrderPaid::class)->handle($order);
 

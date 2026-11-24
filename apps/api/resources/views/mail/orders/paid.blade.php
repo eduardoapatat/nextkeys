@@ -21,7 +21,15 @@ Actívala en: {{ $line['activation'] }}
 @endif
 
 @endforeach
+@if ($shippingCost)
+Envío: {{ $shippingCost }}
+
+@endif
 **Total: {{ $total }} (CLP)**
+
+@if ($shippingAddress)
+**Despacho a:** {{ $shippingAddress['recipient'] }}, {{ $shippingAddress['line'] }}.
+@endif
 
 <x-mail::button :url="$libraryUrl">
 Ver en Mi biblioteca

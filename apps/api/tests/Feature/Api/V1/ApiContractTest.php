@@ -2,6 +2,7 @@
 
 use App\Actions\Orders\MarkOrderPaid;
 use App\Enums\PaymentAttemptStatus;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -123,11 +124,16 @@ it('answers the order endpoints with the shape of their contract fixtures', func
         'url' => 'https://webpay3gint.transbank.cl/webpayserver/initTransaction',
     ])]);
     $this->withHeaders(fromStorefront());
-    $this->actingAs(User::factory()->create(), 'customer');
+    $customer = User::factory()->create();
+    $address = CustomerAddress::factory()->for($customer)->create();
+    $this->actingAs($customer, 'customer');
 
     expectContract('orders.store.422', $this->postJson('/api/v1/orders', ['items' => [['slug' => 'does-not-exist', 'quantity' => 1]]])->assertUnprocessable());
 
-    $created = $this->postJson('/api/v1/orders', ['items' => [['slug' => 'hades-steam-macos-windows-global', 'quantity' => 1]]])->assertCreated();
+    $created = $this->postJson('/api/v1/orders', [
+        'items' => [['slug' => 'hades-steam-macos-windows-global', 'quantity' => 1], ['slug' => 'hades-physical-ps5-north-america', 'quantity' => 1]],
+        'shipping_address' => $address->public_id,
+    ])->assertCreated();
     expectContract('orders.store', $created);
     $reference = $created->json('data.reference');
 

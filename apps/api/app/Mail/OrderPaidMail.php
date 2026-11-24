@@ -48,6 +48,7 @@ final class OrderPaidMail extends Mailable
             'items.product.platforms',
             'items.product.region',
             'paymentAttempts' => fn ($query) => $query->where('status', PaymentAttemptStatus::Authorized),
+            'shipment',
         ]);
 
         $attempt = $this->order->paymentAttempts->first();
@@ -58,6 +59,11 @@ final class OrderPaidMail extends Mailable
                 'reference' => $this->order->reference,
                 'paidAt' => $this->formatDate($this->order->paid_at),
                 'total' => $this->formatMoney($this->order->total),
+                'shippingCost' => $this->order->shipment === null ? null : $this->formatMoney($this->order->shipping_cost),
+                'shippingAddress' => $this->order->shipment === null ? null : [
+                    'recipient' => $this->order->shipment->recipient_name,
+                    'line' => $this->order->shipment->addressLine(),
+                ],
                 'lines' => $this->order->items->map(fn (OrderItem $item): array => [
                     'title' => $item->title_name,
                     'type' => $item->product_type->label(),

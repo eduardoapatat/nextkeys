@@ -3,9 +3,12 @@
 namespace App\Actions\Orders;
 
 use App\Enums\OrderStatus;
+use App\Enums\ProductType;
 use App\Enums\UserRole;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Shipment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -21,21 +24,29 @@ final class PlaceOrder
 
     /**
      * Creates a pending order and holds its stock until `expires_at`. Either
-     * every line is reserved or nothing is written.
+     * every line is reserved or nothing is written. An order with physical
+     * lines ships to a copy of `$shippingAddress` and charges the flat fee
+     * (docs/domain/shipping.md).
      *
      * @param  list<OrderLineData>  $lines
      *
      * @throws ValidationException
      */
-    public function handle(User $customer, array $lines): Order
+    public function handle(User $customer, array $lines, ?CustomerAddress $shippingAddress = null): Order
     {
         $products = $this->validate($customer, $lines);
+        $this->validateShippingAddress($customer, $products, $shippingAddress);
+        $shippingCost = $shippingAddress === null ? 0 : Config::integer('orders.shipping_cost');
 
         try {
-            return DB::transaction(function () use ($customer, $lines, $products): Order {
+            return DB::transaction(function () use ($customer, $lines, $products, $shippingAddress, $shippingCost): Order {
                 $this->ensureNoPendingOrder($customer);
 
-                $order = $this->createOrder($customer, $lines, $products);
+                $order = $this->createOrder($customer, $lines, $products, $shippingCost);
+
+                if ($shippingAddress !== null) {
+                    $order->shipment()->create(Shipment::attributesFrom($shippingAddress));
+                }
 
                 $order->items()->createMany(array_map(function (OrderLineData $line) use ($products): array {
                     $product = $products->findOrFail($line->productId);
@@ -111,6 +122,30 @@ final class PlaceOrder
     }
 
     /**
+     * An order with physical lines needs one of the customer's addresses; an
+     * order without them takes none.
+     *
+     * @param  Collection<int, Product>  $products
+     *
+     * @throws ValidationException
+     */
+    private function validateShippingAddress(User $customer, Collection $products, ?CustomerAddress $shippingAddress): void
+    {
+        $ships = $products->contains(fn (Product $product): bool => $product->type === ProductType::Physical);
+
+        $error = match (true) {
+            $ships && $shippingAddress === null => 'Elige una dirección de despacho para los productos físicos.',
+            ! $ships && $shippingAddress !== null => 'Este pedido no tiene productos físicos que despachar.',
+            $shippingAddress !== null && $shippingAddress->user_id !== $customer->id => 'Esta dirección no existe.',
+            default => null,
+        };
+
+        if ($error !== null) {
+            throw ValidationException::withMessages(['shipping_address' => $error]);
+        }
+    }
+
+    /**
      * One pending order per customer, so nobody holds stock with several
      * checkouts (docs/domain/orders.md, "Storefront checkout"). The customer's
      * row lock serializes two checkouts of the same customer.
@@ -138,9 +173,9 @@ final class PlaceOrder
      * @param  list<OrderLineData>  $lines
      * @param  Collection<int, Product>  $products
      */
-    private function createOrder(User $customer, array $lines, Collection $products): Order
+    private function createOrder(User $customer, array $lines, Collection $products, int $shippingCost): Order
     {
-        $total = array_sum(array_map(
+        $total = $shippingCost + array_sum(array_map(
             fn (OrderLineData $line): int => $products->findOrFail($line->productId)->price * $line->quantity,
             $lines,
         ));
@@ -152,6 +187,7 @@ final class PlaceOrder
                     'reference' => Order::generateReference(),
                     'status' => OrderStatus::Pending,
                     'total' => $total,
+                    'shipping_cost' => $shippingCost,
                     'expires_at' => now()->addMinutes(Config::integer('orders.reservation_minutes')),
                 ]));
             } catch (UniqueConstraintViolationException $exception) {

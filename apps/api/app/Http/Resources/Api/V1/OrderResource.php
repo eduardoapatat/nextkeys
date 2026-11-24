@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Config;
  * A customer's order. `last_payment` carries the receipt Transbank asks the
  * result page to show. Never keys, ids or the gateway's `buy_order`.
  *
- * Expects `items.product` and `paymentAttempts` loaded.
+ * Expects `items.product`, `paymentAttempts` and `shipment` loaded.
  *
  * @property Order $resource
  */
@@ -33,6 +33,7 @@ class OrderResource extends JsonResource
             'reference' => $order->reference,
             'status' => ['slug' => $order->status->value, 'name' => $order->status->label()],
             'total' => $order->total,
+            'shipping_cost' => $order->shipping_cost,
             'created_at' => $order->created_at?->toIso8601String(),
             'expires_at' => $order->expires_at->toIso8601String(),
             'paid_at' => $order->paid_at?->toIso8601String(),
@@ -57,6 +58,7 @@ class OrderResource extends JsonResource
                 'card_last_digits' => $lastPayment->card_last_digits,
                 'transaction_date' => $lastPayment->transaction_date?->toIso8601String(),
             ] : null,
+            'shipment' => $order->shipment === null ? null : (new ShipmentResource($order->shipment))->toArray($request),
         ];
     }
 }

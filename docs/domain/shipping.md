@@ -1,6 +1,6 @@
 # Shipping domain model
 
-Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses implemented. Orders live in [`orders.md`](orders.md).
+Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses and checkout implemented. Orders live in [`orders.md`](orders.md).
 
 ## Decisions
 
@@ -24,5 +24,6 @@ Status: **decided** (2026-11-24), implementation in progress (phase 5): customer
 - `shipments`: `order_id` (unique, cascade), the address snapshot, `status`, `carrier`, `tracking_number`, `shipped_at`, `delivered_at`.
 - **Carriers:** `Carrier` enum (Starken, Chilexpress, Blue Express, Correos de Chile), each with its tracking URL template.
 - **Database rules:** CHECKs tie `carrier`, `tracking_number` and `shipped_at` to `shipped`/`delivered` and `delivered_at` to `delivered`; a trigger allows only `pending → shipped → delivered` and `shipped` only while the order is `paid`; the order transition `paid → completed` is rejected while a shipment is not delivered; a deferred constraint trigger requires a shipment for an order with physical lines and forbids one without them.
+- **Checkout:** `POST /api/v1/orders` takes `shipping_address` (an address `public_id`): required with physical lines, refused without them, and only the customer's own (422 `shipping_address`). `PlaceOrder` creates the shipment snapshot and sets `shipping_cost` in the same transaction. `OrderResource` adds `shipping_cost` and `shipment` (status, address, carrier, tracking number and URL, `shipped_at`, `delivered_at`, `returnable_until`). The payment email adds the fee and the address.
 - **Admin panel:** mark a paid order as shipped (carrier and tracking number), then as delivered.
 - **Shipping email:** queued after commit when the order ships, like the payment confirmation; the job carries only the order id and never logs the address.

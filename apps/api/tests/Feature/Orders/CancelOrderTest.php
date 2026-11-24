@@ -5,6 +5,7 @@ use App\Actions\Orders\OrderLineData;
 use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductKey;
@@ -14,10 +15,11 @@ it('cancels a pending order and releases its keys and boxes', function () {
     $digital = Product::factory()->published()->create();
     $key = ProductKey::factory()->for($digital)->create();
     $box = Product::factory()->physical()->published()->create(['stock' => 3]);
-    $order = app(PlaceOrder::class)->handle(User::factory()->create(), [
+    $customer = User::factory()->create();
+    $order = app(PlaceOrder::class)->handle($customer, [
         new OrderLineData($digital->id, 1),
         new OrderLineData($box->id, 2),
-    ]);
+    ], CustomerAddress::factory()->for($customer)->create());
 
     app(CancelOrder::class)->handle($order);
 

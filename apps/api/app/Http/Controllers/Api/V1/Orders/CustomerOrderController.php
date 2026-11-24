@@ -24,15 +24,15 @@ class CustomerOrderController extends Controller
     public function index(#[CurrentUser] User $customer): AnonymousResourceCollection
     {
         return OrderResource::collection(
-            $customer->orders()->with(['items.product', 'paymentAttempts'])->latest('id')->paginate(self::PER_PAGE),
+            $customer->orders()->with(['items.product', 'paymentAttempts', 'shipment'])->latest('id')->paginate(self::PER_PAGE),
         );
     }
 
     public function store(PlaceCustomerOrderRequest $request, #[CurrentUser] User $customer, PlaceOrder $placeOrder): JsonResponse
     {
-        $order = $placeOrder->handle($customer, $request->lines());
+        $order = $placeOrder->handle($customer, $request->lines(), $request->shippingAddress($customer));
 
-        return (new OrderResource($order->load(['items.product', 'paymentAttempts'])))->response()->setStatusCode(201);
+        return (new OrderResource($order->load(['items.product', 'paymentAttempts', 'shipment'])))->response()->setStatusCode(201);
     }
 
     public function show(#[CurrentUser] User $customer, string $reference): OrderResource
@@ -46,7 +46,7 @@ class CustomerOrderController extends Controller
 
         $cancelOrder->handle($order);
 
-        return new OrderResource($order->refresh()->load(['items.product', 'paymentAttempts']));
+        return new OrderResource($order->refresh()->load(['items.product', 'paymentAttempts', 'shipment']));
     }
 
     /**
@@ -55,7 +55,7 @@ class CustomerOrderController extends Controller
     public static function find(User $customer, string $reference): Order
     {
         return $customer->orders()
-            ->with(['items.product', 'paymentAttempts'])
+            ->with(['items.product', 'paymentAttempts', 'shipment'])
             ->where('reference', $reference)
             ->firstOrFail();
     }

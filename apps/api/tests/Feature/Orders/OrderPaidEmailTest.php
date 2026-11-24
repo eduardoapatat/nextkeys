@@ -6,6 +6,7 @@ use App\Actions\Orders\PlaceOrder;
 use App\Jobs\OrderPaidEmailFailed;
 use App\Jobs\SendOrderPaidEmail;
 use App\Mail\OrderPaidMail;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\PaymentAttempt;
 use App\Models\Product;
@@ -111,16 +112,26 @@ it('lists the physical lines of a mixed order as waiting to ship', function () {
     Mail::fake();
     ProductKey::factory()->for($this->digital)->create(['code' => 'SECRET-00002-EFGH']);
     $box = Product::factory()->physical()->published()->create(['stock' => 2]);
-    $order = app(PlaceOrder::class)->handle(User::factory()->create(), [
+    $customer = User::factory()->create();
+    $order = app(PlaceOrder::class)->handle($customer, [
         new OrderLineData($this->digital->id, 1),
         new OrderLineData($box->id, 1),
-    ]);
+    ], CustomerAddress::factory()->for($customer)->create([
+        'recipient_name' => 'Ana Pérez',
+        'region' => 'RM',
+        'commune' => 'Ñuñoa',
+        'street' => 'Av. Irarrázaval',
+        'street_number' => '1234',
+        'apartment' => 'Depto 501',
+    ]));
 
     app(MarkOrderPaid::class)->handle($order);
 
     expect(($this->sentMail)()->render())
         ->toContain('SECRET-00002-EFGH')
         ->toContain('Se despachará')
+        ->toContain('Envío: $3.990')
+        ->toContain('Despacho a:</strong> Ana Pérez, Av. Irarrázaval 1234, Depto 501, Ñuñoa, Metropolitana de Santiago')
         ->toContain('10 días de derecho a retracto');
 });
 

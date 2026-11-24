@@ -1,17 +1,18 @@
 {
     "data": [
         {
-            "reference": "NK-27J53J",
+            "reference": "NK-7F7T8K",
             "status": {
-                "slug": "completed",
-                "name": "Completado"
+                "slug": "paid",
+                "name": "Pagado"
             },
-            "total": 19990,
-            "created_at": "2026-11-24T18:19:47+00:00",
-            "expires_at": "2026-11-24T18:34:47+00:00",
-            "paid_at": "2026-11-24T18:19:47+00:00",
+            "total": 58970,
+            "shipping_cost": 3990,
+            "created_at": "2026-11-24T18:52:10+00:00",
+            "expires_at": "2026-11-24T19:07:10+00:00",
+            "paid_at": "2026-11-24T18:52:10+00:00",
             "can_pay": false,
-            "has_physical_items": false,
+            "has_physical_items": true,
             "items": [
                 {
                     "product_slug": "hades-steam-macos-windows-global",
@@ -23,6 +24,17 @@
                     "quantity": 1,
                     "unit_price": 19990,
                     "line_total": 19990
+                },
+                {
+                    "product_slug": "hades-physical-ps5-north-america",
+                    "title_name": "Hades",
+                    "type": {
+                        "slug": "physical",
+                        "name": "Físico"
+                    },
+                    "quantity": 1,
+                    "unit_price": 34990,
+                    "line_total": 34990
                 }
             ],
             "last_payment": {
@@ -30,13 +42,37 @@
                     "slug": "authorized",
                     "name": "Autorizado"
                 },
-                "amount": 19990,
+                "amount": 58970,
                 "authorization_code": "1213",
                 "payment_type": "Crédito",
                 "installments_number": 0,
                 "installments_amount": null,
                 "card_last_digits": "6623",
-                "transaction_date": "2026-11-24T18:19:47+00:00"
+                "transaction_date": "2026-11-24T18:52:10+00:00"
+            },
+            "shipment": {
+                "status": {
+                    "slug": "pending",
+                    "name": "Por despachar"
+                },
+                "address": {
+                    "recipient_name": "Eric Ayala",
+                    "phone": "+56989481257",
+                    "region": {
+                        "code": "RM",
+                        "name": "Metropolitana de Santiago"
+                    },
+                    "commune": "Conchalí",
+                    "street": "Avinguda Saúl",
+                    "street_number": "2824",
+                    "apartment": null
+                },
+                "carrier": null,
+                "tracking_number": null,
+                "tracking_url": null,
+                "shipped_at": null,
+                "delivered_at": null,
+                "returnable_until": null
             }
         }
     ],

@@ -6,12 +6,16 @@ use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
 use App\Enums\ProductType;
+use App\Enums\ShipmentStatus;
+use App\Models\CustomerAddress;
 use App\Models\Product;
 use App\Models\ProductKey;
 use App\Models\User;
 
 beforeEach(function () {
+    config(['orders.shipping_cost' => 3990]);
     $this->customer = User::factory()->create();
+    $this->address = CustomerAddress::factory()->for($this->customer)->create();
 });
 
 it('places a pending order that reserves keys and holds boxes', function () {
@@ -23,12 +27,13 @@ it('places a pending order that reserves keys and holds boxes', function () {
     $order = app(PlaceOrder::class)->handle($this->customer, [
         new OrderLineData($digital->id, 2),
         new OrderLineData($box->id, 1),
-    ]);
+    ], $this->address);
 
     expect($order->status)->toBe(OrderStatus::Pending)
         ->and($order->user_id)->toBe($this->customer->id)
         ->and($order->reference)->toMatch('/^NK-[0-9A-HJKMNP-TV-Z]{6}$/')
-        ->and($order->total)->toBe(19990 * 2 + 49990)
+        ->and($order->shipping_cost)->toBe(3990)
+        ->and($order->total)->toBe(19990 * 2 + 49990 + 3990)
         ->and($order->expires_at->equalTo(now()->addMinutes(15)))->toBeTrue()
         ->and($box->fresh()?->stock)->toBe(3);
 
@@ -60,7 +65,7 @@ it('writes nothing when one line is short of stock', function () {
     $errors = validationErrorsOf(fn () => app(PlaceOrder::class)->handle($this->customer, [
         new OrderLineData($box->id, 1),
         new OrderLineData($digital->id, 2),
-    ]));
+    ], $this->address));
 
     expect($errors)->toBe(['items.1.quantity' => ["No hay stock suficiente de {$digital->title->name}."]])
         ->and($box->fresh()?->stock)->toBe(1)
@@ -72,7 +77,7 @@ it('writes nothing when one line is short of stock', function () {
 it('rejects physical stock that is short', function () {
     $box = Product::factory()->physical()->published()->create(['stock' => 1]);
 
-    $errors = validationErrorsOf(fn () => app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($box->id, 2)]));
+    $errors = validationErrorsOf(fn () => app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($box->id, 2)], $this->address));
 
     expect($errors)->toHaveKey('items.0.quantity')
         ->and($box->fresh()?->stock)->toBe(1);
@@ -144,3 +149,58 @@ it('lets a customer order again once the pending order expired', function () {
 
     expect($order->status)->toBe(OrderStatus::Pending);
 });
+
+it('ships an order with physical lines to a copy of the chosen address', function () {
+    $box = Product::factory()->physical()->published()->create(['stock' => 2]);
+
+    $order = app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($box->id, 1)], $this->address);
+    $street = $this->address->street;
+    $this->address->update(['street' => 'Otra calle']);
+    $this->address->delete();
+
+    $shipment = $order->shipment()->sole();
+    expect($shipment->status)->toBe(ShipmentStatus::Pending)
+        ->and($shipment->street)->toBe($street)
+        ->and($shipment->commune)->toBe($this->address->commune)
+        ->and($shipment->phone)->toBe($this->address->phone)
+        ->and($shipment->carrier)->toBeNull();
+});
+
+it('charges no shipping and creates no shipment for a digital order', function () {
+    $digital = Product::factory()->published()->create(['price' => 19990]);
+    ProductKey::factory()->for($digital)->create();
+
+    $order = app(PlaceOrder::class)->handle($this->customer, [new OrderLineData($digital->id, 1)]);
+
+    expect($order->shipping_cost)->toBe(0)
+        ->and($order->total)->toBe(19990)
+        ->and($order->shipment()->exists())->toBeFalse();
+});
+
+it('asks for a shipping address only when the order has physical lines', function (Closure $lines, Closure $address, string $message) {
+    $errors = validationErrorsOf(fn () => app(PlaceOrder::class)->handle($this->customer, $lines(), $address()));
+
+    expect($errors)->toBe(['shipping_address' => [$message]]);
+    $this->assertDatabaseCount('orders', 0);
+})->with([
+    'physical without address' => [
+        fn (): array => [new OrderLineData(Product::factory()->physical()->published()->create(['stock' => 1])->id, 1)],
+        fn (): null => null,
+        'Elige una dirección de despacho para los productos físicos.',
+    ],
+    'digital with address' => [
+        function (): array {
+            $digital = Product::factory()->published()->create();
+            ProductKey::factory()->for($digital)->create();
+
+            return [new OrderLineData($digital->id, 1)];
+        },
+        fn (): CustomerAddress => test()->address,
+        'Este pedido no tiene productos físicos que despachar.',
+    ],
+    'another customer\'s address' => [
+        fn (): array => [new OrderLineData(Product::factory()->physical()->published()->create(['stock' => 1])->id, 1)],
+        fn (): CustomerAddress => CustomerAddress::factory()->create(),
+        'Esta dirección no existe.',
+    ],
+]);

@@ -3,6 +3,7 @@
 use App\Actions\Orders\MarkOrderPaid;
 use App\Actions\Orders\OrderLineData;
 use App\Actions\Orders\PlaceOrder;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductKey;
@@ -20,10 +21,11 @@ beforeEach(function () {
     ProductKey::factory()->for($this->digital)->create(['code' => 'SECRET-00004-MNOP']);
     $this->box = Product::factory()->physical()->published()->create(['stock' => 3]);
     $this->placePaidOrder = function (?User $customer = null): Order {
-        $order = app(PlaceOrder::class)->handle($customer ?? $this->customer, [
+        $customer ??= $this->customer;
+        $order = app(PlaceOrder::class)->handle($customer, [
             new OrderLineData($this->digital->id, 2),
             new OrderLineData($this->box->id, 1),
-        ]);
+        ], CustomerAddress::factory()->for($customer)->create());
         app(MarkOrderPaid::class)->handle($order);
 
         return $order->refresh();

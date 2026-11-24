@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,7 +21,8 @@ use Illuminate\Support\Carbon;
  * @property int $user_id
  * @property string $reference Public identifier, never the id.
  * @property OrderStatus $status
- * @property int $total
+ * @property int $total Lines plus `shipping_cost`.
+ * @property int $shipping_cost Flat fee in CLP when the order ships, 0 otherwise.
  * @property Carbon $expires_at End of the stock reservation while pending.
  * @property Carbon|null $paid_at
  * @property Carbon|null $completed_at
@@ -32,8 +34,9 @@ use Illuminate\Support\Carbon;
  * @property-read User $user
  * @property-read Collection<int, OrderItem> $items
  * @property-read Collection<int, PaymentAttempt> $paymentAttempts
+ * @property-read Shipment|null $shipment
  */
-#[Fillable(['user_id', 'reference', 'status', 'total', 'expires_at', 'paid_at', 'completed_at', 'cancelled_at'])]
+#[Fillable(['user_id', 'reference', 'status', 'total', 'shipping_cost', 'expires_at', 'paid_at', 'completed_at', 'cancelled_at'])]
 class Order extends Model
 {
     /** @use HasFactory<OrderFactory> */
@@ -102,6 +105,7 @@ class Order extends Model
         return [
             'status' => OrderStatus::class,
             'total' => 'integer',
+            'shipping_cost' => 'integer',
             'expires_at' => 'datetime',
             'paid_at' => 'datetime',
             'completed_at' => 'datetime',
@@ -109,5 +113,15 @@ class Order extends Model
             'paid_email_sent_at' => 'datetime',
             'paid_email_resends' => 'integer',
         ];
+    }
+
+    /**
+     * The parcel of an order with physical lines (docs/domain/shipping.md).
+     *
+     * @return HasOne<Shipment, $this>
+     */
+    public function shipment(): HasOne
+    {
+        return $this->hasOne(Shipment::class);
     }
 }

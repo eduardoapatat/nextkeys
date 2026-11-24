@@ -3,6 +3,7 @@
 use App\Enums\OrderStatus;
 use App\Enums\PaymentAttemptStatus;
 use App\Enums\PaymentOrigin;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductKey;
@@ -69,6 +70,55 @@ it('validates the items', function () {
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['items.0.quantity' => 'La cantidad debe estar entre 1 y 5.']);
 });
+
+it('ships a physical product to one of the customer\'s addresses and charges the fee', function () {
+    config(['orders.shipping_cost' => 3990]);
+    $box = Product::factory()->physical()->published()->create(['price' => 49990, 'stock' => 2]);
+    $address = CustomerAddress::factory()->for($this->customer)->create(['commune' => 'Ñuñoa', 'phone' => '+56912345678']);
+
+    $this->actingAs($this->customer, 'customer')
+        ->postJson(route('api.v1.orders.store'), [
+            'items' => [['slug' => $box->slug, 'quantity' => 1]],
+            'shipping_address' => $address->public_id,
+        ])
+        ->assertCreated()
+        ->assertJsonPath('data.shipping_cost', 3990)
+        ->assertJsonPath('data.total', 49990 + 3990)
+        ->assertJsonPath('data.shipment.status', ['slug' => 'pending', 'name' => 'Por despachar'])
+        ->assertJsonPath('data.shipment.address.commune', 'Ñuñoa')
+        ->assertJsonPath('data.shipment.address.phone', '+56912345678')
+        ->assertJsonPath('data.shipment.carrier', null)
+        ->assertJsonPath('data.shipment.tracking_url', null)
+        ->assertJsonPath('data.shipment.returnable_until', null)
+        ->assertJsonMissingPath('data.shipment.id')
+        ->assertJsonMissingPath('data.shipment.address.public_id');
+});
+
+it('answers a digital order with no shipment', function () {
+    $this->actingAs($this->customer, 'customer')
+        ->postJson(route('api.v1.orders.store'), ['items' => [['slug' => $this->product->slug, 'quantity' => 1]]])
+        ->assertCreated()
+        ->assertJsonPath('data.shipping_cost', 0)
+        ->assertJsonPath('data.shipment', null);
+});
+
+it('validates the shipping address', function (Closure $address, string $message) {
+    $box = Product::factory()->physical()->published()->create(['stock' => 2]);
+
+    $this->actingAs($this->customer, 'customer')
+        ->postJson(route('api.v1.orders.store'), array_filter([
+            'items' => [['slug' => $box->slug, 'quantity' => 1]],
+            'shipping_address' => $address(),
+        ]))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['shipping_address' => $message]);
+
+    expect(Order::query()->count())->toBe(0);
+})->with([
+    'missing' => [fn (): null => null, 'Elige una dirección de despacho para los productos físicos.'],
+    'unknown' => [fn (): string => '01JDZZZZZZZZZZZZZZZZZZZZZZ', 'Esta dirección no existe.'],
+    'another customer\'s' => [fn (): string => CustomerAddress::factory()->create()->public_id, 'Esta dirección no existe.'],
+]);
 
 it('refuses a second pending order', function () {
     $this->actingAs($this->customer, 'customer');

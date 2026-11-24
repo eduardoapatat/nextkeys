@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\Orders;
 
 use App\Actions\Orders\OrderLineData;
+use App\Models\CustomerAddress;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -43,6 +44,7 @@ class PlaceCustomerOrderRequest extends FormRequest
             'items' => ['required', 'array', 'max:10'],
             'items.*.slug' => ['required', 'string'],
             'items.*.quantity' => ['required', 'integer'],
+            'shipping_address' => ['nullable', 'string'],
         ];
     }
 
@@ -80,5 +82,21 @@ class PlaceCustomerOrderRequest extends FormRequest
             fn (array $item): OrderLineData => new OrderLineData($productIds[$item['slug']], (int) $item['quantity']),
             $items,
         );
+    }
+
+    /**
+     * The customer's saved address by its `public_id`, or null when none was
+     * sent. `PlaceOrder` decides whether the order needs one.
+     *
+     * @throws ValidationException when it is not one of the customer's addresses
+     */
+    public function shippingAddress(User $customer): ?CustomerAddress
+    {
+        if (! $this->filled('shipping_address')) {
+            return null;
+        }
+
+        return $customer->addresses()->where('public_id', $this->string('shipping_address')->toString())->first()
+            ?? throw ValidationException::withMessages(['shipping_address' => 'Esta dirección no existe.']);
     }
 }
