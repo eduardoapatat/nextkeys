@@ -32,4 +32,5 @@ Status: **decided** (2026-11-24), implementation in progress (phase 5): customer
 ## Storefront
 
 - **`/cuenta/direcciones`** (linked from `/cuenta`): lists the saved addresses, adds, edits and deletes them (deleting asks for a second click). The commune select lists only the chosen region's communes (from `GET /api/v1/shipping`) and clears a commune of another region. With `?redirect=` (a path of the site, `safeRedirect`) it goes back there after saving, so the checkout can send a customer without addresses to add one.
+- **Checkout** (`/checkout`): with physical products in the cart it loads the fee and the saved addresses, adds an "Envío" line to the receipt and to the informative total, and asks to choose an address (radios, the first one preselected) or to add one; payment stays disabled without an address. `placeOrder` sends `shipping_address` only for carts with physical products.
 

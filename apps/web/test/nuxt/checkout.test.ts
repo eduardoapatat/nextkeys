@@ -1,11 +1,13 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+    AddressListSchema,
     CustomerSchema,
     OrderPageSchema,
     OrderSchema,
     PaymentRedirectSchema,
     ProductDetailSchema,
+    ShippingSchema,
 } from '../../app/api/schemas';
 import CheckoutPage from '../../app/pages/checkout.vue';
 import { fixture } from '../fixtures';
@@ -17,6 +19,15 @@ const placed = fixture('orders.store', OrderSchema);
 const noOrders = { ...fixture('orders.index', OrderPageSchema), data: [] };
 const payment = fixture('payments.store', PaymentRedirectSchema);
 const slug = product.data.slug;
+const box = {
+    data: {
+        ...product.data,
+        slug: 'hades-physical-ps5',
+        type: { slug: 'physical' as const, name: 'Físico' },
+    },
+};
+const addresses = fixture('addresses.index', AddressListSchema);
+const shipping = fixture('shipping.show', ShippingSchema);
 
 describe('checkout', () => {
     beforeEach(() => {
@@ -89,5 +100,73 @@ describe('checkout', () => {
             (form.elements.namedItem('token_ws') as HTMLInputElement).value,
         ).toBe(payment.data.token);
         expect(useCart().lines.value).toEqual([]);
+    });
+
+    describe('with physical products', () => {
+        beforeEach(() => {
+            useCart().clear();
+            serveApi(`/products/${box.data.slug}`, box);
+            useCart().add(box.data.slug, 1);
+            serveApi('/orders', noOrders);
+            serveApi('/shipping', shipping);
+            useCustomer().value = { ...customer, email_verified: true };
+        });
+
+        it('adds the shipping fee and ships to the chosen address', async () => {
+            serveApi('/account/addresses', addresses);
+            serveCsrfCookie();
+            const orders = servePost('/orders', placed, 201);
+            servePost(
+                `/orders/${placed.data.reference}/payments`,
+                payment,
+                201,
+            );
+            vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(
+                () => {},
+            );
+
+            const page = await mountSuspended(CheckoutPage, {
+                route: '/checkout',
+            });
+            await vi.waitUntil(() => page.text().includes('Despacho'));
+
+            const summary = page.find('[aria-labelledby="total-heading"]');
+            expect(summary.text()).toContain('Envío');
+            expect(summary.text()).toContain(formatClp(shipping.data.cost));
+            expect(summary.text()).toContain(
+                formatClp(box.data.price + shipping.data.cost),
+            );
+            const radio = page.find('input[name="shipping_address"]');
+            expect((radio.element as HTMLInputElement).checked).toBe(true);
+            expect(page.text()).toContain(addresses.data[0]!.commune);
+
+            await page.find('form[aria-label="Pagar"]').trigger('submit');
+            await vi.waitUntil(() => orders.length === 1);
+
+            expect(orders).toEqual([
+                {
+                    items: [{ slug: box.data.slug, quantity: 1 }],
+                    shipping_address: addresses.data[0]!.public_id,
+                },
+            ]);
+        });
+
+        it('asks for an address before paying', async () => {
+            serveApi('/account/addresses', { data: [] });
+
+            const page = await mountSuspended(CheckoutPage, {
+                route: '/checkout',
+            });
+            await vi.waitUntil(() => page.text().includes('Despacho'));
+
+            expect(
+                page
+                    .find('a[href="/cuenta/direcciones?redirect=/checkout"]')
+                    .exists(),
+            ).toBe(true);
+            expect(
+                page.find('button[type="submit"]').attributes('disabled'),
+            ).toBeDefined();
+        });
     });
 });

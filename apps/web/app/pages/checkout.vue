@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { resendVerification } from '~/api/auth';
+import { fetchAddresses, fetchShipping } from '~/api/addresses';
 import { fetchOrders, placeOrder, startPayment } from '~/api/orders';
 
 definePageMeta({ middleware: 'auth' });
@@ -18,6 +19,27 @@ const pendingOrder = computed(
 );
 const hasPhysicalItems = computed(() =>
     lines.value.some((line) => line.product?.type.slug === 'physical'),
+);
+
+/** Physical products ship: the customer picks one of their addresses. */
+const { data: shipping } = await useAsyncData(
+    'checkout:shipping',
+    async () =>
+        hasPhysicalItems.value
+            ? { ...(await fetchShipping()), addresses: await fetchAddresses() }
+            : null,
+    { watch: [hasPhysicalItems] },
+);
+/** The chosen address; the first saved one until the customer picks. */
+const chosenAddress = ref<string | null>(null);
+const shippingAddress = computed({
+    get: () =>
+        chosenAddress.value ?? shipping.value?.addresses[0]?.public_id ?? null,
+    set: (publicId: string | null) => (chosenAddress.value = publicId),
+});
+const shippingCost = computed(() => shipping.value?.cost ?? 0);
+const canShip = computed(
+    () => !hasPhysicalItems.value || shippingAddress.value !== null,
 );
 
 const errors = ref<string[]>([]);
@@ -43,6 +65,7 @@ async function pay() {
     try {
         const order = await placeOrder(
             cart.lines.value.map(({ slug, quantity }) => ({ slug, quantity })),
+            hasPhysicalItems.value ? shippingAddress.value : null,
         );
         reference = order.reference;
         cart.clear();
@@ -127,6 +150,13 @@ async function pay() {
                 aria-labelledby="total-heading"
                 class="flex flex-col gap-3 border-t border-dashed border-paper-line pt-4"
             >
+                <p
+                    v-if="hasPhysicalItems && shipping"
+                    class="flex items-baseline justify-between"
+                >
+                    <span>Envío</span>
+                    <span class="tabular">{{ formatClp(shippingCost) }}</span>
+                </p>
                 <p class="flex items-baseline justify-between">
                     <span
                         id="total-heading"
@@ -136,7 +166,7 @@ async function pay() {
                         >Total</span
                     >
                     <strong class="tabular text-base">{{
-                        formatClp(total)
+                        formatClp(total + shippingCost)
                     }}</strong>
                 </p>
                 <WithdrawalNotice
@@ -182,13 +212,67 @@ async function pay() {
                     </NuxtLink>
                     . Págalo o cancélalo antes de hacer otro.
                 </p>
-                <form v-else aria-label="Pagar" @submit.prevent="pay">
+                <form
+                    v-else
+                    aria-label="Pagar"
+                    class="flex flex-col gap-4"
+                    @submit.prevent="pay"
+                >
+                    <fieldset
+                        v-if="hasPhysicalItems"
+                        class="flex flex-col gap-2 text-paper-ink"
+                    >
+                        <legend class="mb-2 text-2xl uppercase">
+                            Despacho
+                        </legend>
+                        <template v-if="shipping?.addresses.length">
+                            <label
+                                v-for="address in shipping.addresses"
+                                :key="address.public_id"
+                                class="flex cursor-pointer items-start gap-3 rounded-control border border-paper-line p-3 has-checked:border-brand"
+                            >
+                                <input
+                                    v-model="shippingAddress"
+                                    type="radio"
+                                    name="shipping_address"
+                                    :value="address.public_id"
+                                    class="mt-1 accent-brand"
+                                />
+                                <span>
+                                    <strong class="block">{{
+                                        address.recipient_name
+                                    }}</strong>
+                                    {{ address.street }}
+                                    {{ address.street_number
+                                    }}<template v-if="address.apartment"
+                                        >, {{ address.apartment }}</template
+                                    >, {{ address.commune }},
+                                    {{ address.region.name }}
+                                </span>
+                            </label>
+                            <NuxtLink
+                                to="/cuenta/direcciones?redirect=/checkout"
+                                class="self-start text-sm underline"
+                                >Agregar otra dirección</NuxtLink
+                            >
+                        </template>
+                        <p v-else>
+                            Los productos físicos necesitan una dirección de
+                            despacho.
+                            <NuxtLink
+                                to="/cuenta/direcciones?redirect=/checkout"
+                                class="font-semibold underline"
+                                >Agrega una dirección</NuxtLink
+                            >
+                            para pagar.
+                        </p>
+                    </fieldset>
                     <UiButton
                         type="submit"
                         variant="primary"
                         size="lg"
                         class="w-full"
-                        :disabled="pending"
+                        :disabled="pending || !canShip"
                     >
                         <UiIcon name="lock" />{{
                             pending

@@ -13,11 +13,20 @@ export async function fetchOrder(reference: string): Promise<Order> {
     return response.data;
 }
 
-/** Places the order from the cart; the API checks prices and stock. */
+/**
+ * Places the order from the cart; the API checks prices and stock. Physical
+ * products ship to `shippingAddress`, a saved address's `public_id`.
+ */
 export async function placeOrder(
     items: Array<{ slug: string; quantity: number }>,
+    shippingAddress: string | null = null,
 ): Promise<Order> {
-    const response = await post<{ data: Order }>('/orders', { items });
+    const response = await post<{ data: Order }>(
+        '/orders',
+        shippingAddress === null
+            ? { items }
+            : { items, shipping_address: shippingAddress },
+    );
 
     return response.data;
 }
