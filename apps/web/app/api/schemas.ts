@@ -160,6 +160,30 @@ const addressFields = {
     apartment: v.nullable(v.string()),
 };
 
+const AddressData = v.strictObject({
+    public_id: v.string(),
+    ...addressFields,
+});
+
+/** A shipping address saved in the customer's account. */
+export const AddressSchema = v.strictObject({ data: AddressData });
+
+export const AddressListSchema = v.strictObject({ data: v.array(AddressData) });
+
+/** The flat shipping fee and the regions with their communes. */
+export const ShippingSchema = v.strictObject({
+    data: v.strictObject({
+        cost: v.pipe(v.number(), v.integer()),
+        regions: v.array(
+            v.strictObject({
+                code: v.string(),
+                name: v.string(),
+                communes: v.array(v.string()),
+            }),
+        ),
+    }),
+});
+
 /** An order's parcel: the address copied at checkout and where it is. */
 const ShipmentData = v.strictObject({
     status: v.strictObject({
@@ -264,6 +288,8 @@ export type RevealedKey = v.InferOutput<
 >['data']['keys'][number];
 export type Order = v.InferOutput<typeof OrderSchemaData>;
 export type Shipment = v.InferOutput<typeof ShipmentData>;
+export type Address = v.InferOutput<typeof AddressData>;
+export type Shipping = v.InferOutput<typeof ShippingSchema>['data'];
 export type OrderPage = v.InferOutput<typeof OrderPageSchema>;
 export type PaymentRedirect = v.InferOutput<
     typeof PaymentRedirectSchema

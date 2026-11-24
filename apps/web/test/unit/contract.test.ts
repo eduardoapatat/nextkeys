@@ -1,6 +1,8 @@
 import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 import {
+    AddressListSchema,
+    AddressSchema,
     CatalogFiltersSchema,
     CustomerSchema,
     MessageSchema,
@@ -12,6 +14,7 @@ import {
     PaymentRedirectSchema,
     ProductDetailSchema,
     ProductPageSchema,
+    ShippingSchema,
     ValidationErrorSchema,
 } from '../../app/api/schemas';
 import { fixture } from '../fixtures';
@@ -33,6 +36,10 @@ describe('API contract fixtures', () => {
         ['payments.store', PaymentRedirectSchema],
         ['library.index', LibraryPageSchema],
         ['library.keys', LibraryKeysSchema],
+        ['addresses.index', AddressListSchema],
+        ['addresses.store', AddressSchema],
+        ['addresses.store.422', ValidationErrorSchema],
+        ['shipping.show', ShippingSchema],
     ] as const)('%s matches its schema', (name, schema) => {
         expect(() => fixture(name, schema)).not.toThrow();
     });

@@ -37,15 +37,20 @@ async function requestText(event: object): Promise<string> {
 }
 
 /**
- * Serves `body` with `status` to POST requests at `/api/v1${path}` and
+ * Serves `body` with `status` to `method` requests at `/api/v1${path}` and
  * records the JSON body of every request.
  */
-export function servePost(path: string, body: unknown, status = 200) {
+export function serveRequest(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    path: string,
+    body: unknown,
+    status = 200,
+) {
     const bodies: unknown[] = [];
 
     cleanups.push(
         registerEndpoint(`/api/v1${path}`, {
-            method: 'POST',
+            method,
             handler: async (event) => {
                 const text = await requestText(event);
                 bodies.push(text === '' ? undefined : JSON.parse(text));
@@ -62,6 +67,14 @@ export function servePost(path: string, body: unknown, status = 200) {
     );
 
     return bodies;
+}
+
+/**
+ * Serves `body` with `status` to POST requests at `/api/v1${path}` and
+ * records the JSON body of every request.
+ */
+export function servePost(path: string, body: unknown, status = 200) {
+    return serveRequest('POST', path, body, status);
 }
 
 /** The CSRF cookie route the auth calls hit before their first POST. */

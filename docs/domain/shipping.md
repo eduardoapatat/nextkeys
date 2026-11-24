@@ -1,6 +1,6 @@
 # Shipping domain model
 
-Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses, checkout, and shipping from the panel implemented. Orders live in [`orders.md`](orders.md).
+Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses, checkout and shipping from the panel implemented in the API; storefront addresses page done. Orders live in [`orders.md`](orders.md).
 
 ## Decisions
 
@@ -28,3 +28,8 @@ Status: **decided** (2026-11-24), implementation in progress (phase 5): customer
 - **Admin panel:** the order detail shows the shipment (recipient, address, courier, tracking link, dates). "Marcar como despachado" (a dialog with courier and tracking number, letters, digits and dashes) runs `ShipOrder`; "Marcar como entregado" runs `MarkOrderDelivered`, which delivers the shipment and completes the order in one transaction. Both lock the order row. The orders table has a shipping status column and filter ("Por despachar").
 - **Shipping email:** `ShipOrder` dispatches `SendOrderShippedEmail` (`ShouldQueueAfterCommit`, only the order id, same retries as the payment email) with `OrderShippedMail` (never queued): courier, tracking number and link, shipped lines, address, the 10-day withdrawal and a link to the order in the storefront. A failure is rethrown as `OrderShippedEmailFailed` without the original exception, and the job refuses the `log` mailer (`MailerGuard`, shared with the payment email): the address never reaches the logs or `failed_jobs`.
 - **Tracking URLs** are each courier's public tracking page; the store is fictitious, so they are not checked against real parcels.
+
+## Storefront
+
+- **`/cuenta/direcciones`** (linked from `/cuenta`): lists the saved addresses, adds, edits and deletes them (deleting asks for a second click). The commune select lists only the chosen region's communes (from `GET /api/v1/shipping`) and clears a commune of another region. With `?redirect=` (a path of the site, `safeRedirect`) it goes back there after saving, so the checkout can send a customer without addresses to add one.
+

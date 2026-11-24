@@ -181,7 +181,9 @@
         input[type='text'],
         input[type='email'],
         input[type='password'],
-        input:not([type])
+        input[type='tel'],
+        input:not([type]),
+        select
     ) {
         height: 2.75rem;
         width: 100%;
@@ -196,7 +198,9 @@
         input[type='text'],
         input[type='email'],
         input[type='password'],
-        input:not([type])
+        input[type='tel'],
+        input:not([type]),
+        select
     ):focus {
         border-color: var(--color-brand);
         outline: none;

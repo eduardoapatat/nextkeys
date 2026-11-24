@@ -82,6 +82,9 @@ async function signOut() {
             <UiButton to="/biblioteca" size="lg"
                 ><UiIcon name="library" />Mi biblioteca</UiButton
             >
+            <UiButton to="/cuenta/direcciones" size="lg" class="col-span-2"
+                ><UiIcon name="home" />Mis direcciones</UiButton
+            >
         </nav>
 
         <UiButton

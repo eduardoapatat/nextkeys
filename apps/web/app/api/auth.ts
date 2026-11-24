@@ -9,14 +9,35 @@ async function ensureCsrfCookie(): Promise<void> {
     }
 }
 
-export async function post<T>(
+/** A request that changes data: it carries the CSRF cookie first. */
+async function send<T>(
+    method: 'POST' | 'PUT' | 'DELETE',
     path: string,
     body?: Record<string, unknown>,
     query?: Record<string, string>,
 ): Promise<T> {
     await ensureCsrfCookie();
 
-    return useNuxtApp().$api<T>(path, { method: 'POST', body, query });
+    return useNuxtApp().$api<T>(path, { method, body, query });
+}
+
+export function post<T>(
+    path: string,
+    body?: Record<string, unknown>,
+    query?: Record<string, string>,
+): Promise<T> {
+    return send<T>('POST', path, body, query);
+}
+
+export function put<T>(
+    path: string,
+    body: Record<string, unknown>,
+): Promise<T> {
+    return send<T>('PUT', path, body);
+}
+
+export async function del(path: string): Promise<void> {
+    await send<unknown>('DELETE', path);
 }
 
 /** The signed in customer, or `null` without a session (401). */
