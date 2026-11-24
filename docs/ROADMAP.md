@@ -6,7 +6,7 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 5. Physical products (phase 4 closed, including the storefront's visual design).
-- **Next task:** phase 5 (addresses, shipments and shipping status).
+- **Next task:** phase 5, shipping address and fee at checkout (customer addresses done). See [`docs/domain/shipping.md`](domain/shipping.md).
 
 ## Phases
 
@@ -15,7 +15,11 @@ Finished phases collapse to one line; details live in the git history.
 - [x] **2. Public catalog API:** read-only `/api/v1` (filtered listing, product detail with its variants, filter options) with API Resources ([`catalog.md` → Public catalog API (phase 2)](domain/catalog.md#public-catalog-api-phase-2)). Price range, name search and in-stock filter deferred.
 - [x] **3. Orders and payments:** orders with stock reservation and expiry ([`orders.md`](domain/orders.md)), Transbank Webpay Plus behind `PaymentGateway` with reconciliation ([`payments.md`](domain/payments.md)), and the payment confirmation email with the keys through the queue ([`orders.md` → Confirmation email and key delivery](domain/orders.md#confirmation-email-and-key-delivery)).
 - [x] **4. Nuxt storefront (`apps/web`):** with its visual design ([`storefront.md` → Visual design](domain/storefront.md#visual-design), `apps/web/DESIGN.md`): catalog and product page, cart in a cookie, customer auth with Sanctum ([`users.md`](domain/users.md#customer-authentication-phase-4)), checkout with Webpay and one pending order per customer ([`orders.md` → Storefront checkout](domain/orders.md#storefront-checkout-phase-4)), payment result page, and "My library" with keys revealed on request ([`orders.md` → My library](domain/orders.md#my-library-phase-4)).
-- [ ] **5. Physical products:** addresses, shipments and shipping status.
+- [ ] **5. Physical products:** addresses, shipments and shipping status ([`shipping.md`](domain/shipping.md)): home delivery only, flat fee, `completed` on delivery.
+  - [x] Customer addresses (API).
+  - [ ] Shipping address and fee at checkout (API).
+  - [ ] Ship and deliver from the panel, shipping email.
+  - [ ] Storefront: addresses, checkout, shipment tracking.
 - [ ] **6. Extras:** Meilisearch search, wishlist, reviews, coupons and sales dashboard, and an activation guide page (one section per activation service or kind of product; the home FAQ's "¿Cómo activo mi clave?" will link to it).
 - [ ] **7. Launch:** deployment, public demo and portfolio README (screenshots, GIF, diagram).
 

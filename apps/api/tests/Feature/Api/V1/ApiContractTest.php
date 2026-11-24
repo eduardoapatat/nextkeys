@@ -104,6 +104,7 @@ it('answers with the shape of its contract fixture', function (string $fixture, 
     'products.show' => ['products.show', '/api/v1/products/hades-steam-macos-windows-global', 200],
     'products.show.404' => ['products.show.404', '/api/v1/products/does-not-exist', 404],
     'catalog.filters' => ['catalog.filters', '/api/v1/catalog/filters', 200],
+    'shipping.show' => ['shipping.show', '/api/v1/shipping', 200],
 ]);
 
 it('answers the auth endpoints with the shape of their contract fixtures', function () {
@@ -150,4 +151,22 @@ it('answers the order endpoints with the shape of their contract fixtures', func
     expectContract('orders.index', $this->getJson('/api/v1/orders')->assertOk());
     expectContract('library.index', $this->getJson('/api/v1/library')->assertOk());
     expectContract('library.keys', $this->postJson("/api/v1/library/{$reference}/hades-steam-macos-windows-global/keys")->assertOk());
+});
+
+it('answers the address endpoints with the shape of their contract fixtures', function () {
+    $this->withHeaders(fromStorefront());
+    $this->actingAs(User::factory()->create(), 'customer');
+    $address = [
+        'recipient_name' => 'Ana Pérez',
+        'phone' => '+56 9 1234 5678',
+        'region' => 'RM',
+        'commune' => 'Ñuñoa',
+        'street' => 'Av. Irarrázaval',
+        'street_number' => '1234',
+        'apartment' => 'Depto 501',
+    ];
+
+    expectContract('addresses.store.422', $this->postJson('/api/v1/account/addresses', [...$address, 'commune' => 'Viña del Mar'])->assertUnprocessable());
+    expectContract('addresses.store', $this->postJson('/api/v1/account/addresses', $address)->assertCreated());
+    expectContract('addresses.index', $this->getJson('/api/v1/account/addresses')->assertOk());
 });

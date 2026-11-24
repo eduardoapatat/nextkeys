@@ -11,6 +11,7 @@ const PUBLIC_API_ROUTES = [
     'api.v1.products.index',
     'api.v1.products.show',
     'api.v1.catalog.filters',
+    'api.v1.shipping.show',
     'api.v1.auth.register',
     'api.v1.auth.login',
     'api.v1.auth.verification.verify',

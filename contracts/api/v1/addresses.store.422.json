@@ -1,0 +1,8 @@
+{
+    "message": "Elige una comuna de la región seleccionada.",
+    "errors": {
+        "commune": [
+            "Elige una comuna de la región seleccionada."
+        ]
+    }
+}

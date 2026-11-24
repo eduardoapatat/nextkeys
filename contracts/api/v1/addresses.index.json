@@ -1,0 +1,17 @@
+{
+    "data": [
+        {
+            "public_id": "01m87e13kwtzd2hmndwwmbvbvq",
+            "recipient_name": "Ana Pérez",
+            "phone": "+56912345678",
+            "region": {
+                "code": "RM",
+                "name": "Metropolitana de Santiago"
+            },
+            "commune": "Ñuñoa",
+            "street": "Av. Irarrázaval",
+            "street_number": "1234",
+            "apartment": "Depto 501"
+        }
+    ]
+}

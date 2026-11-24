@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Account\AddressController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\RegistrationController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Api\V1\Library\LibraryController;
 use App\Http\Controllers\Api\V1\Orders\CustomerOrderController;
 use App\Http\Controllers\Api\V1\Orders\CustomerPaymentController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\ShippingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +25,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/{slug}', [ProductController::class, 'show'])->name('products.show');
     Route::get('catalog/filters', CatalogFilterController::class)->name('catalog.filters');
+    Route::get('shipping', ShippingController::class)->name('shipping.show');
 
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::post('register', RegistrationController::class)->middleware('throttle:customer-register')->name('register');
@@ -54,5 +57,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::middleware('auth:sanctum')->prefix('library')->name('library.')->group(function () {
         Route::get('/', [LibraryController::class, 'index'])->name('index');
         Route::post('{reference}/{slug}/keys', [LibraryController::class, 'reveal'])->middleware('throttle:30,1')->name('keys');
+    });
+
+    Route::middleware('auth:sanctum')->prefix('account/addresses')->name('account.addresses.')->group(function () {
+        Route::get('/', [AddressController::class, 'index'])->name('index');
+        Route::post('/', [AddressController::class, 'store'])->middleware('throttle:20,1')->name('store');
+        Route::put('{publicId}', [AddressController::class, 'update'])->middleware('throttle:20,1')->name('update');
+        Route::delete('{publicId}', [AddressController::class, 'destroy'])->name('destroy');
     });
 });

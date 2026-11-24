@@ -33,6 +33,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Order> $orders
+ * @property-read Collection<int, CustomerAddress> $addresses
  */
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -103,5 +104,15 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Shipping addresses saved in this customer's account.
+     *
+     * @return HasMany<CustomerAddress, $this>
+     */
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(CustomerAddress::class);
     }
 }

@@ -35,4 +35,10 @@ return [
     */
     'max_paid_email_resends' => 3,
 
+    /*
+    | Flat shipping fee in CLP, added to the total of an order with physical
+    | lines when it is placed (docs/domain/shipping.md).
+    */
+    'shipping_cost' => 3990,
+
 ];
