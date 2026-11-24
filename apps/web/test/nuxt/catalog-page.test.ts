@@ -116,4 +116,46 @@ describe('catalog listing', () => {
         );
         expect(page.text()).toContain('Página 2 de 3');
     });
+
+    it('asks for the filter options with the chosen facets, without sort or page', async () => {
+        const queries = serveApi(
+            '/catalog/filters',
+            fixture('catalog.filters', CatalogFiltersSchema),
+        );
+        serveApi('/products', productPage);
+
+        await mountSuspended(CatalogPage, {
+            route: '/catalogo?activation_service=steam&sort=price&page=2',
+        });
+
+        expect(queries.at(-1)).toEqual({ activation_service: 'steam' });
+    });
+
+    it('offers only the options that list something, plus the checked ones', async () => {
+        const filters = fixture('catalog.filters', CatalogFiltersSchema);
+        serveApi('/catalog/filters', {
+            data: {
+                ...filters.data,
+                platforms: [
+                    { slug: 'android', name: 'Android', count: 0 },
+                    { slug: 'ps5', name: 'PS5', count: 0 },
+                    { slug: 'windows', name: 'Windows', count: 7 },
+                ],
+            },
+        });
+        serveApi('/products', productPage);
+
+        const page = await mountSuspended(CatalogPage, {
+            route: '/catalogo?platform=ps5',
+        });
+        const platforms = page
+            .findAll('input[name="platform"]')
+            .map((input) => input.attributes('value'));
+
+        expect(platforms).toEqual(['ps5', 'windows']);
+        expect(
+            page.find('input[value="windows"]').element.closest('label')
+                ?.textContent,
+        ).toContain('7');
+    });
 });

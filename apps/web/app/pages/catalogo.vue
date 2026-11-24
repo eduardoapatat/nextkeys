@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { fetchCatalogFilters, fetchProducts } from '~/api/catalog';
-import type { CatalogFilters, Reference } from '~/api/schemas';
+import type { CatalogFilters, FacetOption } from '~/api/schemas';
 
 useHead({ title: 'Catálogo' });
 
@@ -8,9 +8,28 @@ const route = useRoute();
 const listing = computed(() => parseListingQuery(route.query));
 const apiQuery = computed(() => serializeListingQuery(listing.value));
 
+// The options follow the chosen facets (not the sort or the page): each one
+// counts what it would list, and the previous ones stay while new ones load.
+const facetQuery = computed(() =>
+    serializeListingQuery({
+        ...listing.value,
+        sort: undefined,
+        page: undefined,
+    }),
+);
+
 const { data: filters, error: filtersError } = await useAsyncData(
-    'catalog-filters',
-    () => fetchCatalogFilters(),
+    () => `catalog-filters:${new URLSearchParams(facetQuery.value)}`,
+    // An unknown slug in the URL answers 422: the listing shows the API's
+    // message, and the sidebar falls back to the unfiltered options.
+    () =>
+        fetchCatalogFilters(facetQuery.value).catch((cause: unknown) => {
+            if (toApiError(cause).statusCode === 422) {
+                return fetchCatalogFilters();
+            }
+            throw cause;
+        }),
+    { deep: false },
 );
 
 if (filtersError.value) {
@@ -46,18 +65,25 @@ const facetLabels: Record<ListingFacet, string> = {
     region: 'Región',
 };
 
+/**
+ * The options worth offering: those that list something with the other
+ * filters, plus the checked ones (so they can be unchecked).
+ */
 function facetOptions(
     facet: ListingFacet,
     options: CatalogFilters,
-): Reference[] {
-    const byFacet: Record<ListingFacet, Reference[]> = {
+): FacetOption[] {
+    const byFacet: Record<ListingFacet, FacetOption[]> = {
         platform: options.platforms,
         type: options.types,
         activation_service: options.activation_services,
         region: options.regions,
     };
 
-    return byFacet[facet];
+    return byFacet[facet].filter(
+        (option) =>
+            option.count > 0 || listing.value[facet].includes(option.slug),
+    );
 }
 
 const sortOptions = [
@@ -163,33 +189,41 @@ function pageLink(number: number) {
                     @submit.prevent="applyFilters"
                 >
                     <template v-if="filters">
-                        <fieldset
-                            v-for="facet in listingFacets"
-                            :key="facet"
-                            class="flex flex-col gap-1"
-                        >
-                            <legend
-                                class="mb-2 font-display text-sm font-extrabold tracking-wider text-fg-faint uppercase"
+                        <template v-for="facet in listingFacets" :key="facet">
+                            <fieldset
+                                v-if="facetOptions(facet, filters).length"
+                                class="flex flex-col gap-1"
                             >
-                                {{ facetLabels[facet] }}
-                            </legend>
-                            <label
-                                v-for="option in facetOptions(facet, filters)"
-                                :key="option.slug"
-                                class="flex min-h-9 cursor-pointer items-center gap-3 rounded-control px-2 text-fg-muted hover:bg-surface hover:text-fg has-checked:text-fg"
-                            >
-                                <input
-                                    type="checkbox"
-                                    :name="facet"
-                                    :value="option.slug"
-                                    :checked="
-                                        listing[facet].includes(option.slug)
-                                    "
-                                    class="size-4"
-                                />
-                                {{ option.name }}
-                            </label>
-                        </fieldset>
+                                <legend
+                                    class="mb-2 font-display text-sm font-extrabold tracking-wider text-fg-faint uppercase"
+                                >
+                                    {{ facetLabels[facet] }}
+                                </legend>
+                                <label
+                                    v-for="option in facetOptions(
+                                        facet,
+                                        filters,
+                                    )"
+                                    :key="option.slug"
+                                    class="flex min-h-9 cursor-pointer items-center gap-3 rounded-control px-2 text-fg-muted hover:bg-surface hover:text-fg has-checked:text-fg"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        :name="facet"
+                                        :value="option.slug"
+                                        :checked="
+                                            listing[facet].includes(option.slug)
+                                        "
+                                        class="size-4"
+                                    />
+                                    {{ option.name }}
+                                    <span
+                                        class="tabular ml-auto text-sm text-fg-faint"
+                                        >{{ option.count }}</span
+                                    >
+                                </label>
+                            </fieldset>
+                        </template>
                     </template>
                     <div class="flex items-center gap-3">
                         <UiButton type="submit" size="sm">Aplicar</UiButton>

@@ -20,6 +20,18 @@ const ProductTypeReference = v.strictObject({
     name: v.string(),
 });
 
+// A filter option with how many products it would list given the other
+// filters (contracts/api/v1/catalog.filters.json).
+const FacetOption = v.strictObject({
+    ...Reference.entries,
+    count: v.pipe(v.number(), v.integer()),
+});
+
+const ProductTypeFacetOption = v.strictObject({
+    ...ProductTypeReference.entries,
+    count: v.pipe(v.number(), v.integer()),
+});
+
 const productFields = {
     slug: v.string(),
     type: ProductTypeReference,
@@ -78,10 +90,10 @@ export const ProductPageSchema = v.strictObject({
 
 export const CatalogFiltersSchema = v.strictObject({
     data: v.strictObject({
-        platforms: v.array(Reference),
-        types: v.array(ProductTypeReference),
-        activation_services: v.array(Reference),
-        regions: v.array(Reference),
+        platforms: v.array(FacetOption),
+        types: v.array(ProductTypeFacetOption),
+        activation_services: v.array(FacetOption),
+        regions: v.array(FacetOption),
     }),
 });
 
@@ -112,6 +124,7 @@ export type ProductSummary = v.InferOutput<typeof ProductSummarySchema>;
 export type ProductDetail = v.InferOutput<typeof ProductDetailSchema>['data'];
 export type ProductPage = v.InferOutput<typeof ProductPageSchema>;
 export type CatalogFilters = v.InferOutput<typeof CatalogFiltersSchema>['data'];
+export type FacetOption = v.InferOutput<typeof FacetOption>;
 export const orderStatuses = [
     'pending',
     'paid',

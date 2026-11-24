@@ -15,9 +15,16 @@ export async function fetchProduct(slug: string): Promise<ProductDetail> {
     return response.data;
 }
 
-export async function fetchCatalogFilters(): Promise<CatalogFilters> {
+/**
+ * The filter options, each with how many products it would list given the
+ * other facets in `query` (the listing's facets, without sort or page).
+ */
+export async function fetchCatalogFilters(
+    query: Record<string, string> = {},
+): Promise<CatalogFilters> {
     const response = await useNuxtApp().$api<{ data: CatalogFilters }>(
         '/catalog/filters',
+        { query },
     );
 
     return response.data;
