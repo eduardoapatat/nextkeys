@@ -1,6 +1,6 @@
 # Shipping domain model
 
-Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses, checkout and shipping from the panel implemented in the API; storefront addresses page done. Orders live in [`orders.md`](orders.md).
+Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses, checkout and shipping from the panel implemented in the API and the storefront (addresses, checkout, tracking). Orders live in [`orders.md`](orders.md).
 
 ## Decisions
 
@@ -33,4 +33,5 @@ Status: **decided** (2026-11-24), implementation in progress (phase 5): customer
 
 - **`/cuenta/direcciones`** (linked from `/cuenta`): lists the saved addresses, adds, edits and deletes them (deleting asks for a second click). The commune select lists only the chosen region's communes (from `GET /api/v1/shipping`) and clears a commune of another region. With `?redirect=` (a path of the site, `safeRedirect`) it goes back there after saving, so the checkout can send a customer without addresses to add one.
 - **Checkout** (`/checkout`): with physical products in the cart it loads the fee and the saved addresses, adds an "Envío" line to the receipt and to the informative total, and asks to choose an address (radios, the first one preselected) or to add one; payment stays disabled without an address. `placeOrder` sends `shipping_address` only for carts with physical products.
+- **Order page** (`/pedidos/{reference}`): a paid order with a shipment shows the "Envío" section (`ShipmentTracking`): the steps Por despachar → Despachado → Entregado with their dates, the courier and the tracking link, the address copy and, once delivered, the last day to withdraw. The receipt lists the shipping fee. "Mis pedidos" adds the shipping status next to a paid order's status (`StatusBadge`).
 

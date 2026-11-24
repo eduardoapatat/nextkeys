@@ -113,8 +113,8 @@ async function cancel() {
                         <NuxtLink to="/biblioteca" class="text-brand underline"
                             >Mi biblioteca</NuxtLink
                         >.
-                        <template v-if="order.has_physical_items">
-                            Los productos físicos se despachan por separado.
+                        <template v-if="order.shipment">
+                            Los productos físicos van a la dirección de abajo.
                         </template>
                     </p>
                 </div>
@@ -218,8 +218,22 @@ async function cancel() {
                                 formatClp(item.line_total)
                             }}</span>
                         </li>
+                        <li
+                            v-if="order.shipment"
+                            class="flex justify-between gap-4"
+                        >
+                            <span>Envío</span>
+                            <span class="tabular shrink-0">{{
+                                formatClp(order.shipping_cost)
+                            }}</span>
+                        </li>
                     </ul>
                 </ThermalReceipt>
+
+                <ShipmentTracking
+                    v-if="order.shipment"
+                    :shipment="order.shipment"
+                />
             </template>
 
             <div
@@ -345,6 +359,15 @@ async function cancel() {
                         </span>
                         <span class="tabular shrink-0 text-fg">{{
                             formatClp(item.line_total)
+                        }}</span>
+                    </li>
+                    <li
+                        v-if="order.shipment"
+                        class="flex justify-between gap-4 py-3 text-fg"
+                    >
+                        <span>Envío</span>
+                        <span class="tabular shrink-0">{{
+                            formatClp(order.shipping_cost)
                         }}</span>
                     </li>
                 </ul>

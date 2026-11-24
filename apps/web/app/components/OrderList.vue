@@ -41,17 +41,27 @@ defineProps<{ orders: Order[] }>();
                     {{ formatDateTime(order.created_at) }}
                 </td>
                 <td class="py-3 pr-4">
-                    <span
-                        class="rounded-control px-2 py-0.5 text-sm"
-                        :class="
-                            ['paid', 'completed'].includes(order.status.slug)
-                                ? 'bg-ok-soft text-ok'
-                                : order.status.slug === 'pending'
-                                  ? 'bg-brand-soft text-brand'
-                                  : 'bg-surface-2 text-fg-muted'
-                        "
-                        >{{ order.status.name }}</span
-                    >
+                    <span class="flex flex-wrap gap-1.5">
+                        <StatusBadge
+                            :tone="
+                                ['paid', 'completed'].includes(
+                                    order.status.slug,
+                                )
+                                    ? 'ok'
+                                    : order.status.slug === 'pending'
+                                      ? 'brand'
+                                      : 'muted'
+                            "
+                            >{{ order.status.name }}</StatusBadge
+                        >
+                        <StatusBadge
+                            v-if="
+                                order.shipment && order.status.slug === 'paid'
+                            "
+                            tone="brand"
+                            >{{ order.shipment.status.name }}</StatusBadge
+                        >
+                    </span>
                 </td>
                 <td class="tabular py-3 text-right text-fg">
                     {{ formatClp(order.total) }}

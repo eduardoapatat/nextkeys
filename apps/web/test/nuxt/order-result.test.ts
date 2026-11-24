@@ -59,6 +59,93 @@ describe('payment result', () => {
         expect(result.find('a[href="/biblioteca"]').exists()).toBe(true);
     });
 
+    it('follows the shipment of a paid order', async () => {
+        const shipment = paid.shipment!;
+        const shipped: Order = {
+            ...paid,
+            shipment: {
+                ...shipment,
+                status: { slug: 'shipped', name: 'Despachado' },
+                carrier: { slug: 'starken', name: 'Starken' },
+                tracking_number: 'AB-12345',
+                tracking_url:
+                    'https://www.starken.cl/seguimiento?codigo=AB-12345',
+                shipped_at: '2026-11-24T15:00:00+00:00',
+            },
+        };
+        serveApi(`/orders/${paid.reference}`, { data: shipped });
+
+        const result = await mountSuspended(OrderPage, {
+            route: `/pedidos/${paid.reference}`,
+        });
+
+        const section = result.find('[aria-labelledby="shipment-heading"]');
+        expect(section.find('[aria-current="step"]').text()).toContain(
+            'Despachado',
+        );
+        expect(section.text()).toContain('Starken');
+        expect(
+            section.find(`a[href="${shipped.shipment!.tracking_url}"]`).text(),
+        ).toBe('AB-12345');
+        expect(section.text()).toContain(shipment.address.recipient_name);
+        expect(section.text()).toContain(
+            `${shipment.address.commune}, ${shipment.address.region.name}`,
+        );
+        expect(section.text()).not.toContain('derecho a retracto');
+        expect(result.text()).toContain('Envío');
+        expect(result.text()).toContain(formatClp(paid.shipping_cost));
+    });
+
+    it('says the parcel is being packed, then when the withdrawal ends', async () => {
+        const shipment = paid.shipment!;
+        serveApi(`/orders/${paid.reference}`, { data: paid });
+
+        const packing = await mountSuspended(OrderPage, {
+            route: `/pedidos/${paid.reference}`,
+        });
+        expect(packing.find('[aria-current="step"]').text()).toContain(
+            'Por despachar',
+        );
+        expect(packing.text()).toContain('Estamos preparando tu paquete');
+
+        resetApi();
+        const delivered: Order = {
+            ...paid,
+            status: { slug: 'completed', name: 'Completado' },
+            shipment: {
+                ...shipment,
+                status: { slug: 'delivered', name: 'Entregado' },
+                carrier: { slug: 'starken', name: 'Starken' },
+                tracking_number: 'AB-12345',
+                tracking_url: null,
+                shipped_at: '2026-11-20T15:00:00+00:00',
+                delivered_at: '2026-11-22T15:00:00+00:00',
+                returnable_until: '2026-12-02T15:00:00+00:00',
+            },
+        };
+        serveApi(`/orders/${paid.reference}`, { data: delivered });
+
+        const done = await mountSuspended(OrderPage, {
+            route: `/pedidos/${paid.reference}`,
+        });
+        expect(done.find('[aria-current="step"]').text()).toContain(
+            'Entregado',
+        );
+        expect(done.text()).toContain(
+            'Puedes ejercer tu derecho a retracto hasta el 2 de diciembre de 2026',
+        );
+    });
+
+    it('shows the shipping status of a paid order in the list', async () => {
+        serveApi('/orders', page);
+
+        const list = await mountSuspended(OrdersPage, { route: '/pedidos' });
+        await vi.waitUntil(() => list.text().includes(page.data[0]!.reference));
+
+        expect(page.data[0]!.shipment?.status.name).toBe('Por despachar');
+        expect(list.find('tbody').text()).toContain('Por despachar');
+    });
+
     it('explains a rejection and retries the payment', async () => {
         serveApi(`/orders/${rejected.reference}`, { data: rejected });
         serveCsrfCookie();
