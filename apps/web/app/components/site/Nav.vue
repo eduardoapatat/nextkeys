@@ -12,7 +12,7 @@ const items = computed(() => [
     { label: 'Catálogo', to: catalogLink() },
     ...platformFamilies.map((family) => ({
         label: family.label,
-        to: catalogLink({ platform: [...family.platform] }),
+        to: catalogLink(family.filter),
     })),
     ...productTypeLinks.map((item) => ({
         label: item.label,

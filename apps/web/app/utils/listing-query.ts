@@ -97,15 +97,17 @@ export const catalogPath = '/catalogo';
 
 /** A link to the catalog with some facets (and optionally a sort) already applied. */
 export function catalogLink(
-    filters: Partial<Record<ListingFacet, string[]>> & { sort?: string } = {},
+    filters: Partial<Record<ListingFacet, readonly string[]>> & {
+        sort?: string;
+    } = {},
 ): { path: string; query: Record<string, string> } {
     return {
         path: catalogPath,
         query: serializeListingQuery({
-            platform: filters.platform ?? [],
-            type: filters.type ?? [],
-            activation_service: filters.activation_service ?? [],
-            region: filters.region ?? [],
+            platform: [...(filters.platform ?? [])],
+            type: [...(filters.type ?? [])],
+            activation_service: [...(filters.activation_service ?? [])],
+            region: [...(filters.region ?? [])],
             sort: filters.sort,
         }),
     };

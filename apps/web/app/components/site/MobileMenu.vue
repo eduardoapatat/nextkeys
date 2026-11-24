@@ -81,11 +81,7 @@ const link =
                             :key="family.label"
                         >
                             <NuxtLink
-                                :to="
-                                    catalogLink({
-                                        platform: [...family.platform],
-                                    })
-                                "
+                                :to="catalogLink(family.filter)"
                                 :class="link"
                                 >{{ family.label }}</NuxtLink
                             >

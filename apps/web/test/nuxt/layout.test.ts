@@ -38,6 +38,11 @@ describe('store layout', () => {
         expect(nav.find('a[href="/catalogo?type=physical"]').text()).toBe(
             'Juegos físicos',
         );
+        // PC games are listed by their store, not as "PC y Mac".
+        expect(
+            nav.find('a[href="/catalogo?activation_service=steam"]').text(),
+        ).toBe('Steam');
+        expect(nav.text()).not.toContain('PC y Mac');
     });
 
     it('puts the menu tab only on the link to the current page and query', async () => {

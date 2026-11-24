@@ -1,14 +1,28 @@
 /**
  * The store's merchandising menu: platform families and product types,
- * each a real catalog filter. The slugs are the catalog's platform and type
+ * each a real catalog filter. PC games are listed by their store, Steam
+ * (an activation service filter), as the cover band names them; programs
+ * for Windows and macOS live under "Licencias". The slugs are the catalog's platform and type
  * slugs (`/api/v1/catalog/filters`); a slug the API does not know answers
  * 422 in the catalog, so renames show up at once.
  */
 export const platformFamilies = [
-    { id: 'playstation', label: 'PlayStation', platform: ['ps5', 'ps4'] },
-    { id: 'xbox', label: 'Xbox', platform: ['xbox-series', 'xbox-one'] },
-    { id: 'nintendo', label: 'Nintendo', platform: ['switch-2', 'switch'] },
-    { id: 'pc', label: 'PC y Mac', platform: ['windows', 'macos'] },
+    {
+        id: 'playstation',
+        label: 'PlayStation',
+        filter: { platform: ['ps5', 'ps4'] },
+    },
+    {
+        id: 'xbox',
+        label: 'Xbox',
+        filter: { platform: ['xbox-series', 'xbox-one'] },
+    },
+    {
+        id: 'nintendo',
+        label: 'Nintendo',
+        filter: { platform: ['switch-2', 'switch'] },
+    },
+    { id: 'steam', label: 'Steam', filter: { activation_service: ['steam'] } },
 ] as const;
 
 export const productTypeLinks = [

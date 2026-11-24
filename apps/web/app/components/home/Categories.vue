@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { CatalogFilters, ProductSummary } from '~/api/schemas';
-import type { TileKind } from '~/components/CategoryTile.vue';
 
 /**
  * The full-width turquoise band, the home's only shortcut to the filters
@@ -22,24 +21,17 @@ function platformNames(slugs: readonly string[]): string {
         .join(' · ');
 }
 
-// Steam is a store, not a platform: its tile filters by activation service.
-// PC programs (licenses) are reached through the "Licencias" link.
-const tiles = computed(() => [
-    ...platformFamilies
-        .filter((family) => family.id !== 'pc')
-        .map((family) => ({
-            kind: family.id as TileKind,
-            label: family.label,
-            note: platformNames(family.platform),
-            to: catalogLink({ platform: [...family.platform] }),
-        })),
-    {
-        kind: 'steam' as const,
-        label: 'Steam',
-        note: 'Juegos para escritorio',
-        to: catalogLink({ activation_service: ['steam'] }),
-    },
-]);
+const tiles = computed(() =>
+    platformFamilies.map((family) => ({
+        kind: family.id,
+        label: family.label,
+        note:
+            'platform' in family.filter
+                ? platformNames(family.filter.platform)
+                : 'Claves para tu cuenta Steam',
+        to: catalogLink(family.filter),
+    })),
+);
 
 const typeNotes: Record<(typeof productTypeLinks)[number]['type'][0], string> =
     {
