@@ -18,3 +18,13 @@ arch('OrderPaidMail is never queued (its keys would be serialized): queue App\Jo
     ->not->toImplement(ShouldQueue::class)
     ->and('App\Mail\OrderPaidMail')
     ->toOnlyBeUsedIn('App\Jobs\SendOrderPaidEmail');
+
+arch('the shipping email is sent by shipping with ShipOrder, never dispatched elsewhere')
+    ->expect('App\Jobs\SendOrderShippedEmail')
+    ->toOnlyBeUsedIn('App\Actions\Orders\ShipOrder');
+
+arch('OrderShippedMail is never queued (the address would be serialized): queue App\Jobs\SendOrderShippedEmail, which carries only the order id')
+    ->expect('App\Mail\OrderShippedMail')
+    ->not->toImplement(ShouldQueue::class)
+    ->and('App\Mail\OrderShippedMail')
+    ->toOnlyBeUsedIn('App\Jobs\SendOrderShippedEmail');

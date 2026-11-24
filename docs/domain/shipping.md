@@ -1,6 +1,6 @@
 # Shipping domain model
 
-Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses and checkout implemented. Orders live in [`orders.md`](orders.md).
+Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses, checkout, and shipping from the panel implemented. Orders live in [`orders.md`](orders.md).
 
 ## Decisions
 
@@ -25,5 +25,6 @@ Status: **decided** (2026-11-24), implementation in progress (phase 5): customer
 - **Carriers:** `Carrier` enum (Starken, Chilexpress, Blue Express, Correos de Chile), each with its tracking URL template.
 - **Database rules:** CHECKs tie `carrier`, `tracking_number` and `shipped_at` to `shipped`/`delivered` and `delivered_at` to `delivered`; a trigger allows only `pending → shipped → delivered` and `shipped` only while the order is `paid`; the order transition `paid → completed` is rejected while a shipment is not delivered; a deferred constraint trigger requires a shipment for an order with physical lines and forbids one without them.
 - **Checkout:** `POST /api/v1/orders` takes `shipping_address` (an address `public_id`): required with physical lines, refused without them, and only the customer's own (422 `shipping_address`). `PlaceOrder` creates the shipment snapshot and sets `shipping_cost` in the same transaction. `OrderResource` adds `shipping_cost` and `shipment` (status, address, carrier, tracking number and URL, `shipped_at`, `delivered_at`, `returnable_until`). The payment email adds the fee and the address.
-- **Admin panel:** mark a paid order as shipped (carrier and tracking number), then as delivered.
-- **Shipping email:** queued after commit when the order ships, like the payment confirmation; the job carries only the order id and never logs the address.
+- **Admin panel:** the order detail shows the shipment (recipient, address, courier, tracking link, dates). "Marcar como despachado" (a dialog with courier and tracking number, letters, digits and dashes) runs `ShipOrder`; "Marcar como entregado" runs `MarkOrderDelivered`, which delivers the shipment and completes the order in one transaction. Both lock the order row. The orders table has a shipping status column and filter ("Por despachar").
+- **Shipping email:** `ShipOrder` dispatches `SendOrderShippedEmail` (`ShouldQueueAfterCommit`, only the order id, same retries as the payment email) with `OrderShippedMail` (never queued): courier, tracking number and link, shipped lines, address, the 10-day withdrawal and a link to the order in the storefront. A failure is rethrown as `OrderShippedEmailFailed` without the original exception, and the job refuses the `log` mailer (`MailerGuard`, shared with the payment email): the address never reaches the logs or `failed_jobs`.
+- **Tracking URLs** are each courier's public tracking page; the store is fictitious, so they are not checked against real parcels.

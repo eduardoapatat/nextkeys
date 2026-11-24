@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Carrier;
 use App\Enums\ChileRegion;
 use App\Enums\ShipmentStatus;
+use Carbon\CarbonInterface;
 use Database\Factories\ShipmentFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -86,7 +87,7 @@ class Shipment extends Model
     /**
      * Last day of the withdrawal period, counted from delivery.
      */
-    public function returnableUntil(): ?Carbon
+    public function returnableUntil(): ?CarbonInterface
     {
         return $this->delivered_at?->copy()->addDays(self::WITHDRAWAL_DAYS);
     }

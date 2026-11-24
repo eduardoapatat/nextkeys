@@ -3,6 +3,7 @@ import { Head, setLayoutProps } from '@inertiajs/vue3';
 import OrderController from '@/actions/App/Http/Controllers/Orders/OrderController';
 import ConfirmActionButton from '@/components/ConfirmActionButton.vue';
 import Heading from '@/components/Heading.vue';
+import ShipOrderDialog from '@/components/ShipOrderDialog.vue';
 import { Badge } from '@/components/ui/badge';
 import type { BadgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -50,6 +51,22 @@ type PaymentAttempt = {
     refunded_at: string | null;
 };
 
+type Shipment = {
+    status: {
+        value: string;
+        label: string;
+        variant: NonNullable<BadgeVariants['variant']>;
+    };
+    recipient_name: string;
+    phone: string;
+    address_line: string;
+    carrier: string | null;
+    tracking_number: string | null;
+    tracking_url: string | null;
+    shipped_at: string | null;
+    delivered_at: string | null;
+};
+
 type OrderDetail = {
     reference: string;
     status: {
@@ -58,6 +75,7 @@ type OrderDetail = {
         variant: NonNullable<BadgeVariants['variant']>;
     };
     total: number;
+    shipping_cost: number;
     customer: { name: string; email: string };
     created_at: string | null;
     expires_at: string;
@@ -71,6 +89,7 @@ type OrderDetail = {
     };
     items: OrderLine[];
     payments: PaymentAttempt[];
+    shipment: Shipment | null;
 };
 
 const props = defineProps<{
@@ -79,6 +98,9 @@ const props = defineProps<{
     canResendPaidEmail: boolean;
     canMarkPaid: boolean;
     canPayWithWebpay: boolean;
+    canShip: boolean;
+    canMarkDelivered: boolean;
+    carriers: { value: string; label: string }[];
 }>();
 
 setLayoutProps({
@@ -239,6 +261,12 @@ const timeline = [
                         </TableRow>
                     </TableBody>
                     <TableFooter>
+                        <TableRow v-if="order.shipment !== null">
+                            <TableCell colspan="3">Envío</TableCell>
+                            <TableCell class="text-right">
+                                {{ clp.format(order.shipping_cost) }}
+                            </TableCell>
+                        </TableRow>
                         <TableRow>
                             <TableCell colspan="3">Total</TableCell>
                             <TableCell class="text-right font-medium">
@@ -247,6 +275,78 @@ const timeline = [
                         </TableRow>
                     </TableFooter>
                 </Table>
+            </CardContent>
+        </Card>
+
+        <Card v-if="order.shipment !== null">
+            <CardHeader class="flex flex-row items-center gap-3">
+                <CardTitle>Envío</CardTitle>
+                <Badge :variant="order.shipment.status.variant">
+                    {{ order.shipment.status.label }}
+                </Badge>
+            </CardHeader>
+            <CardContent
+                class="flex flex-wrap items-start justify-between gap-4"
+            >
+                <dl class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div>
+                        <dt class="text-sm text-muted-foreground">Recibe</dt>
+                        <dd class="text-sm font-medium">
+                            {{ order.shipment.recipient_name }} ·
+                            {{ order.shipment.phone }}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm text-muted-foreground">Dirección</dt>
+                        <dd class="text-sm font-medium">
+                            {{ order.shipment.address_line }}
+                        </dd>
+                    </div>
+                    <div v-if="order.shipment.carrier !== null">
+                        <dt class="text-sm text-muted-foreground">
+                            Seguimiento
+                        </dt>
+                        <dd class="text-sm font-medium">
+                            {{ order.shipment.carrier }} ·
+                            <a
+                                v-if="order.shipment.tracking_url !== null"
+                                :href="order.shipment.tracking_url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="font-mono underline underline-offset-4"
+                                >{{ order.shipment.tracking_number }}</a
+                            >
+                        </dd>
+                    </div>
+                    <div v-if="order.shipment.shipped_at !== null">
+                        <dt class="text-sm text-muted-foreground">
+                            Despachado
+                        </dt>
+                        <dd class="text-sm font-medium">
+                            {{ formatDateTime(order.shipment.shipped_at) }}
+                        </dd>
+                    </div>
+                    <div v-if="order.shipment.delivered_at !== null">
+                        <dt class="text-sm text-muted-foreground">Entregado</dt>
+                        <dd class="text-sm font-medium">
+                            {{ formatDateTime(order.shipment.delivered_at) }}
+                        </dd>
+                    </div>
+                </dl>
+                <ShipOrderDialog
+                    v-if="canShip"
+                    :reference="order.reference"
+                    :carriers="carriers"
+                />
+                <ConfirmActionButton
+                    v-if="canMarkDelivered"
+                    :action="OrderController.markDelivered(order.reference)"
+                    :title="`¿Marcar ${order.reference} como entregado?`"
+                    description="El pedido queda completado y el cliente tiene 10 días de derecho a retracto desde hoy."
+                    confirm-label="Marcar como entregado"
+                >
+                    <Button>Marcar como entregado</Button>
+                </ConfirmActionButton>
             </CardContent>
         </Card>
 

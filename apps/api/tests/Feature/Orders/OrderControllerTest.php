@@ -7,6 +7,8 @@ use App\Actions\Orders\PlaceOrder;
 use App\Enums\OrderStatus;
 use App\Enums\ProductKeyStatus;
 use App\Mail\OrderPaidMail;
+use App\Mail\OrderShippedMail;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\PaymentAttempt;
 use App\Models\Product;
@@ -52,7 +54,7 @@ it('filters orders by status', function () {
 });
 
 it('searches orders by reference and by customer email', function (Closure $searchFor) {
-    $order = ($this->placeOrder)(User::factory()->create(['email' => 'ana@example.com']));
+    $order = ($this->placeOrder)(User::factory()->create(['email' => 'ana.searched@nextkeys.test']));
     Order::factory()->create();
 
     $this->get(route('orders.index', ['search' => $searchFor($order)]))
@@ -61,7 +63,7 @@ it('searches orders by reference and by customer email', function (Closure $sear
             ->where('orders.data.0.reference', $order->reference));
 })->with([
     'reference' => fn (Order $order): string => $order->reference,
-    'email' => fn (Order $order): string => 'ana@example',
+    'email' => fn (Order $order): string => 'ana.searched@nextkeys',
 ]);
 
 it('shows an order by its reference with lines and key hints, never codes', function () {
@@ -289,4 +291,84 @@ it('does not resend the email of an unpaid order', function () {
     Mail::assertNothingSent();
     $this->get(route('orders.show', $order))
         ->assertInertia(fn (Assert $page) => $page->where('canResendPaidEmail', false));
+});
+
+describe('shipping', function () {
+    beforeEach(function () {
+        Mail::fake();
+        $customer = User::factory()->create();
+        $box = Product::factory()->physical()->published()->create(['stock' => 2]);
+        $this->shippable = app(PlaceOrder::class)->handle($customer, [new OrderLineData($box->id, 1)], CustomerAddress::factory()->for($customer)->create([
+            'recipient_name' => 'Ana Pérez',
+            'commune' => 'Ñuñoa',
+        ]));
+        app(MarkOrderPaid::class)->handle($this->shippable);
+    });
+
+    it('shows the shipment and offers to ship a paid order', function () {
+        $this->get(route('orders.show', $this->shippable))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('order.shipment.status.value', 'pending')
+                ->where('order.shipment.recipient_name', 'Ana Pérez')
+                ->where('order.shipping_cost', 3990)
+                ->where('carriers.0', ['value' => 'starken', 'label' => 'Starken'])
+                ->where('canShip', true)
+                ->where('canMarkDelivered', false));
+    });
+
+    it('ships, then delivers the order', function () {
+        $this->post(route('orders.ship', $this->shippable), ['carrier' => 'blue_express', 'tracking_number' => 'BX-998877'])
+            ->assertRedirect(route('orders.show', $this->shippable))
+            ->assertInertiaFlash('toast.message', 'Pedido despachado. Le avisamos al cliente.');
+        Mail::assertSent(OrderShippedMail::class);
+
+        $this->get(route('orders.show', $this->shippable))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('order.shipment.carrier', 'Blue Express')
+                ->where('order.shipment.tracking_url', 'https://www.blue.cl/seguimiento/?n_seguimiento=BX-998877')
+                ->where('canShip', false)
+                ->where('canMarkDelivered', true));
+
+        $this->post(route('orders.mark-delivered', $this->shippable))
+            ->assertRedirect(route('orders.show', $this->shippable))
+            ->assertInertiaFlash('toast.message', 'Entrega registrada. El pedido está completado.');
+
+        expect($this->shippable->fresh()?->status)->toBe(OrderStatus::Completed);
+    });
+
+    it('validates the courier and the tracking number', function (array $data, array $errors) {
+        $this->from(route('orders.show', $this->shippable))
+            ->post(route('orders.ship', $this->shippable), $data)
+            ->assertSessionHasErrors($errors);
+
+        Mail::assertNotSent(OrderShippedMail::class);
+    })->with([
+        'unknown courier' => [['carrier' => 'dhl', 'tracking_number' => '123456'], ['carrier']],
+        'missing number' => [['carrier' => 'starken'], ['tracking_number']],
+        'odd characters' => [['carrier' => 'starken', 'tracking_number' => '12 34; drop'], ['tracking_number' => 'El número de seguimiento solo lleva letras, números y guiones (4 a 40).']],
+    ]);
+
+    it('refuses to deliver an order that has not shipped', function () {
+        $this->from(route('orders.show', $this->shippable))
+            ->post(route('orders.mark-delivered', $this->shippable))
+            ->assertSessionHasErrors(['order' => 'Solo se marca como entregado un pedido despachado.']);
+    });
+
+    it('filters the orders waiting to ship', function () {
+        ($this->placeOrder)();
+
+        $this->get(route('orders.index', ['filter' => ['shipment_status' => 'pending']]))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('orders.meta.total', 1)
+                ->where('orders.data.0.reference', $this->shippable->reference)
+                ->where('orders.data.0.shipment_status', 'pending'));
+    });
+
+    it('is forbidden to customers', function () {
+        $this->actingAs(User::factory()->create());
+
+        $this->post(route('orders.ship', $this->shippable), ['carrier' => 'starken', 'tracking_number' => '123456'])->assertForbidden();
+        $this->post(route('orders.mark-delivered', $this->shippable))->assertForbidden();
+    });
 });

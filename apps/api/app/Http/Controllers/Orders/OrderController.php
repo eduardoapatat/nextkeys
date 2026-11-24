@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Orders;
 
 use App\Actions\Orders\CancelOrder;
+use App\Actions\Orders\MarkOrderDelivered;
 use App\Actions\Orders\MarkOrderPaid;
 use App\Actions\Orders\OrderBusy;
 use App\Actions\Orders\OrderCannotBePaid;
 use App\Actions\Orders\OrderCannotBePaidReason;
 use App\Actions\Orders\ResendOrderPaidEmail;
+use App\Actions\Orders\ShipOrder;
 use App\Actions\Payments\StartPaymentAttempt;
 use App\DataTables\OrdersTable;
+use App\Enums\Carrier;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentOrigin;
+use App\Enums\ShipmentStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Orders\ShipOrderRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentAttempt;
@@ -45,7 +50,9 @@ class OrderController extends Controller
             'items' => fn ($query) => $query->orderBy('id'),
             'items.keys' => fn ($query) => $query->select(['id', 'order_item_id', 'code_hint', 'status', 'revealed_at'])->orderBy('id'),
             'paymentAttempts' => fn ($query) => $query->orderBy('number'),
+            'shipment',
         ]);
+        $shipment = $order->shipment;
 
         return Inertia::render('orders/Show', [
             'order' => [
@@ -56,6 +63,7 @@ class OrderController extends Controller
                     'variant' => $order->status->badgeVariant(),
                 ],
                 'total' => $order->total,
+                'shipping_cost' => $order->shipping_cost,
                 'customer' => ['name' => $order->user->name, 'email' => $order->user->email],
                 'created_at' => $order->created_at?->toIso8601String(),
                 'expires_at' => $order->expires_at->toIso8601String(),
@@ -98,7 +106,25 @@ class OrderController extends Controller
                     'refunded_amount' => $attempt->refunded_amount,
                     'refunded_at' => $attempt->refunded_at?->toIso8601String(),
                 ])->all(),
+                'shipment' => $shipment === null ? null : [
+                    'status' => [
+                        'value' => $shipment->status->value,
+                        'label' => $shipment->status->label(),
+                        'variant' => $shipment->status->badgeVariant(),
+                    ],
+                    'recipient_name' => $shipment->recipient_name,
+                    'phone' => $shipment->phone,
+                    'address_line' => $shipment->addressLine(),
+                    'carrier' => $shipment->carrier?->label(),
+                    'tracking_number' => $shipment->tracking_number,
+                    'tracking_url' => $shipment->trackingUrl(),
+                    'shipped_at' => $shipment->shipped_at?->toIso8601String(),
+                    'delivered_at' => $shipment->delivered_at?->toIso8601String(),
+                ],
             ],
+            'carriers' => array_map(fn (Carrier $carrier): array => ['value' => $carrier->value, 'label' => $carrier->label()], Carrier::cases()),
+            'canShip' => $order->status === OrderStatus::Paid && $shipment?->status === ShipmentStatus::Pending,
+            'canMarkDelivered' => $order->status === OrderStatus::Paid && $shipment?->status === ShipmentStatus::Shipped,
             'canCancel' => $order->status === OrderStatus::Pending,
             'canResendPaidEmail' => in_array($order->status, [OrderStatus::Paid, OrderStatus::Completed], true)
                 && $order->paid_email_resends < Config::integer('orders.max_paid_email_resends'),
@@ -143,6 +169,35 @@ class OrderController extends Controller
         }
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Pago registrado.']);
+
+        return to_route('orders.show', $order);
+    }
+
+    /**
+     * Records that the parcel left with a courier; the customer gets the
+     * shipping email.
+     *
+     * @throws ValidationException
+     */
+    public function ship(ShipOrderRequest $request, Order $order, ShipOrder $shipOrder): RedirectResponse
+    {
+        $shipOrder->handle($order, $request->carrier(), $request->trackingNumber());
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Pedido despachado. Le avisamos al cliente.']);
+
+        return to_route('orders.show', $order);
+    }
+
+    /**
+     * Records the delivery, which completes the order.
+     *
+     * @throws ValidationException
+     */
+    public function markDelivered(Order $order, MarkOrderDelivered $markOrderDelivered): RedirectResponse
+    {
+        $markOrderDelivered->handle($order);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Entrega registrada. El pedido está completado.']);
 
         return to_route('orders.show', $order);
     }

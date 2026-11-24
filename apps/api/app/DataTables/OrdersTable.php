@@ -3,14 +3,15 @@
 namespace App\DataTables;
 
 use App\Enums\OrderStatus;
+use App\Enums\ShipmentStatus;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use InertiaDataTable\Column;
 use InertiaDataTable\DataTable;
 
 /**
- * Orders of the admin panel: filter by status, search by reference or
- * customer email (docs/domain/orders.md, "Admin panel").
+ * Orders of the admin panel: filter by status and shipping status ("Por
+ * despachar"), search by reference or customer email (docs/domain/orders.md, "Admin panel").
  */
 class OrdersTable extends DataTable
 {
@@ -32,6 +33,7 @@ class OrdersTable extends DataTable
             Column::text('customer', 'Cliente')->from('user.name')->sortable(),
             Column::text('email', 'Email')->from('user.email')->searchable(),
             Column::option('status', 'Estado')->options(OrderStatus::class)->badge()->sortable()->filterMultiSelect(),
+            Column::option('shipment_status', 'Envío')->from('shipment.status')->options(ShipmentStatus::class)->badge()->filterMultiSelect(),
             Column::number('total', 'Total')->money('CLP')->sortable(),
             Column::date('created_at', 'Creado')->format('datetime')->sortable(),
             Column::date('expires_at', 'Vence')->format('datetime')->hidden(),

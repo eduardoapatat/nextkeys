@@ -6,7 +6,6 @@ use App\Mail\OrderPaidMail;
 use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
@@ -41,7 +40,7 @@ final class SendOrderPaidEmail implements ShouldQueueAfterCommit
 
     public function handle(): void
     {
-        if ($this->mailerWritesToLog()) {
+        if (MailerGuard::writesToLog()) {
             $this->fail(OrderPaidEmailFailed::logMailer());
 
             return;
@@ -64,26 +63,5 @@ final class SendOrderPaidEmail implements ShouldQueueAfterCommit
             'order' => Order::query()->whereKey($this->orderId)->value('reference'),
             'exception' => $exception === null ? null : $exception::class,
         ]);
-    }
-
-    /**
-     * The `log` transport writes the whole message, keys included, to the
-     * application log.
-     */
-    private function mailerWritesToLog(): bool
-    {
-        $mailer = Config::string('mail.default');
-        $transport = Config::get("mail.mailers.{$mailer}.transport");
-        $mailers = in_array($transport, ['failover', 'roundrobin'], true)
-            ? (array) Config::get("mail.mailers.{$mailer}.mailers", [])
-            : [$mailer];
-
-        foreach ($mailers as $name) {
-            if (is_string($name) && Config::get("mail.mailers.{$name}.transport") === 'log') {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

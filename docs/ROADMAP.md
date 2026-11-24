@@ -6,7 +6,7 @@ Finished phases collapse to one line; details live in the git history.
 ## Current status
 
 - **Current phase:** 5. Physical products (phase 4 closed, including the storefront's visual design).
-- **Next task:** phase 5, ship and deliver from the panel with the shipping email (addresses and checkout done in the API). See [`docs/domain/shipping.md`](domain/shipping.md).
+- **Next task:** phase 5, storefront: addresses in the account, address and fee at checkout, shipment tracking (the API side is done). See [`docs/domain/shipping.md`](domain/shipping.md).
 
 ## Phases
 
@@ -18,7 +18,7 @@ Finished phases collapse to one line; details live in the git history.
 - [ ] **5. Physical products:** addresses, shipments and shipping status ([`shipping.md`](domain/shipping.md)): home delivery only, flat fee, `completed` on delivery.
   - [x] Customer addresses (API).
   - [x] Shipping address and fee at checkout (API).
-  - [ ] Ship and deliver from the panel, shipping email.
+  - [x] Ship and deliver from the panel, shipping email.
   - [ ] Storefront: addresses, checkout, shipment tracking.
 - [ ] **6. Extras:** Meilisearch search, wishlist, reviews, coupons and sales dashboard, and an activation guide page (one section per activation service or kind of product; the home FAQ's "¿Cómo activo mi clave?" will link to it).
 - [ ] **7. Launch:** deployment, public demo and portfolio README (screenshots, GIF, diagram).
