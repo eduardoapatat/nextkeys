@@ -59,6 +59,27 @@ describe('payment result', () => {
         expect(result.find('a[href="/biblioteca"]').exists()).toBe(true);
     });
 
+    it('mentions keys only when the order has them', async () => {
+        const physicalOnly: Order = {
+            ...paid,
+            items: paid.items.filter((item) => item.type.slug === 'physical'),
+        };
+        serveApi(`/orders/${paid.reference}`, { data: physicalOnly });
+
+        const result = await mountSuspended(OrderPage, {
+            route: `/pedidos/${paid.reference}`,
+        });
+
+        expect(result.text()).toContain(
+            'Te enviamos la confirmación a tu correo',
+        );
+        expect(result.text()).not.toContain('claves');
+        expect(result.find('a[href="/biblioteca"]').exists()).toBe(false);
+        expect(result.text()).toContain(
+            'Los productos físicos van a la dirección de abajo',
+        );
+    });
+
     it('follows the shipment of a paid order', async () => {
         const shipment = paid.shipment!;
         const shipped: Order = {

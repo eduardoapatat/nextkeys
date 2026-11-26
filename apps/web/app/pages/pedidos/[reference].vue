@@ -28,6 +28,13 @@ if (error.value) {
  * What the page shows. `?estado` from the Webpay return only adds wording:
  * the order from the API is the truth.
  */
+/** Whether some line is delivered as a key (to the email and the library). */
+const hasKeys = computed(
+    () =>
+        order.value?.items.some((item) => item.type.slug !== 'physical') ??
+        false,
+);
+
 const view = computed(() => {
     const current = order.value;
 
@@ -109,10 +116,17 @@ async function cancel() {
                         /><strong>Pago aprobado.</strong>
                     </p>
                     <p class="text-fg-muted">
-                        Te enviamos las claves a tu correo. También están en
-                        <NuxtLink to="/biblioteca" class="text-brand underline"
-                            >Mi biblioteca</NuxtLink
-                        >.
+                        <template v-if="hasKeys">
+                            Te enviamos las claves a tu correo. También están en
+                            <NuxtLink
+                                to="/biblioteca"
+                                class="text-brand underline"
+                                >Mi biblioteca</NuxtLink
+                            >.
+                        </template>
+                        <template v-else>
+                            Te enviamos la confirmación a tu correo.
+                        </template>
                         <template v-if="order.shipment">
                             Los productos físicos van a la dirección de abajo.
                         </template>
