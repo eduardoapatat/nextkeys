@@ -1,3 +1,4 @@
+# Minor and patch updates come grouped per ecosystem; each major update gets its own pull request.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -10,6 +11,9 @@ updates:
       github-actions:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "composer"
     directory: "/apps/api"
@@ -21,9 +25,16 @@ updates:
       api-composer:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "npm"
     directory: "/apps/api"
+    ignore:
+      # vue-tsc/Volar and typescript-eslint do not support TypeScript 7 yet (AGENTS.md, Known pitfalls).
+      - dependency-name: "typescript"
+        versions: [">=6"]
     schedule:
       interval: "weekly"
     cooldown:
@@ -32,9 +43,16 @@ updates:
       api-npm:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "npm"
     directory: "/apps/web"
+    ignore:
+      # vue-tsc/Volar and typescript-eslint do not support TypeScript 7 yet (AGENTS.md, Known pitfalls).
+      - dependency-name: "typescript"
+        versions: [">=6"]
     schedule:
       interval: "weekly"
     cooldown:
@@ -43,3 +61,6 @@ updates:
       web-npm:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
