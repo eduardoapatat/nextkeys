@@ -31,6 +31,11 @@ defineProps<{
 }>();
 
 const open = ref(false);
+/**
+ * The patched NativeSelect marks options from its model value: without one,
+ * no option is selected and the select looks empty.
+ */
+const selectedCarrier = ref('');
 </script>
 
 <template>
@@ -56,7 +61,15 @@ const open = ref(false);
 
                 <div class="grid gap-2">
                     <Label for="carrier">Empresa de envío</Label>
-                    <NativeSelect id="carrier" name="carrier" required>
+                    <NativeSelect
+                        id="carrier"
+                        v-model="selectedCarrier"
+                        name="carrier"
+                        required
+                    >
+                        <NativeSelectOption value="" disabled>
+                            Elige una empresa
+                        </NativeSelectOption>
                         <NativeSelectOption
                             v-for="carrier in carriers"
                             :key="carrier.value"
