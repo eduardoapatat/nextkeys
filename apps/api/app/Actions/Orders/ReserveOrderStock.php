@@ -37,24 +37,32 @@ final class ReserveOrderStock
         }
     }
 
+    /**
+     * The keys are picked once, in a materialized CTE. With the subquery in
+     * `WHERE id IN (… LIMIT n FOR UPDATE SKIP LOCKED)`, a nested loop semi
+     * join rescans it for each row and, skipping the keys it already
+     * reserved, takes more than n (`ReserveOrderStockTest`).
+     */
     private function reserveKeys(OrderItem $item): bool
     {
         $reserved = DB::update(<<<'SQL'
-            UPDATE product_keys
-            SET status = ?, order_item_id = ?, updated_at = now()
-            WHERE id IN (
+            WITH picked AS MATERIALIZED (
                 SELECT id FROM product_keys
                 WHERE product_id = ? AND status = ?
                 ORDER BY id
                 LIMIT ?
                 FOR UPDATE SKIP LOCKED
             )
+            UPDATE product_keys
+            SET status = ?, order_item_id = ?, updated_at = now()
+            FROM picked
+            WHERE product_keys.id = picked.id
             SQL, [
-            ProductKeyStatus::Reserved->value,
-            $item->id,
             $item->product_id,
             ProductKeyStatus::Available->value,
             $item->quantity,
+            ProductKeyStatus::Reserved->value,
+            $item->id,
         ]);
 
         return $reserved === $item->quantity;

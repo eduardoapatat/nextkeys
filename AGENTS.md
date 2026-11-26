@@ -28,7 +28,7 @@ Record every decision as soon as it is made, not only when closing a task: domai
 - Product type is an enum (`digital_key`, `license`, `physical`), not subclasses. Each type defines how it is delivered.
 - Payments sit behind a `PaymentGateway` interface. The domain knows nothing about Transbank (the first gateway) or any other provider.
 - Keys are stored encrypted (`encrypted` cast) and are never exposed in listings or logs.
-- Key reservation and assignment use Postgres row locks (`lockForUpdate` / `SKIP LOCKED`), never an unlocked read-then-write.
+- Key reservation and assignment use Postgres row locks (`lockForUpdate` / `SKIP LOCKED`), never an unlocked read-then-write. Pick the rows to lock in a `MATERIALIZED` CTE and update with a join, never `UPDATE … WHERE id IN (SELECT … LIMIT n … SKIP LOCKED)`: a nested loop semi join rescans the subquery and updates more than n rows (`tests/Feature/Orders/ReserveOrderStockTest.php` forces that plan).
 - Each app is an independent pnpm project. There is no workspace at the root.
 - `contracts/api/v1/*.json` is the only folder shared between the apps: data, never code. Laravel writes the fixtures (`ApiContractTest`), and `apps/web` parses them with its valibot schemas in tests. See `docs/domain/storefront.md`.
 
