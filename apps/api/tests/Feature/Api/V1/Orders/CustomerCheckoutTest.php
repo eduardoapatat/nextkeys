@@ -5,6 +5,7 @@ use App\Enums\PaymentAttemptStatus;
 use App\Enums\PaymentOrigin;
 use App\Models\CustomerAddress;
 use App\Models\Order;
+use App\Models\PaymentAttempt;
 use App\Models\Product;
 use App\Models\ProductKey;
 use App\Models\User;
@@ -216,4 +217,26 @@ it('never exposes keys, ids or the buy order', function () {
             ->assertDontSee('"code', escape: false)
             ->assertDontSee("{$reference}-1");
     }
+});
+
+it('shows the authorized payment as the receipt of a paid order, never a later unfinished attempt', function () {
+    $order = Order::factory()->for($this->customer)->paid()->create();
+    PaymentAttempt::factory()->for($order)->authorized()->create(['number' => 1, 'authorization_code' => '1213']);
+    PaymentAttempt::factory()->for($order)->create(['number' => 2]);
+
+    $this->actingAs($this->customer, 'customer')
+        ->getJson(route('api.v1.orders.show', $order->reference))
+        ->assertOk()
+        ->assertJsonPath('data.last_payment.status.slug', 'authorized')
+        ->assertJsonPath('data.last_payment.authorization_code', '1213');
+});
+
+it('shows no receipt for an order paid without an authorized attempt', function () {
+    $order = Order::factory()->for($this->customer)->paid()->create();
+    PaymentAttempt::factory()->for($order)->create();
+
+    $this->actingAs($this->customer, 'customer')
+        ->getJson(route('api.v1.orders.show', $order->reference))
+        ->assertOk()
+        ->assertJsonPath('data.last_payment', null);
 });

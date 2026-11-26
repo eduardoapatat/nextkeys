@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Api\V1;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentAttemptStatus;
 use App\Enums\ProductType;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Config;
 
 /**
  * A customer's order. `last_payment` carries the receipt Transbank asks the
- * result page to show. Never keys, ids or the gateway's `buy_order`.
+ * result page to show: for a paid order, its authorized attempt (none when
+ * it was paid by hand in the panel), so a later unfinished attempt never
+ * replaces the receipt; otherwise the latest attempt, to explain a rejection. Never keys, ids or the gateway's `buy_order`.
  *
  * Expects `items.product`, `paymentAttempts` and `shipment` loaded.
  *
@@ -27,7 +30,7 @@ class OrderResource extends JsonResource
     public function toArray(Request $request): array
     {
         $order = $this->resource;
-        $lastPayment = $order->paymentAttempts->sortByDesc('number')->first();
+        $lastPayment = $this->receiptAttempt($order);
 
         return [
             'reference' => $order->reference,
@@ -60,5 +63,16 @@ class OrderResource extends JsonResource
             ] : null,
             'shipment' => $order->shipment === null ? null : (new ShipmentResource($order->shipment))->toArray($request),
         ];
+    }
+
+    private function receiptAttempt(Order $order): ?PaymentAttempt
+    {
+        $attempts = $order->paymentAttempts->sortByDesc('number');
+
+        if (in_array($order->status, [OrderStatus::Paid, OrderStatus::Completed], true)) {
+            return $attempts->first(fn (PaymentAttempt $attempt): bool => $attempt->status === PaymentAttemptStatus::Authorized);
+        }
+
+        return $attempts->first();
     }
 }
