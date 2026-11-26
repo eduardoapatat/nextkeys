@@ -1,6 +1,6 @@
 # Shipping domain model
 
-Status: **decided** (2026-11-24), implementation in progress (phase 5): customer addresses, checkout and shipping from the panel implemented in the API and the storefront (addresses, checkout, tracking). Orders live in [`orders.md`](orders.md).
+Status: **implemented** (2026-11-25, phase 5), verified end to end in the browser: checkout with the fee and an address, manual payment, ship (email in Mailpit), deliver, and the three steps in the storefront.
 
 ## Decisions
 
